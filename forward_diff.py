@@ -105,6 +105,9 @@ class Expr(pycparser.c_ast.Node):
         return Cosine()
 
     def __variable__(self, name):
+        # if name == curr_base_variable._get():
+        #     return base_vars[0]
+        # else:
         return Variable(name)
 
 
@@ -117,17 +120,25 @@ class Variable(Expr):
         return self.name
 
     def _forward_diff(self):
+        if self.name == curr_base_variable._get():
+            return "1"
+        else:
+            return "0"
+
+    def _get(self):
         return self.name
 
 
-
 class Constant(Expr):
+    def __init__(self,value):
+        self.value = value
+
     def _eval(self, cache):
         # TODO
         return self.value
 
     def _forward_diff(self):
-        return 0
+        return "0"
 
 
 
@@ -195,7 +206,7 @@ class Pow(Expr):
         der_exp = Expr(exp)._forward_diff()
 
         return "(pow("+base+",("+exp+"-1) * "+\
-                "("+exp+ " * "+ der_base +" + "+base+ " * "+ der_exp+ " * log("+base+")))"
+                "("+exp+ " * "+ der_base +" + "+base+ " * "+ der_exp+ " * log("+base+"))))"
 
 
 class Sine(Expr):        
@@ -208,7 +219,7 @@ class Sine(Expr):
 
     def _forward_diff(self,cur_node):       
         exp = cur_node.ast.args.exprs[0].name
-        return "cos("+Expr(exp)._forward_diff() +")"
+        return "cos("+ exp +")*"+Expr(exp)._forward_diff()
 
 
 class Cosine(Expr):
@@ -221,7 +232,7 @@ class Cosine(Expr):
 
     def _forward_diff(self,cur_node):
         exp = cur_node.ast.args.exprs[0].name
-        return "-1*sin("+Expr(exp)._forward_diff() +")"
+        return "-1*sin("+exp +")*"+Expr(exp)._forward_diff()
 
 def differentiate(node):
     # print(show_attrs(node.__class__))
@@ -267,6 +278,7 @@ def grad(ast, x=0):
     same arguments as `fun` , but returns the gradient instead. The function
     `fun` is expected to be scalar valued. The gradient has the same type as argument."""
     assert type(x) in (int, tuple, list), x
+
     fun = ast.ext[-1].body.block_items[1].init
     fun.show()
     return get_traversal(fun,x)
@@ -279,12 +291,25 @@ def grad_without_traversal(ast, x=0):
     same arguments as `fun` , but returns the gradient instead. The function
     `fun` is expected to be scalar valued. The gradient has the same type as argument."""
     assert type(x) in (int, tuple, list), x
-    fun = ast.ext[-1].body.block_items[1].init
-    fun.show()
-    derivative = Expr(fun)._forward_diff()       
-    print(derivative)
+    fun_name = ast.ext[-2].decl.name
+    assert fun_name == 'to_diff'
+    der_vars = ast.ext[-2].decl.type.args.params
+    global curr_base_variable
     c_code = c_generator.CGenerator()
-    c_code._write(derivative)
+    c_code._make_header()
+
+    for vars_ in der_vars:
+        curr_base_variable = Variable(vars_.name)
+
+        fun = ast.ext[-2].body.block_items[1].init
+        fun.show()
+        derivative = Expr(fun)._forward_diff()       
+        print(derivative)
+        c_code._generate_expr(curr_base_variable._get(), derivative)
+
+    c_code._make_footer()
+        
+        # c_code._write(derivative)
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -295,5 +320,7 @@ if __name__ == "__main__":
     ast = parse_file(filename, use_cpp=True,
             cpp_path='gcc',
             cpp_args=['-E', r'-Iutils/fake_libc_include'])
+
+    curr_base_variable = Variable("temp")
     # ast.show()
     grad_without_traversal(ast)
