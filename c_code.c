@@ -6,10 +6,10 @@ double *ders;
 ders = malloc(count * sizeof(*ders));
 
 double k = values[0];
-ders[0]= cos(k) * cos(k)*1 + sin(k) * -1*sin(k)*1 + (pow(k,(2-1) * (2 * 1 + k * 0 * log(k))));
+ders[0]= cos(k) * cos(k)*1 + sin(k) * -1*sin(k)*1 + (pow(k,(2-1) * (2 * 1 + k * 0 * log(k)))) + l * 0 + l * 0 - l * 1 + k * 0;
 
 double l = values[1];
-ders[1]= cos(k) * cos(k)*0 + sin(k) * -1*sin(k)*0 + (pow(k,(2-1) * (2 * 0 + k * 0 * log(k))));
+ders[1]= cos(k) * cos(k)*0 + sin(k) * -1*sin(k)*0 + (pow(k,(2-1) * (2 * 0 + k * 0 * log(k)))) + l * 1 + l * 1 - l * 0 + k * 1;
 
 return ders; 
 }

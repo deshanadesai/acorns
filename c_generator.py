@@ -23,8 +23,7 @@ class CGenerator(object):
 	def _make_header(self):
 		f = open(self.filename,'w')
 		f.write("#include <math.h>\n\n")
-		funcdecl = "double *compute(double values[], int count){\n\n\
-double *ders;\nders = malloc(count * sizeof(*ders));\n\n";
+		funcdecl = "double *compute(double values[], int count){\n\ndouble *ders;\nders = malloc(count * sizeof(*ders));\n\n";
 		f.write(funcdecl)
 		f.close()
 
@@ -41,8 +40,7 @@ double *ders;\nders = malloc(count * sizeof(*ders));\n\n";
 		f = open(self.filename,'a')
 		f.write("return ders; \n}\n\n")
 		funcdecl = "int main(){\n\n"
-		funcbody = "int i, count = "+str(self.points)+";\ndouble *ders; \n\
-double values["+str(self.points)+"] = {4.5,6.4};\n\n\
+		funcbody = "int i, count = "+str(self.points)+";\ndouble *ders; \ndouble values["+str(self.points)+"] = {4.5,6.4};\n\n\
 ders = compute(values, count);\n"
 		funcprint = "printf(\"Printing values: \");\n\
 for(i = 0 ; i < count ; i++) { \n\

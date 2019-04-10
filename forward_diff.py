@@ -9,14 +9,16 @@ import c_generator
 class Expr(pycparser.c_ast.Node):
     def __init__(self,node):
         if isinstance(node, str):
+            # print("Making new node: ")
+            # print("New node: ",node)
             self.ast = node
             self.type = 'str'
         else:
-            print("Making a new Expression")
-            print(type(node))
+            # print("Making a new Expression",node)
             self.ast = node
-            print(self.ast.show())
+            print("AST: ",self.ast.show())
             self.type = node.__class__.__name__ 
+            print("type: ",self.type)
 
     def _eval(self):
         if self.type=='BinaryOp':
@@ -25,6 +27,10 @@ class Expr(pycparser.c_ast.Node):
             return self.eval_match_funccall()
         elif self.type == 'str':
             return (self.__variable__(self.ast))._eval()
+        elif self.type == 'ID':
+            return (self.__variable__(self.ast.name))._eval()            
+        elif self.type == 'Constant':
+            return (self.__variable__(self.ast.value))._eval()        
 
 
     def match_op(self):
@@ -41,7 +47,7 @@ class Expr(pycparser.c_ast.Node):
 
     def match_funccall(self):
         func = self.ast.name.name
-        print(func)
+        # print(func)
         if func == 'pow':
             return (self.__pow__())._forward_diff(self)
         elif func == 'sin':
@@ -81,7 +87,12 @@ class Expr(pycparser.c_ast.Node):
         elif self.type ==  'FuncCall':
             return self.match_funccall()
         elif self.type == 'str':
-            return (self.__variable__(self.ast))._forward_diff()            
+            return (self.__variable__(self.ast))._forward_diff() 
+        elif self.type == 'ID':
+            return (self.__variable__(self.ast.name))._forward_diff() 
+        elif self.type == 'Constant':
+            return (self.__variable__(self.ast.value))._forward_diff()
+
 
     def __add__(self):
         return Add()
@@ -108,6 +119,7 @@ class Expr(pycparser.c_ast.Node):
         # if name == curr_base_variable._get():
         #     return base_vars[0]
         # else:
+        print("Making new variable",name)
         return Variable(name)
 
 
@@ -120,6 +132,7 @@ class Variable(Expr):
         return self.name
 
     def _forward_diff(self):
+        print("Getting derivative for ",self.name, " when base is ",curr_base_variable._get())
         if self.name == curr_base_variable._get():
             return "1"
         else:
@@ -150,15 +163,16 @@ class Add(Expr):
         return Expr(cur_node.ast.left).__eval() + " + " + Expr(cur_node.ast.right).__eval()
 
     def _forward_diff(self,cur_node):
-        print(type(cur_node.ast))
+        # print(type(cur_node.ast))
         print("Forward Diff through add")
         cur_node.ast.show()
-        print(type(cur_node.ast.left))
+        print(cur_node.ast.right)
         return Expr(cur_node.ast.left)._forward_diff() + " + " + Expr(cur_node.ast.right)._forward_diff()
 
 
 class Subtract(Expr):
     def __init__(self):
+        print("initiating subtract")
         pass    
     def _eval(self,cur_node):
         return Expr(cur_node.ast.left).__eval() + " - " + Expr(cur_node.ast.right).__eval()
@@ -171,6 +185,9 @@ class Multiply(Expr):
     def __init__(self):
         pass    
     def _eval(self,cur_node):
+        print("printing left tree:",cur_node.ast)
+        print("left eval: ",Expr(cur_node.ast.left).__eval())
+        print("right eval: ",Expr(cur_node.ast.right).__eval())
         return Expr(cur_node.ast.left).__eval() + " * " + Expr(cur_node.ast.right).__eval()
 
     def _forward_diff(self,cur_node):
@@ -182,15 +199,18 @@ class Multiply(Expr):
 
 class Divide(Expr):
     def __init__(self):
+        print("initiating divide")
         pass    
     def _eval(self,cur_node):
         return Expr(cur_node.ast.left).__eval() + " / " + Expr(cur_node.ast.right).__eval()
 
     def _forward_diff(self,cur_node):
+        print("in divide forward:",cur_node.ast)
         lhs = Expr(cur_node.ast.left)._eval()
+        print("lhs: ",lhs)
         rhs = Expr(cur_node.ast.right)._eval()
-        return "(" +rhs+ " * " +Expr(cur_node.ast.left)._forward_diff() + " - " + \
-                         lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()+")" + "/ " + rhs + " * " + rhs
+        return "(" +rhs+ " * " +Expr(cur_node.ast.left)._forward_diff() + " - " \
+                        + lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()+")" + "/ " + rhs + " * " + rhs
 
 class Pow(Expr):
     def __init__(self):
@@ -234,20 +254,20 @@ class Cosine(Expr):
         exp = cur_node.ast.args.exprs[0].name
         return "-1*sin("+exp +")*"+Expr(exp)._forward_diff()
 
-def differentiate(node):
-    # print(show_attrs(node.__class__))
-    if node.__class__.__name__ == 'BinaryOp':
-        op = node.op
-        if (op)=='+':
-            print("x=a+b")
-        elif (op) == '*':
-            print("Mult")
-        else:
-            print(op)
+# def differentiate(node):
+#     # print(show_attrs(node.__class__))
+#     if node.__class__.__name__ == 'BinaryOp':
+#         op = node.op
+#         if (op)=='+':
+#             print("x=a+b")
+#         elif (op) == '*':
+#             print("Mult")
+#         else:
+#             print(op)
 
-    elif node.__class__.__name__ == 'FuncCall':
-        print(node.name.name)
-    return
+#     elif node.__class__.__name__ == 'FuncCall':
+#         print(node.name.name)
+#     return
 
 def show_attrs(node):    
     for attr in dir(node):
@@ -300,7 +320,7 @@ def grad_without_traversal(ast, x=0):
 
     for vars_ in der_vars:
         curr_base_variable = Variable(vars_.name)
-
+        print("Deriving for variable: ",vars_.name)
         fun = ast.ext[-2].body.block_items[1].init
         fun.show()
         derivative = Expr(fun)._forward_diff()       
@@ -309,7 +329,7 @@ def grad_without_traversal(ast, x=0):
 
     c_code._make_footer()
         
-        # c_code._write(derivative)
+    # c_code._write(derivative)
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

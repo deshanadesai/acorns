@@ -5,7 +5,7 @@ void f(char * restrict joe){}
 int to_diff(double k,double l)
 {
     unsigned int long c = 4;
-    int p = sin(k)*cos(k)+pow(k,2);
+    double p = sin(k)*cos(k)+pow(k,2)+l*l-k*l;
     return 0;
 }
 
