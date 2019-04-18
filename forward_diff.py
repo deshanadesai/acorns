@@ -5,6 +5,7 @@ import math
 from pycparser import parse_file
 import pycparser.c_ast
 import c_generator
+import argparse
 
 class Expr(pycparser.c_ast.Node):
     def __init__(self,node):
@@ -185,9 +186,9 @@ class Multiply(Expr):
     def __init__(self):
         pass    
     def _eval(self,cur_node):
-        print("printing left tree:",cur_node.ast)
-        print("left eval: ",Expr(cur_node.ast.left).__eval())
-        print("right eval: ",Expr(cur_node.ast.right).__eval())
+        # print("printing left tree:",cur_node.ast)
+        # print("left eval: ",Expr(cur_node.ast.left).__eval())
+        # print("right eval: ",Expr(cur_node.ast.right).__eval())
         return Expr(cur_node.ast.left).__eval() + " * " + Expr(cur_node.ast.right).__eval()
 
     def _forward_diff(self,cur_node):
@@ -205,9 +206,9 @@ class Divide(Expr):
         return Expr(cur_node.ast.left).__eval() + " / " + Expr(cur_node.ast.right).__eval()
 
     def _forward_diff(self,cur_node):
-        print("in divide forward:",cur_node.ast)
+        # print("in divide forward:",cur_node.ast)
         lhs = Expr(cur_node.ast.left)._eval()
-        print("lhs: ",lhs)
+        # print("lhs: ",lhs)
         rhs = Expr(cur_node.ast.right)._eval()
         return "(" +rhs+ " * " +Expr(cur_node.ast.left)._forward_diff() + " - " \
                         + lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()+")" + "/ " + rhs + " * " + rhs
@@ -311,20 +312,49 @@ def grad_without_traversal(ast, x=0):
     same arguments as `fun` , but returns the gradient instead. The function
     `fun` is expected to be scalar valued. The gradient has the same type as argument."""
     assert type(x) in (int, tuple, list), x
-    fun_name = ast.ext[-2].decl.name
-    assert fun_name == 'to_diff'
-    der_vars = ast.ext[-2].decl.type.args.params
+    global ext_index
+    fun = None
+
+    for funs in range(len(ast.ext)):
+        if 'decl' not in  dir(ast.ext[funs]):
+            continue
+        fun_name = ast.ext[funs].decl.name
+        if fun_name == parser.func:
+            ext_index = funs
+            break
+    assert fun_name == parser.func
+
+    der_vars = ast.ext[ext_index].decl.type.args.params
+
     global curr_base_variable
-    c_code = c_generator.CGenerator()
+    c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables))
     c_code._make_header()
 
-    for vars_ in der_vars:
-        curr_base_variable = Variable(vars_.name)
-        print("Deriving for variable: ",vars_.name)
-        fun = ast.ext[-2].body.block_items[1].init
-        fun.show()
-        derivative = Expr(fun)._forward_diff()       
-        print(derivative)
+    # for vars_ in der_vars:
+    #     c_code._make_decls(vars_.name)
+
+    # look for function to differentiate.
+    for blocks in range(len(ast.ext[ext_index].body.block_items)):
+        if 'name' not in dir(ast.ext[ext_index].body.block_items[blocks]):
+            continue
+        expr_name = ast.ext[ext_index].body.block_items[blocks].name
+
+        if expr_name != expression:
+            continue
+
+        fun = ast.ext[ext_index].body.block_items[blocks].init
+
+    assert fun != None
+
+    fun.show()
+
+    for i, vars_ in enumerate(variables):
+        c_code._declare_vars(vars_,i)
+
+    for vars_ in variables:
+        curr_base_variable = Variable(vars_)
+        derivative = Expr(fun)._forward_diff() 
+        print(derivative) 
         c_code._generate_expr(curr_base_variable._get(), derivative)
 
     c_code._make_footer()
@@ -332,10 +362,26 @@ def grad_without_traversal(ast, x=0):
     # c_code._write(derivative)
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        filename  = sys.argv[1]
-    else:
-        print("Please provide a filename as argument")
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('filename', type = str, help='file name')
+    parser.add_argument('expr', type = str, help='file name')
+    parser.add_argument('-v', '--vars',
+                      type=str, action='store',
+                      dest='variables',
+                      help='Variables to differentiate wrt to')
+    parser.add_argument('-func', type = str, dest = 'func', help='function name')
+    parser.add_argument('--output_filename', type = str, default ='c_code', help='file name')    
+    parser.add_argument('--nth_der', type = int, help='nth derivative')
+
+
+    parser = parser.parse_args()
+
+    filename = parser.filename
+    variables = parser.variables.split(",")
+    expression = parser.expr
+    output_filename = parser.output_filename
+
 
     ast = parse_file(filename, use_cpp=True,
             cpp_path='gcc',
@@ -343,4 +389,5 @@ if __name__ == "__main__":
 
     curr_base_variable = Variable("temp")
     # ast.show()
+    ext_index = 0
     grad_without_traversal(ast)

@@ -2,11 +2,11 @@
 
 void f(char * restrict joe){}
 
-int to_diff(double k,double l)
+double to_diff(double k,double l)
 {
     unsigned int long c = 4;
-    int p = sin(k)*cos(k)+pow(k,2);
-    return 0;
+    double p = sin(k)*cos(k)+pow(k,2);
+    return p;
 }
 
 int main(){
