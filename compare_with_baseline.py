@@ -11,7 +11,8 @@ DERIVATIVES_FILENAME = "derivatives"
 RUNNABLE_FILENAME = "runnable"
 OUTPUT_FILENAME = "output.txt"
 OFFSET = "    "
-NUM_PARAMS = 1000
+NUM_PARAMS = 10
+NUM_ITERATIONS = 100
 
 
 def generate_function_c_file():
@@ -47,33 +48,29 @@ def generate_runnable_c_file():
 	der_f.close()
 	run_f = open(RUNNABLE_FILENAME + ".c", "w")
 	include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n"
-	# global_args = "double args[argc-1][2];"
-	# global_ders = "double ders[" + str(NUM_PARAMS + "][2];"
+	global_num_params = "#define N " + str(NUM_PARAMS) + "\n"
 	main = """\nint main(int argc, char *argv[]) {
-	double args[argc-1][2];
-	for(int i = 1; i < argc; i++) {
-		args[i-1][0] = atof(argv[i]);
+	double args[N][2];
+	for(int i = 0; i < N; i++) {
+		args[i][0] = atof(argv[i]);
 	}
-		long num_points = ((int) (sizeof (args) / sizeof (args)[0]));\n
+	long num_points = ((int) (sizeof (args) / sizeof (args)[0]));\n
 	"""
-	main += "double ders[" + str(NUM_PARAMS) + "][2];\n"
+	main += "double ders[N][2];\n"
 	main += """
+	struct timespec tstart={0,0}, tend={0,0};
+    clock_gettime(CLOCK_MONOTONIC, &tstart);
 	struct timeval stop, start;
-	gettimeofday(&start, NULL);
-	long long start_ms = (((long long)start.tv_sec)*1000)+(start.tv_usec/1000);
 	compute(args, num_points, ders);
-	gettimeofday(&stop, NULL);
-	long long stop_ms = (((long long)stop.tv_sec)*1000)+(stop.tv_usec/1000);
-	printf("start: %lu", start_ms);
-	printf("stop: %lu", stop_ms);
-	long long delta = stop_ms - start_ms;
+	clock_gettime(CLOCK_MONOTONIC, &tend);
+	double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
 	FILE *fp;\n
 	"""
 	main += "fp = fopen(\""
 	main += OUTPUT_FILENAME
 	main += "\", \"w+\");\n"
 	main += """
-    fprintf(fp, "%lu ", delta);
+    fprintf(fp, "%f ", delta);
 	for(int i = 0; i < ( (int) sizeof(ders) / sizeof(ders[0]) ); i++) {
         fprintf(fp, "%f ", ders[i][0]);
     }
@@ -81,7 +78,7 @@ def generate_runnable_c_file():
 	return 0;
 }
 	"""
-	output = include + der_func + main
+	output = include + global_num_params + der_func + main
 	run_f.write(output)
 	run_f.close()
 
@@ -108,25 +105,30 @@ def run_pytorch(params):
 def run_ours(param_string):
 	os.system("gcc " + RUNNABLE_FILENAME + ".c -o " + RUNNABLE_FILENAME + " -lm")
 	run_command = "./" + RUNNABLE_FILENAME + " " + param_string
-	start_time_us = time.time()
 	os.system(run_command)
-	end_time_us = time.time()
-	runtime = end_time_us - start_time_us
-	print(runtime)
 	f = open(OUTPUT_FILENAME, "r")
 	output = f.read()
 	output_array = output.split()
-	# time = output_array[0]
+	runtime = output_array[0]
 	values = output_array[1:]
 	return [values, runtime]
 
 
 if __name__ == "__main__":
-	params = generate_params()
 	generate_function_c_file()
 	generate_runnable_c_file()
-	param_string = " ".join(str(x[0]) for x in params[0])
-	pytorch = run_pytorch(params)
-	ours = run_ours(param_string)
-	print(pytorch[1])
-	print(ours[1])
+	our_times = []
+	py_times = []
+	for i in range(NUM_ITERATIONS):
+		params = generate_params()
+		param_string = " ".join(str(x[0]) for x in params[0])
+		pytorch = run_pytorch(params)
+		ours = run_ours(param_string)
+		our_times.append(float(ours[1]))
+		py_times.append(float(pytorch[1]))
+		# print("Pytorch took: " + str(pytorch[1]))
+		# print("We took: " + str(ours[1]))
+	avg_us = sum(our_times) / len(our_times)
+	avg_pytorch = sum(py_times) / len(py_times)
+	print("Avg Us: " + str(avg_us) )
+	print("Avg Pytorch: " + str(avg_pytorch) )
