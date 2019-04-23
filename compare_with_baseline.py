@@ -3,8 +3,6 @@ import time
 import os
 import numpy as np
 
-from subprocess import call
-
 import forward_diff
 
 functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
@@ -13,7 +11,7 @@ DERIVATIVES_FILENAME = "derivatives"
 RUNNABLE_FILENAME = "runnable"
 OUTPUT_FILENAME = "output.txt"
 OFFSET = "    "
-NUM_PARAMS = 1000000
+NUM_PARAMS = 1000
 
 
 def generate_function_c_file():
@@ -49,6 +47,8 @@ def generate_runnable_c_file():
 	der_f.close()
 	run_f = open(RUNNABLE_FILENAME + ".c", "w")
 	include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n"
+	# global_args = "double args[argc-1][2];"
+	# global_ders = "double ders[" + str(NUM_PARAMS + "][2];"
 	main = """\nint main(int argc, char *argv[]) {
 	double args[argc-1][2];
 	for(int i = 1; i < argc; i++) {
@@ -107,14 +107,18 @@ def run_pytorch(params):
 
 def run_ours(param_string):
 	os.system("gcc " + RUNNABLE_FILENAME + ".c -o " + RUNNABLE_FILENAME + " -lm")
-	print(param_string)
-	os.system("./" + RUNNABLE_FILENAME + " " + param_string)
+	run_command = "./" + RUNNABLE_FILENAME + " " + param_string
+	start_time_us = time.time()
+	os.system(run_command)
+	end_time_us = time.time()
+	runtime = end_time_us - start_time_us
+	print(runtime)
 	f = open(OUTPUT_FILENAME, "r")
 	output = f.read()
 	output_array = output.split()
-	time = output_array[0]
+	# time = output_array[0]
 	values = output_array[1:]
-	return [time, values]
+	return [values, runtime]
 
 
 if __name__ == "__main__":
@@ -124,5 +128,5 @@ if __name__ == "__main__":
 	param_string = " ".join(str(x[0]) for x in params[0])
 	pytorch = run_pytorch(params)
 	ours = run_ours(param_string)
-	# print(pytorch)
-	print(ours)
+	print(pytorch[1])
+	print(ours[1])
