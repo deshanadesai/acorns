@@ -28,8 +28,7 @@ class CGenerator(object):
 			ext = '.c'
 
 			f = open(self.filename+ext,'w')
-			f.write("void compute(const double values[][%d], double ders[][%d]){\n\n" % (self.variable_count, self.variable_count))
-			f.write("\tlong num_points = ((int) (sizeof (values) / sizeof (values)[0]));\n\n")
+			f.write("void compute(const double values[][%d], long num_points, double ders[][%d]){\n\n" % (self.variable_count, self.variable_count))
 			f.write("\tfor(int i = 0; i < num_points; ++i)\n\t{\n") # iterate over 
 			f.close()
 

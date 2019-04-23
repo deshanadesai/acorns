@@ -226,8 +226,8 @@ class Pow(Expr):
         der_base = Expr(base)._forward_diff()
         der_exp = Expr(exp)._forward_diff()
 
-        return "(pow("+base+",("+exp+"-1) * "+\
-                "("+exp+ " * "+ der_base +" + "+base+ " * "+ der_exp+ " * log("+base+"))))"
+        return "(pow("+base+",("+exp+"-1)) * "+\
+                "("+exp+ " * "+ der_base +" + "+base+ " * "+ der_exp+ " * log("+base+")))"
 
 
 class Sine(Expr):        
