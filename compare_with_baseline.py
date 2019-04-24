@@ -2,7 +2,7 @@ import torch
 from timeit import default_timer as timer
 import os
 import numpy as np
-
+from subprocess import PIPE, run
 import forward_diff
 
 functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
@@ -10,8 +10,9 @@ INPUT_FILENAME = "functions.c"
 DERIVATIVES_FILENAME = "derivatives"
 RUNNABLE_FILENAME = "runnable"
 OUTPUT_FILENAME = "output.txt"
+PARAMS_FILENAME = "params.txt"
 OFFSET = "    "
-NUM_PARAMS = 1000
+NUM_PARAMS = 1000000
 NUM_ITERATIONS = 1
 
 
@@ -48,6 +49,7 @@ def generate_runnable_c_file():
 	der_f.close()
 	run_f = open(RUNNABLE_FILENAME + ".c", "w")
 	include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n"
+	read_file_func = generate_read_file()
 	global_num_params = "#define N " + str(NUM_PARAMS) + "\n"
 	main = """\nint main(int argc, char *argv[]) {
 	double **args = malloc(N * sizeof(double *));
@@ -56,9 +58,8 @@ def generate_runnable_c_file():
    		args[i] = malloc(2 * sizeof(double));
    		ders[i] = malloc(2 * sizeof(double));
 	}
-	for(int i = 0; i < N; i++) {
-		args[i][0] = atof(argv[i+1]);
-	}
+
+	read_file_to_array(argv[1], args);
 
 	struct timespec tstart={0,0}, tend={0,0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
@@ -80,11 +81,25 @@ def generate_runnable_c_file():
 	return 0;
 }
 	"""
-	output = include + global_num_params + der_func + main
+	output = include + global_num_params + der_func + read_file_func + main
 	run_f.write(output)
 	run_f.close()
 
-
+def generate_read_file():
+	return """void read_file_to_array(char* filename, double **args) {
+    FILE *file = fopen ( filename, "r" );
+    if ( file != NULL ) {
+    	char line [ 200 ]; 
+   		int i = 0;
+    	while ( fgets ( line, sizeof line, file ) != NULL )  {
+      		args[i][0] = atof(line);
+      		i++;
+        }
+        fclose ( file );
+    } else {
+    	perror ( filename ); /* why didn't the file open? */
+    }
+}"""
 
 def generate_params():
 	all_params = []
@@ -105,9 +120,11 @@ def run_pytorch(params):
 	return [x.grad, runtime]
 
 def run_ours(param_string):
+	print_param_to_file(param_string)
 	os.system("gcc " + RUNNABLE_FILENAME + ".c -o " + RUNNABLE_FILENAME + " -lm")
-	run_command = "./" + RUNNABLE_FILENAME + " " + param_string
-	os.system(run_command)
+	run_command = "./" + RUNNABLE_FILENAME  + " " + PARAMS_FILENAME
+	result = run(run_command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
+	print(result.stdout)
 	f = open(OUTPUT_FILENAME, "r")
 	output = f.read()
 	output_array = output.split()
@@ -115,6 +132,9 @@ def run_ours(param_string):
 	values = output_array[1:]
 	return [values, runtime]
 
+def print_param_to_file(param_string):
+	param_f = open(PARAMS_FILENAME, "w+")
+	param_f.write(param_string)
 
 if __name__ == "__main__":
 	generate_function_c_file()
@@ -123,7 +143,7 @@ if __name__ == "__main__":
 	py_times = []
 	for i in range(NUM_ITERATIONS):
 		params = generate_params()
-		param_string = " ".join(str(x[0]) for x in params[0])
+		param_string = "\n".join(str(x[0]) for x in params[0])
 		pytorch = run_pytorch(params)
 		ours = run_ours(param_string)
 		our_times.append(float(ours[1]))

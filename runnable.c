@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#define N 1000
+#define N 10000000
 void compute(double **values, long num_points, double **ders){
 
 	for(int i = 0; i < num_points; ++i)
@@ -12,7 +12,20 @@ void compute(double **values, long num_points, double **ders){
 	}
 }
 
-
+void read_file_to_array(char* filename, double **args) {
+    FILE *file = fopen ( filename, "r" );
+    if ( file != NULL ) {
+    	char line [ 200 ]; 
+   		int i = 0;
+    	while ( fgets ( line, sizeof line, file ) != NULL )  {
+      		args[i][0] = atof(line);
+      		i++;
+        }
+        fclose ( file );
+    } else {
+    	perror ( filename ); /* why didn't the file open? */
+    }
+}
 int main(int argc, char *argv[]) {
 	double **args = malloc(N * sizeof(double *));
 	double **ders = malloc(N * sizeof(double *));
@@ -20,9 +33,8 @@ int main(int argc, char *argv[]) {
    		args[i] = malloc(2 * sizeof(double));
    		ders[i] = malloc(2 * sizeof(double));
 	}
-	for(int i = 0; i < N; i++) {
-		args[i][0] = atof(argv[i+1]);
-	}
+
+	read_file_to_array(argv[1], args);
 
 	struct timespec tstart={0,0}, tend={0,0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
