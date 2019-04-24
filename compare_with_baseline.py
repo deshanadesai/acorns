@@ -4,6 +4,8 @@ import os
 import numpy as np
 from subprocess import PIPE, run
 import forward_diff
+import numpy as np
+import matplotlib.pyplot as plt
 
 functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
 INPUT_FILENAME = "functions.c"
@@ -12,8 +14,8 @@ RUNNABLE_FILENAME = "runnable"
 OUTPUT_FILENAME = "output.txt"
 PARAMS_FILENAME = "params.txt"
 OFFSET = "    "
-NUM_PARAMS = 1000000
-NUM_ITERATIONS = 1
+NUM_PARAMS = 10
+NUM_ITERATIONS = 20
 
 
 def generate_function_c_file():
@@ -124,7 +126,6 @@ def run_ours(param_string):
 	os.system("gcc " + RUNNABLE_FILENAME + ".c -o " + RUNNABLE_FILENAME + " -lm")
 	run_command = "./" + RUNNABLE_FILENAME  + " " + PARAMS_FILENAME
 	result = run(run_command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
-	print(result.stdout)
 	f = open(OUTPUT_FILENAME, "r")
 	output = f.read()
 	output_array = output.split()
@@ -150,5 +151,12 @@ if __name__ == "__main__":
 		py_times.append(float(pytorch[1]))
 	avg_us = sum(our_times) / len(our_times)
 	avg_pytorch = sum(py_times) / len(py_times)
+	denom = list(range(NUM_ITERATIONS))
+	print(our_times)
+	plt.figure(1)
+	plt.subplot(211)
+	plt.plot(denom, our_times, 'b')
+	plt.plot(denom, py_times, 'r--')
+	plt.savefig('graph.png')
 	print("Avg Us: " + str(avg_us) )
 	print("Avg Pytorch: " + str(avg_pytorch) )

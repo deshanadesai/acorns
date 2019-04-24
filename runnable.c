@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#define N 10000000
+#define N 10
 void compute(double **values, long num_points, double **ders){
 
 	for(int i = 0; i < num_points; ++i)
