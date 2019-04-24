@@ -1,5 +1,5 @@
 import torch
-import time
+from timeit import default_timer as timer
 import os
 import numpy as np
 
@@ -11,8 +11,8 @@ DERIVATIVES_FILENAME = "derivatives"
 RUNNABLE_FILENAME = "runnable"
 OUTPUT_FILENAME = "output.txt"
 OFFSET = "    "
-NUM_PARAMS = 10
-NUM_ITERATIONS = 100
+NUM_PARAMS = 1000
+NUM_ITERATIONS = 1
 
 
 def generate_function_c_file():
@@ -50,18 +50,20 @@ def generate_runnable_c_file():
 	include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n"
 	global_num_params = "#define N " + str(NUM_PARAMS) + "\n"
 	main = """\nint main(int argc, char *argv[]) {
-	double args[N][2];
+	double **args = malloc(N * sizeof(double *));
+	double **ders = malloc(N * sizeof(double *));
 	for(int i = 0; i < N; i++) {
-		args[i][0] = atof(argv[i]);
+   		args[i] = malloc(2 * sizeof(double));
+   		ders[i] = malloc(2 * sizeof(double));
 	}
-	long num_points = ((int) (sizeof (args) / sizeof (args)[0]));\n
-	"""
-	main += "double ders[N][2];\n"
-	main += """
+	for(int i = 0; i < N; i++) {
+		args[i][0] = atof(argv[i+1]);
+	}
+
 	struct timespec tstart={0,0}, tend={0,0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
 	struct timeval stop, start;
-	compute(args, num_points, ders);
+	compute(args, (long) N, ders);
 	clock_gettime(CLOCK_MONOTONIC, &tend);
 	double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
 	FILE *fp;\n
@@ -71,7 +73,7 @@ def generate_runnable_c_file():
 	main += "\", \"w+\");\n"
 	main += """
     fprintf(fp, "%f ", delta);
-	for(int i = 0; i < ( (int) sizeof(ders) / sizeof(ders[0]) ); i++) {
+	for(int i = 0; i < N; i++) {
         fprintf(fp, "%f ", ders[i][0]);
     }
 	fclose(fp);
@@ -95,10 +97,10 @@ def generate_params():
 def run_pytorch(params):
 	x = torch.tensor(params[0], requires_grad=True)
 	y = torch.sin(x)*torch.cos(x)+torch.pow(x,2)
-	start_time_pytorch = time.time()
+	start_time_pytorch = timer()
 	y.backward(torch.ones_like(x))
 	x.grad
-	end_time_pytorch = time.time()
+	end_time_pytorch = timer()
 	runtime = end_time_pytorch - start_time_pytorch
 	return [x.grad, runtime]
 
@@ -126,8 +128,6 @@ if __name__ == "__main__":
 		ours = run_ours(param_string)
 		our_times.append(float(ours[1]))
 		py_times.append(float(pytorch[1]))
-		# print("Pytorch took: " + str(pytorch[1]))
-		# print("We took: " + str(ours[1]))
 	avg_us = sum(our_times) / len(our_times)
 	avg_pytorch = sum(py_times) / len(py_times)
 	print("Avg Us: " + str(avg_us) )

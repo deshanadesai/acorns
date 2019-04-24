@@ -1,4 +1,4 @@
-void compute(const double values[][2], long num_points, double ders[][2]){
+void compute(double **values, long num_points, double **ders){
 
 	for(int i = 0; i < num_points; ++i)
 	{

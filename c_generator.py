@@ -28,7 +28,7 @@ class CGenerator(object):
 			ext = '.c'
 
 			f = open(self.filename+ext,'w')
-			f.write("void compute(const double values[][%d], long num_points, double ders[][%d]){\n\n" % (self.variable_count, self.variable_count))
+			f.write("void compute(double **values, long num_points, double **ders){\n\n")
 			f.write("\tfor(int i = 0; i < num_points; ++i)\n\t{\n") # iterate over 
 			f.close()
 
@@ -36,7 +36,7 @@ class CGenerator(object):
 		if(self.ispc):
 			ext = '.ispc'
 			f = open(self.filename+ext,'w')
-			f.write("export void compute(uniform double values[][%d], uniform double ders[][%d]){\n\n" % (self.variable_count, self.variable_count))
+			f.write("export void compute(double **values, long num_points, double **ders){\n\n")
 			f.write("\tuniform long num_points = ((int) (sizeof (values) / sizeof (values)[0]));\n\n")
 			f.write("\tforeach (index = 0 ... num_points)\n\t{\n") # iterate over 
 			f.close()

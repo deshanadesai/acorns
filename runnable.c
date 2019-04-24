@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#define N 10
-void compute(const double values[][2], long num_points, double ders[][2]){
+#define N 1000
+void compute(double **values, long num_points, double **ders){
 
 	for(int i = 0; i < num_points; ++i)
 	{
@@ -14,18 +14,20 @@ void compute(const double values[][2], long num_points, double ders[][2]){
 
 
 int main(int argc, char *argv[]) {
-	double args[N][2];
+	double **args = malloc(N * sizeof(double *));
+	double **ders = malloc(N * sizeof(double *));
 	for(int i = 0; i < N; i++) {
-		args[i][0] = atof(argv[i]);
+   		args[i] = malloc(2 * sizeof(double));
+   		ders[i] = malloc(2 * sizeof(double));
 	}
-	long num_points = ((int) (sizeof (args) / sizeof (args)[0]));
-
-	double ders[N][2];
+	for(int i = 0; i < N; i++) {
+		args[i][0] = atof(argv[i+1]);
+	}
 
 	struct timespec tstart={0,0}, tend={0,0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
 	struct timeval stop, start;
-	compute(args, num_points, ders);
+	compute(args, (long) N, ders);
 	clock_gettime(CLOCK_MONOTONIC, &tend);
 	double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
 	FILE *fp;
@@ -33,7 +35,7 @@ int main(int argc, char *argv[]) {
 	fp = fopen("output.txt", "w+");
 
     fprintf(fp, "%f ", delta);
-	for(int i = 0; i < ( (int) sizeof(ders) / sizeof(ders[0]) ); i++) {
+	for(int i = 0; i < N; i++) {
         fprintf(fp, "%f ", ders[i][0]);
     }
 	fclose(fp);
