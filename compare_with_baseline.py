@@ -15,7 +15,7 @@ OUTPUT_FILENAME = "output.txt"
 PARAMS_FILENAME = "params.txt"
 OFFSET = "    "
 NUM_PARAMS = 10
-NUM_ITERATIONS = 20
+NUM_ITERATIONS = 10
 
 
 def generate_function_c_file():
@@ -62,7 +62,7 @@ def generate_runnable_c_file():
 	}
 
 	read_file_to_array(argv[1], args);
-
+	compute(args, (long) N, ders);
 	struct timespec tstart={0,0}, tend={0,0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
 	struct timeval stop, start;
@@ -112,8 +112,11 @@ def generate_params():
 
 
 def run_pytorch(params):
+	torch.set_num_threads(1)
 	x = torch.tensor(params[0], requires_grad=True)
 	y = torch.sin(x)*torch.cos(x)+torch.pow(x,2)
+	print("Y is: " + str(type(y)))
+	print(torch.get_num_threads())
 	start_time_pytorch = timer()
 	y.backward(torch.ones_like(x))
 	x.grad
@@ -121,9 +124,9 @@ def run_pytorch(params):
 	runtime = end_time_pytorch - start_time_pytorch
 	return [x.grad, runtime]
 
-def run_ours(param_string):
-	print_param_to_file(param_string)
-	os.system("gcc " + RUNNABLE_FILENAME + ".c -o " + RUNNABLE_FILENAME + " -lm")
+def run_ours(params):
+	print_param_to_file(params)
+	os.system("gcc " + RUNNABLE_FILENAME + ".c -O3 -o " + RUNNABLE_FILENAME + " -lm")
 	run_command = "./" + RUNNABLE_FILENAME  + " " + PARAMS_FILENAME
 	result = run(run_command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
 	f = open(OUTPUT_FILENAME, "r")
@@ -133,30 +136,37 @@ def run_ours(param_string):
 	values = output_array[1:]
 	return [values, runtime]
 
-def print_param_to_file(param_string):
+def print_param_to_file(params):
+	param_string = "\n".join(str(x[0]) for x in params[0])
 	param_f = open(PARAMS_FILENAME, "w+")
 	param_f.write(param_string)
 
 if __name__ == "__main__":
-	generate_function_c_file()
-	generate_runnable_c_file()
-	our_times = []
-	py_times = []
-	for i in range(NUM_ITERATIONS):
-		params = generate_params()
-		param_string = "\n".join(str(x[0]) for x in params[0])
-		pytorch = run_pytorch(params)
-		ours = run_ours(param_string)
-		our_times.append(float(ours[1]))
-		py_times.append(float(pytorch[1]))
-	avg_us = sum(our_times) / len(our_times)
-	avg_pytorch = sum(py_times) / len(py_times)
-	denom = list(range(NUM_ITERATIONS))
+	# params = generate_params()
+	avg_us = []
+	avg_pytorch = []
+	denom = []
+	# run_pytorch(params)
+	while NUM_PARAMS < 1000000:
+		generate_function_c_file()
+		generate_runnable_c_file()
+		our_times = []
+		py_times = []
+		for i in range(NUM_ITERATIONS):
+			params = generate_params()
+			pytorch = run_pytorch(params)
+			ours = run_ours(params)
+			our_times.append(float(ours[1]))
+			py_times.append(float(pytorch[1]))
+		avg_us.append(sum(our_times) / len(our_times))
+		avg_pytorch.append(sum(py_times) / len(py_times))
+		denom.append(NUM_PARAMS) 
+		NUM_PARAMS = NUM_PARAMS * 10
 	print(our_times)
 	plt.figure(1)
 	plt.subplot(211)
-	plt.plot(denom, our_times, 'b')
-	plt.plot(denom, py_times, 'r--')
+	plt.plot(denom, avg_us, 'b')
+	plt.plot(denom, avg_pytorch, 'r--')
 	plt.savefig('graph.png')
 	print("Avg Us: " + str(avg_us) )
 	print("Avg Pytorch: " + str(avg_pytorch) )

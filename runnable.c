@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#define N 10
+#define N 100000
 void compute(double **values, long num_points, double **ders){
 
 	for(int i = 0; i < num_points; ++i)
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	read_file_to_array(argv[1], args);
-
+	compute(args, (long) N, ders);
 	struct timespec tstart={0,0}, tend={0,0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
 	struct timeval stop, start;
