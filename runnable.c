@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#define N 100000
+#define N 10
 void compute(double **values, long num_points, double **ders){
 
 	for(int i = 0; i < num_points; ++i)
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
 	FILE *fp;
 
-	fp = fopen("output.txt", "w+");
+	fp = fopen("us_output.txt", "w+");
 
     fprintf(fp, "%f ", delta);
 	for(int i = 0; i < N; i++) {

@@ -37,7 +37,6 @@ class CGenerator(object):
 			ext = '.ispc'
 			f = open(self.filename+ext,'w')
 			f.write("export void compute(double **values, long num_points, double **ders){\n\n")
-			f.write("\tuniform long num_points = ((int) (sizeof (values) / sizeof (values)[0]));\n\n")
 			f.write("\tforeach (index = 0 ... num_points)\n\t{\n") # iterate over 
 			f.close()
 
