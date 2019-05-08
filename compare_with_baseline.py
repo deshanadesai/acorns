@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
+# functions = [ ["k*k", ["k"] ] ]
 INPUT_FILENAME = "functions.c"
 DERIVATIVES_FILENAME = "derivatives"
 RUNNABLE_FILENAME = "runnable"
@@ -124,13 +125,15 @@ def parse_pytorch(func):
     stripped = func.strip()
     for i in range(len(stripped)):
         if stripped[i] == "*" or stripped[i] == "/" or stripped[i] == "+" or stripped[i] == "-":
-            substring = stripped[lastIndex:i]
-            torched = "torch." + substring + stripped[i]
+            substring = stripped[lastIndex:i] + stripped[i]
+            if "sin" in substring or "cos" in substring or "pow" in substring:
+            	substring = "torch." + substring
             lastIndex = i + 1
-            finalEq += torched
+            finalEq += substring
     substring = stripped[lastIndex:]
-    torched = "torch." + substring
-    finalEq += torched
+    if "sin" in substring or "cos" in substring or "pow" in substring:
+    	substring = "torch." + substring
+    finalEq += substring
     return finalEq
 
 def generate_pytorch_file(func_num, params):
@@ -198,7 +201,7 @@ if __name__ == "__main__":
 			ours = run_ours(params[0])
 			round_ours = " ".join(format(float(x), '.4f') for x in ours[0])
 			round_py = " ".join(format(float(x), '.4f') for x in pytorch[0])
-			assert(round_ours == round_py, "Values did not match!")
+			assert round_ours == round_py, "Values did not match!"
 			our_times.append(float(ours[1]))
 			py_times.append(float(pytorch[1]))
 		avg_us.append(sum(our_times) / len(our_times))
