@@ -11,13 +11,15 @@ class CGenerator(object):
 		uses string accumulation for returning expressions.
 	"""
 
-	def __init__(self, filename = 'c_code', variable_count = 1, ispc = True, c_code = True):
+	def __init__(self, filename = 'c_code', variable_count = 1, ispc = True, c_code = False):
 		self.indent_level = 0
 		self.filename=filename
 		self.variable_count = 2 # number of variables
 		self.count = 0
 		self.ispc = ispc
 		self.c_code = c_code
+		f = open(self.filename+'.c','w')
+		f.close()
 
 	def _make_indent(self):
 		return ' ' * self.indent_level
@@ -35,10 +37,9 @@ class CGenerator(object):
 
 		if(self.ispc):
 			ext = '.ispc'
-			f = open(self.filename+ext,'w')
-			f.write("export void compute(double **values, long num_points, double **ders){\n\n")
-			f.write("\tuniform long num_points = ((int) (sizeof (values) / sizeof (values)[0]));\n\n")
-			f.write("\tforeach (index = 0 ... num_points)\n\t{\n") # iterate over 
+			f = open('derivatives.ispc','w')
+			f.write("export void compute(uniform double values[], uniform int num_points, uniform double ders[]){\n\n")
+			f.write("\tforeach (i = 0 ... num_points)\n\t{\n") # iterate over 
 			f.close()
 
 	def _generate_expr(self, var, derivative_string):
@@ -54,8 +55,8 @@ class CGenerator(object):
 		if(self.ispc):
 
 			ext = '.ispc'	
-			f = open(self.filename+ext,'a')
-			f.write("\t\tders[index]["+str(self.count)+"]"+"= "+derivative_string+";\n")
+			f = open('derivatives.ispc','a')
+			f.write("\t\tders[i]"+" = "+derivative_string+";\n")
 			f.close()	
 		self.count += 1	
 
@@ -64,15 +65,15 @@ class CGenerator(object):
 		if self.c_code:
 
 			ext = '.c'			
-			f = open(self.filename+ext,'a')
+			f = open('derivatives.ispc','a')
 			f.write("\t\tdouble %s = values[i][%d];\n" % (var, index))
 			f.close()
 
 		if(self.ispc):
 
 			ext = '.ispc'				
-			f = open(self.filename+ext,'a')
-			f.write("\t\tdouble %s = values[index][%d];\n" % (var, index))
+			f = open('derivatives.ispc','a')
+			f.write("\t\tdouble %s = values[i];\n" % (var))
 			f.close()			
 
 	def _make_footer(self):
@@ -87,7 +88,7 @@ class CGenerator(object):
 		if (self.ispc):
 
 			ext = '.ispc'				
-			f = open(self.filename+ext,'a')
+			f = open('derivatives.ispc','a')
 			f.write("\t}\n}\n\n")	
 			f.close()		
 

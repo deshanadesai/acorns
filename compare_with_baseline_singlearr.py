@@ -50,25 +50,25 @@ def generate_runnable_c_file():
 	der_func = der_f.read()
 	der_f.close()
 	run_f = open(RUNNABLE_FILENAME + ".c", "w")
-	include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n"
+	include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n#include \"objs/derivatives_ispc.h\"\n"
 	read_file_func = generate_read_file()
 	global_num_params = "#define N " + str(NUM_PARAMS) + "\n"
-	main = """\nint main(int argc, char *argv[]) {
-	double **args = malloc(N * sizeof(double *));
-	double **ders = malloc(N * sizeof(double *));
-	for(int i = 0; i < N; i++) {
-   		args[i] = malloc(2 * sizeof(double));
-   		ders[i] = malloc(2 * sizeof(double));
-	}
+	main = """\nint main() {
+	double values[N];
+	double ders[N];
+	char variable[] = "params.txt"; 
+	read_file_to_array(variable, values);
 
-	read_file_to_array(argv[1], args);
-	compute(args, (long) N, ders);
 	struct timespec tstart={0,0}, tend={0,0};
+    struct timeval stop, start;
     clock_gettime(CLOCK_MONOTONIC, &tstart);
-	struct timeval stop, start;
-	compute(args, (long) N, ders);
+	
+    compute(values, N, ders);
+
+
 	clock_gettime(CLOCK_MONOTONIC, &tend);
 	double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
+    printf("%f ", delta);
 	FILE *fp;\n
 	"""
 	main += "fp = fopen(\""
@@ -77,7 +77,7 @@ def generate_runnable_c_file():
 	main += """
     fprintf(fp, "%f ", delta);
 	for(int i = 0; i < N; i++) {
-        fprintf(fp, "%f ", ders[i][0]);
+        fprintf(fp, "%f ", ders[i]);
     }
 	fclose(fp);
 	return 0;
@@ -88,16 +88,21 @@ def generate_runnable_c_file():
 	run_f.close()
 
 def generate_read_file():
-	return """void read_file_to_array(char* filename, double **args) {
-    FILE *file = fopen ( filename, "r" );
+	return """void read_file_to_array(char* filename, double *args) {
+    FILE *file = fopen (filename, "r" );
+
     if ( file != NULL ) {
-    	char line [ 200 ]; 
-   		int i = 0;
-    	while ( fgets ( line, sizeof line, file ) != NULL )  {
-      		args[i][0] = atof(line);
-      		i++;
-        }
-        fclose ( file );
+
+
+    char line [ 200 ]; 
+    int i = 0;        
+
+    for(int i=0;i<N;i++){
+        fscanf(file, "%lf", &args[i]);
+//        printf("%f ", args[i]);
+    }
+
+    fclose ( file );
     } else {
     	perror ( filename ); /* why didn't the file open? */
     }
@@ -126,7 +131,11 @@ def run_pytorch(params):
 
 def run_ours(params):
 	print_param_to_file(params)
-	os.system("gcc " + RUNNABLE_FILENAME + ".c -O3 -o " + RUNNABLE_FILENAME + " -lm")
+	cmd = "ispc -O2 --target=avx derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
+	os.system(cmd)
+	cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c"
+	os.system(cmd)
+	# os.system("gcc " + RUNNABLE_FILENAME + ".c -O3 -o " + RUNNABLE_FILENAME + " -lm")
 	run_command = "./" + RUNNABLE_FILENAME  + " " + PARAMS_FILENAME
 	result = run(run_command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
 	f = open(OUTPUT_FILENAME, "r")
