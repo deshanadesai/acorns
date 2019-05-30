@@ -327,7 +327,7 @@ def grad_without_traversal(ast, x=0):
     der_vars = ast.ext[ext_index].decl.type.args.params
 
     global curr_base_variable
-    c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables))
+    c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), c_code = ccode, ispc = ispc)
     c_code._make_header()
 
     # for vars_ in der_vars:
@@ -371,6 +371,9 @@ if __name__ == "__main__":
                       dest='variables',
                       help='Variables to differentiate wrt to')
     parser.add_argument('-func', type = str, dest = 'func', help='function name')
+    parser.add_argument('-ccode', type = str, dest = 'ccode', help='function name')
+    parser.add_argument('-ispc', type = str, dest = 'ispc', help='function name')
+
     parser.add_argument('--output_filename', type = str, default ='c_code', help='file name')    
     parser.add_argument('--nth_der', type = int, help='nth derivative')
 
@@ -382,7 +385,18 @@ if __name__ == "__main__":
     expression = parser.expr
     output_filename = parser.output_filename
 
+    if parser.ccode == 'True':
+        ccode = True
+    else:
+        ccode = False
 
+    if parser.ispc == 'True':
+        ispc = True
+    else:
+        ispc = False
+
+    print("CCODE: ",ccode)
+    print("ISPC CODE: ",ispc)
     ast = parse_file(filename, use_cpp=True,
             cpp_path='gcc',
             cpp_args=['-E', r'-Iutils/fake_libc_include'])

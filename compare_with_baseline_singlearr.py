@@ -16,7 +16,8 @@ PARAMS_FILENAME = "params.txt"
 OFFSET = "    "
 NUM_PARAMS = 10
 NUM_ITERATIONS = 10
-
+RUN_C = True
+RUN_ISPC = False
 
 def generate_function_c_file():
 	f = open(INPUT_FILENAME,'w')
@@ -44,7 +45,7 @@ def generate_function_c_file():
 
 def generate_runnable_c_file():
 	vars = ",".join(str(x) for x in functions[0][1])
-	cmd = "python3 forward_diff.py " + INPUT_FILENAME + " 'p' --vars \"" + vars + "\" -func \"function_0\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
+	cmd = "python3 forward_diff.py " + INPUT_FILENAME + " 'p' -ccode "+ str(RUN_C) + " -ispc "+ str(RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_0\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
 	os.system(cmd)
 	der_f = open(DERIVATIVES_FILENAME + ".c", "r")
 	der_func = der_f.read()
@@ -131,11 +132,14 @@ def run_pytorch(params):
 
 def run_ours(params):
 	print_param_to_file(params)
-	cmd = "ispc -O2 --target=avx derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
-	os.system(cmd)
-	cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c"
-	os.system(cmd)
-	# os.system("gcc " + RUNNABLE_FILENAME + ".c -O3 -o " + RUNNABLE_FILENAME + " -lm")
+
+	if RUN_ISPC:
+		cmd = "ispc -O2 --target=avx derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
+		os.system(cmd)
+		cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c"
+		os.system(cmd)
+	if RUN_C:
+		os.system("gcc " + RUNNABLE_FILENAME + ".c -O3 -o " + RUNNABLE_FILENAME + " -lm")
 	run_command = "./" + RUNNABLE_FILENAME  + " " + PARAMS_FILENAME
 	result = run(run_command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
 	f = open(OUTPUT_FILENAME, "r")

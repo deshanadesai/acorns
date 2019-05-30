@@ -4,6 +4,15 @@
 #include <stdio.h>
 #include "objs/derivatives_ispc.h"
 #define N 100000
+void compute(double values[], int num_points, double ders[]){
+
+	for(int i = 0; i < num_points; ++i)
+	{
+		double k = values[i];
+		ders[i]= cos(k) * cos(k)*1 + sin(k) * -1*sin(k)*1 + (pow(k,(2-1)) * (2 * 1 + k * 0 * log(k)));
+	}
+}
+
 void read_file_to_array(char* filename, double *args) {
     FILE *file = fopen (filename, "r" );
 
@@ -41,7 +50,7 @@ int main() {
     printf("%f ", delta);
 	FILE *fp;
 
-	fp = fopen("us_output.txt", "w+");
+	fp = fopen("output.txt", "w+");
 
     fprintf(fp, "%f ", delta);
 	for(int i = 0; i < N; i++) {

@@ -30,7 +30,7 @@ class CGenerator(object):
 			ext = '.c'
 
 			f = open(self.filename+ext,'w')
-			f.write("void compute(double **values, long num_points, double **ders){\n\n")
+			f.write("void compute(double values[], int num_points, double ders[]){\n\n")
 			f.write("\tfor(int i = 0; i < num_points; ++i)\n\t{\n") # iterate over 
 			f.close()
 
@@ -49,7 +49,7 @@ class CGenerator(object):
 
 			ext = '.c'		
 			f = open(self.filename+ext,'a')
-			f.write("\t\tders[i]["+str(self.count)+"]"+"= "+derivative_string+";\n")
+			f.write("\t\tders[i]"+"= "+derivative_string+";\n")
 			f.close()		
 		
 
@@ -66,8 +66,8 @@ class CGenerator(object):
 		if self.c_code:
 
 			ext = '.c'			
-			f = open('derivatives.ispc','a')
-			f.write("\t\tdouble %s = values[i][%d];\n" % (var, index))
+			f = open(self.filename+ext,'a')
+			f.write("\t\tdouble %s = values[i];\n" % (var))
 			f.close()
 
 		if(self.ispc):
