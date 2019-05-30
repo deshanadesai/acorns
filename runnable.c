@@ -41,7 +41,7 @@ int main() {
     printf("%f ", delta);
 	FILE *fp;
 
-	fp = fopen("output.txt", "w+");
+	fp = fopen("us_output.txt", "w+");
 
     fprintf(fp, "%f ", delta);
 	for(int i = 0; i < N; i++) {
