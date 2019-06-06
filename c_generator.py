@@ -40,7 +40,7 @@ class CGenerator(object):
 			f = open('derivatives.ispc','w')
 			f.write("export void compute(uniform double values[], uniform int num_points, uniform double ders[]){\n\n")
 			f.write("\tforeach (i = 0 ... num_points)\n\t{\n") # iterate over 
-
+			# f.write("\tfor (int i = 0; i < num_points; ++i){\n")
 			f.close()
 
 	def _generate_expr(self, var, derivative_string):
@@ -75,6 +75,7 @@ class CGenerator(object):
 			ext = '.ispc'				
 			f = open('derivatives.ispc','a')
 			f.write("\t\tdouble %s = values[i];\n" % (var))
+			# f.write("\t\tprint(\"k = %\\n\",k);");
 			f.close()			
 
 	def _make_footer(self):

@@ -17,11 +17,12 @@ class Expr(pycparser.c_ast.Node):
         else:
             # print("Making a new Expression",node)
             self.ast = node
-            print("AST: ",self.ast.show())
+            # print("AST: ",self.ast.show())
             self.type = node.__class__.__name__ 
-            print("type: ",self.type)
+            # print("type: ",self.type)
 
-    def _eval(self):
+    def eval(self):
+        # print("trying to evaluate----")
         if self.type=='BinaryOp':
             return self.eval_match_op()
         elif self.type ==  'FuncCall':
@@ -35,11 +36,14 @@ class Expr(pycparser.c_ast.Node):
 
 
     def match_op(self):
+        # print("Matching operation",self.ast.op)
+
         if self.ast.op == '+':
             return (self.__add__())._forward_diff(self)
         elif self.ast.op == '-':
             return (self.__sub__())._forward_diff(self)
         elif self.ast.op == '*':
+            # print("trying to multiply")            
             return (self.__mul__())._forward_diff(self)
         elif self.ast.op == '/':
             return (self.__truediv__())._forward_diff(self)
@@ -120,7 +124,7 @@ class Expr(pycparser.c_ast.Node):
         # if name == curr_base_variable._get():
         #     return base_vars[0]
         # else:
-        print("Making new variable",name)
+        # print("Making new variable",name)
         return Variable(name)
 
 
@@ -133,7 +137,6 @@ class Variable(Expr):
         return self.name
 
     def _forward_diff(self):
-        print("Getting derivative for ",self.name, " when base is ",curr_base_variable._get())
         if self.name == curr_base_variable._get():
             return "1"
         else:
@@ -161,63 +164,80 @@ class Add(Expr):
         pass
 
     def _eval(self,cur_node):
-        return Expr(cur_node.ast.left).__eval() + " + " + Expr(cur_node.ast.right).__eval()
+        # print("evaluating through addition, left nodes are: ",cur_node.ast.left)
+        # print("evaluating through addition, right nodes are: ",cur_node.ast.right)
+        # print(Expr(cur_node.ast.left).eval())
+        # print("Addition evaluation of: ")
+        # cur_node.ast.show()
+
+        temp= "("+Expr(cur_node.ast.left).eval() + " + " + Expr(cur_node.ast.right).eval()+")"
+        # print(temp)
+        return temp
 
     def _forward_diff(self,cur_node):
         # print(type(cur_node.ast))
-        print("Forward Diff through add")
-        cur_node.ast.show()
-        print(cur_node.ast.right)
-        return Expr(cur_node.ast.left)._forward_diff() + " + " + Expr(cur_node.ast.right)._forward_diff()
+        # print("Forward Diff through add")
+        # cur_node.ast.show()
+        # print(cur_node.ast.right)
+        # print("right value will be: ",Expr(cur_node.ast.right)._forward_diff())
+        return "(" + "(" + Expr(cur_node.ast.left)._forward_diff()+")" + " + " + "("+Expr(cur_node.ast.right)._forward_diff()+")"+")"
 
 
 class Subtract(Expr):
     def __init__(self):
-        print("initiating subtract")
+        # print("initiating subtract")
         pass    
     def _eval(self,cur_node):
-        return Expr(cur_node.ast.left).__eval() + " - " + Expr(cur_node.ast.right).__eval()
+        return "("+Expr(cur_node.ast.left).eval() + " - " + Expr(cur_node.ast.right).eval()+")"
 
     def _forward_diff(self,cur_node):
-        return Expr(cur_node.ast.left)._forward_diff() + " - " + Expr(cur_node.ast.right)._forward_diff()
+        return "(" + "(" + Expr(cur_node.ast.left)._forward_diff()+")" + " - " + "("+Expr(cur_node.ast.right)._forward_diff()+")"+")"
 
 
 class Multiply(Expr):
     def __init__(self):
         pass    
     def _eval(self,cur_node):
-        # print("printing left tree:",cur_node.ast)
-        # print("left eval: ",Expr(cur_node.ast.left).__eval())
-        # print("right eval: ",Expr(cur_node.ast.right).__eval())
-        return Expr(cur_node.ast.left).__eval() + " * " + Expr(cur_node.ast.right).__eval()
+        # print("evaluating multiplication, printing left tree:",cur_node.ast)
+        # print("left eval: ",Expr(cur_node.ast.left).eval())
+        # print("right eval: ",Expr(cur_node.ast.right).eval())
+        return "("+Expr(cur_node.ast.left).eval() + " * " + Expr(cur_node.ast.right).eval()+")"
 
     def _forward_diff(self,cur_node):
-        lhs = Expr(cur_node.ast.left)._eval() # Needs to be a string
-        rhs = Expr(cur_node.ast.right)._eval()
-        return rhs+ " * " +Expr(cur_node.ast.left)._forward_diff() + " + " \
-                        + lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()
+        lhs = Expr(cur_node.ast.left).eval() # Needs to be a string
+        rhs = Expr(cur_node.ast.right).eval()
+        # print("multiplication evaluation of: ")
+        # cur_node.ast.show() 
+        # print("left:",lhs)
+        # print("Right:",rhs)       
+
+        return "(" + rhs+ " * " + "("+Expr(cur_node.ast.left)._forward_diff()+")" + " + " \
+                        + lhs+ " * " + "("+Expr(cur_node.ast.right)._forward_diff() +")" +")" 
 
 
 class Divide(Expr):
     def __init__(self):
-        print("initiating divide")
         pass    
     def _eval(self,cur_node):
-        return Expr(cur_node.ast.left).__eval() + " / " + Expr(cur_node.ast.right).__eval()
+        return "("+Expr(cur_node.ast.left).eval() + " / " + Expr(cur_node.ast.right).eval()+")"
 
     def _forward_diff(self,cur_node):
         # print("in divide forward:",cur_node.ast)
-        lhs = Expr(cur_node.ast.left)._eval()
+        lhs = Expr(cur_node.ast.left).eval()
         # print("lhs: ",lhs)
-        rhs = Expr(cur_node.ast.right)._eval()
+        rhs = Expr(cur_node.ast.right).eval()
         return "(" +rhs+ " * " +Expr(cur_node.ast.left)._forward_diff() + " - " \
-                        + lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()+")" + "/ " + rhs + " * " + rhs
+                        + lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()+")" + "/ (" + rhs + " * " + rhs+")"
 
 class Pow(Expr):
     def __init__(self):
         pass    
     def _eval(self,cur_node):
-        return "pow" # TODO
+        # print("evaluation of: ")
+        # cur_node.ast.show()
+        base = cur_node.ast.args.exprs[0].name
+        exp = cur_node.ast.args.exprs[1].value        
+        return "(pow(%s,%s))" % (Expr(base).eval(),exp) # TODO
 
     def _forward_diff(self,cur_node):
         base = cur_node.ast.args.exprs[0].name
@@ -236,11 +256,11 @@ class Sine(Expr):
 
     def _eval(self,cur_node):
         exp = cur_node.ast.args.exprs[0].name
-        return "sin("+Expr(exp)._eval()+")"
+        return "(sin("+Expr(exp).eval()+"))"
 
     def _forward_diff(self,cur_node):       
         exp = cur_node.ast.args.exprs[0].name
-        return "cos("+ exp +")*"+Expr(exp)._forward_diff()
+        return "(cos("+ exp +")*"+Expr(exp)._forward_diff()+")"
 
 
 class Cosine(Expr):
@@ -249,11 +269,11 @@ class Cosine(Expr):
 
     def _eval(self,cur_node):
         exp = cur_node.ast.args.exprs[0].name
-        return "cos("+Expr(exp)._eval()+")"
+        return "(cos("+Expr(exp).eval()+"))"
 
     def _forward_diff(self,cur_node):
         exp = cur_node.ast.args.exprs[0].name
-        return "-1*sin("+exp +")*"+Expr(exp)._forward_diff()
+        return "(-1*sin("+exp +")*"+Expr(exp)._forward_diff()+")"
 
 # def differentiate(node):
 #     # print(show_attrs(node.__class__))
@@ -301,7 +321,7 @@ def grad(ast, x=0):
     assert type(x) in (int, tuple, list), x
 
     fun = ast.ext[-1].body.block_items[1].init
-    fun.show()
+    # fun.show()
     return get_traversal(fun,x)
 
 
@@ -346,7 +366,7 @@ def grad_without_traversal(ast, x=0):
 
     assert fun != None
 
-    fun.show()
+    # fun.show()
 
     for i, vars_ in enumerate(variables):
         c_code._declare_vars(vars_,i)

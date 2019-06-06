@@ -7,17 +7,8 @@ import forward_diff
 import numpy as np
 import matplotlib.pyplot as plt
 
-functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
-INPUT_FILENAME = "functions.c"
-DERIVATIVES_FILENAME = "derivatives"
-RUNNABLE_FILENAME = "runnable"
-OUTPUT_FILENAME = "output.txt"
-PARAMS_FILENAME = "params.txt"
-OFFSET = "    "
-NUM_PARAMS = 10
-NUM_ITERATIONS = 10
-RUN_C = True
-RUN_ISPC = False
+
+
 
 def generate_function_c_file():
 	f = open(INPUT_FILENAME,'w')
@@ -51,7 +42,11 @@ def generate_runnable_c_file():
 	der_func = der_f.read()
 	der_f.close()
 	run_f = open(RUNNABLE_FILENAME + ".c", "w")
-	include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n#include \"objs/derivatives_ispc.h\"\n"
+	if RUN_ISPC:
+		include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n#include \"objs/derivatives_ispc.h\"\n"
+	elif RUN_C:
+		include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n"
+
 	read_file_func = generate_read_file()
 	global_num_params = "#define N " + str(NUM_PARAMS) + "\n"
 	main = """\nint main() {
@@ -120,9 +115,9 @@ def generate_params():
 def run_pytorch(params):
 	torch.set_num_threads(1)
 	x = torch.tensor(params[0], requires_grad=True)
-	y = torch.sin(x)*torch.cos(x)+torch.pow(x,2)
-	print("Y is: " + str(type(y)))
-	print(torch.get_num_threads())
+	# y = ((x+x)*2 + torch.pow(x,2))*x
+	y = ((x*x+3*x)-x/4)/x
+	# y = torch.sin(x)*torch.cos(x)+torch.pow(x,2)
 	start_time_pytorch = timer()
 	y.backward(torch.ones_like(x))
 	x.grad
@@ -134,10 +129,21 @@ def run_ours(params):
 	print_param_to_file(params)
 
 	if RUN_ISPC:
-		cmd = "ispc -O2 --target=avx derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
+		# if target==1:
+		cmd = "ispc -O3 --target=sse2 --opt=fast-math derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
 		os.system(cmd)
-		cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c"
+		cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
 		os.system(cmd)
+		# if target==2:
+		# 	cmd = "ispc -O3 --target=sse4 --opt=fast-math derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
+		# 	os.system(cmd)
+		# 	cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
+		# 	os.system(cmd)	
+		# if target ==3:
+		# 	cmd = "ispc -O3 --target=avx --opt=fast-math derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
+		# 	os.system(cmd)
+		# 	cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
+		# 	os.system(cmd)
 	if RUN_C:
 		os.system("gcc " + RUNNABLE_FILENAME + ".c -O3 -o " + RUNNABLE_FILENAME + " -lm")
 	run_command = "./" + RUNNABLE_FILENAME  + " " + PARAMS_FILENAME
@@ -155,6 +161,36 @@ def print_param_to_file(params):
 	param_f.write(param_string)
 
 if __name__ == "__main__":
+
+	RUN_C = False
+	RUN_ISPC = True
+
+
+	# functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
+	functions = [ ["((k*k+3*k)-k/4)/k", ["k"] ] ]
+	# functions = [ ["1/4+k*k", ["k"] ] ]
+	# functions = [ ["((k+k)*2 + pow(k,2))*k", ["k"] ]] 
+
+	# need to manually change the function in pytorch
+
+
+	INPUT_FILENAME = "functions.c"
+	DERIVATIVES_FILENAME = "derivatives"
+	RUNNABLE_FILENAME = "runnable"
+	OUTPUT_FILENAME = "output.txt"
+	PARAMS_FILENAME = "params.txt"
+	OFFSET = "    "
+	NUM_PARAMS = 1
+	NUM_ITERATIONS = 10	
+
+
+	RUN_C = True
+	RUN_ISPC = False
+
+
+	'''
+	RUN C
+	'''
 	# params = generate_params()
 	avg_us = []
 	avg_pytorch = []
@@ -164,6 +200,7 @@ if __name__ == "__main__":
 		generate_function_c_file()
 		generate_runnable_c_file()
 		our_times = []
+		ispc_times = []
 		py_times = []
 		for i in range(NUM_ITERATIONS):
 			params = generate_params()
@@ -171,16 +208,60 @@ if __name__ == "__main__":
 			ours = run_ours(params)
 			our_times.append(float(ours[1]))
 			py_times.append(float(pytorch[1]))
+		print("Parameters: ",params[0][:10])
+		print("Snapshot of Our Results:", ours[0][:10])
+		print("Snapshot of Pytorch results: ",pytorch[0][:10])
+
 		avg_us.append(sum(our_times) / len(our_times))
 		avg_pytorch.append(sum(py_times) / len(py_times))
 		denom.append(NUM_PARAMS) 
 		NUM_PARAMS = NUM_PARAMS * 10
-	print(our_times)
+
+
+
+	'''
+	RUN ISPC
+	'''
+
+
+	# params = generate_params()
+	avg_ispc = []
+	denom = []
+	NUM_ITERATIONS = 10	
+	NUM_PARAMS = 1
+	RUN_C = False
+	RUN_ISPC = True
+	RUN_ISPC_1 = True
+	target = 1
+	# run_pytorch(params)
+	while NUM_PARAMS < 1000000:
+		generate_function_c_file()
+		generate_runnable_c_file()
+		ispc_times = []
+		for i in range(NUM_ITERATIONS):
+			params = generate_params()
+			ispc_time = run_ours(params)	
+			ispc_times.append(float(ispc_time[1]))
+		avg_ispc.append(sum(ispc_times) / len(ispc_times))
+		denom.append(NUM_PARAMS) 
+		NUM_PARAMS = NUM_PARAMS * 10			
+
+
+	print("Time taken by C code:",our_times)
+	print("Time taken by ISPC code: ",ispc_times)
 	plt.figure(1)
 	plt.subplot(211)
-	plt.plot(denom, avg_us, 'b')
-	plt.plot(denom, avg_pytorch, 'r--')
-	plt.legend(['Us','Pytorch'])
-	plt.savefig('graph.png')
+	plt.plot(denom, avg_us)
+	plt.plot(denom, avg_ispc)
+
+	plt.plot(denom, avg_pytorch, '--')
+	plt.legend(['Us','ISPC target=sse2', 'Pytorch'])
+	plt.title('C Code vs Pytorch. # It: '+str(NUM_ITERATIONS))
+	plt.savefig('results/graph.png')
+
 	print("Avg Us: " + str(avg_us) )
+	print("Avg ISPC: " + str(avg_ispc) )
 	print("Avg Pytorch: " + str(avg_pytorch) )
+
+
+
