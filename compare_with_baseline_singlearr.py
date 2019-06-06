@@ -43,7 +43,7 @@ def generate_runnable_c_file():
 	der_f.close()
 	run_f = open(RUNNABLE_FILENAME + ".c", "w")
 	if RUN_ISPC:
-		include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n#include \"objs/derivatives_ispc.h\"\n"
+		include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n#include \"../objs/derivatives_ispc.h\"\n"
 	elif RUN_C:
 		include = "#include <math.h>\n#include <stdlib.h>\n#include <time.h>\n#include <stdio.h>\n"
 
@@ -52,7 +52,7 @@ def generate_runnable_c_file():
 	main = """\nint main() {
 	double values[N];
 	double ders[N];
-	char variable[] = "params.txt"; 
+	char variable[] = "utils/params.txt"; 
 	read_file_to_array(variable, values);
 
 	struct timespec tstart={0,0}, tend={0,0};
@@ -130,7 +130,7 @@ def run_ours(params):
 
 	if RUN_ISPC:
 		# if target==1:
-		cmd = "ispc -O3 --target=sse2 --opt=fast-math derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
+		cmd = "ispc -O3 --target=sse2 --opt=fast-math utils/derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
 		os.system(cmd)
 		cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
 		os.system(cmd)
@@ -174,11 +174,11 @@ if __name__ == "__main__":
 	# need to manually change the function in pytorch
 
 
-	INPUT_FILENAME = "functions.c"
-	DERIVATIVES_FILENAME = "derivatives"
-	RUNNABLE_FILENAME = "runnable"
-	OUTPUT_FILENAME = "output.txt"
-	PARAMS_FILENAME = "params.txt"
+	INPUT_FILENAME = 'utils/'+"functions.c"
+	DERIVATIVES_FILENAME = 'utils/'+"derivatives"
+	RUNNABLE_FILENAME = 'utils/'+"runnable"
+	OUTPUT_FILENAME = 'utils/'+"output.txt"
+	PARAMS_FILENAME = 'utils/'+"params.txt"
 	OFFSET = "    "
 	NUM_PARAMS = 1
 	NUM_ITERATIONS = 10	
