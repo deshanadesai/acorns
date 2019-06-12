@@ -188,11 +188,11 @@ def run_pytorch():
 def run_ours(params):
 	print_param_to_file(params)
 
-	if RUN_ISPC:
+	if RUN_ISPC: 
 		# if target==1:
 		cmd = "ispc -O3 --opt=fast-math utils/derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
 		os.system(cmd)
-		cmd = "gcc-8 -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
+		cmd = "gcc-5 -O3 -march=native -ffast-math -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
 		os.system(cmd)
 		# if target==2:
 		# 	cmd = "ispc -O3 --target=sse4 --opt=fast-math derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
@@ -205,7 +205,7 @@ def run_ours(params):
 		# 	cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
 		# 	os.system(cmd)
 	if RUN_C:
-		os.system("gcc-8 " + RUNNABLE_FILENAME + ".c -O3 -o " + RUNNABLE_FILENAME + " -lm")
+		os.system("gcc-5 " + RUNNABLE_FILENAME + ".c -O3 -march=native -ffast-math -o " + RUNNABLE_FILENAME + " -lm")
 	run_command = "./" + RUNNABLE_FILENAME  + " " + PARAMS_FILENAME
 	result = run(run_command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
 	f = open(OUTPUT_FILENAME, "r")
