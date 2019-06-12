@@ -14,7 +14,7 @@ class CGenerator(object):
 	def __init__(self, filename = 'c_code', variable_count = 1, ispc = True, c_code = False):
 		self.indent_level = 0
 		self.filename=filename
-		self.variable_count = 2 # number of variables
+		self.variable_count = variable_count # number of variables
 		self.count = 0
 		self.ispc = ispc
 		self.c_code = c_code
@@ -43,13 +43,13 @@ class CGenerator(object):
 			# f.write("\tfor (int i = 0; i < num_points; ++i){\n")
 			f.close()
 
-	def _generate_expr(self, var, derivative_string):
+	def _generate_expr(self, var, derivative_string, index):
 
 		if self.c_code:
 
 			ext = '.c'		
 			f = open(self.filename+ext,'a')
-			f.write("\t\tders[i]"+"= "+derivative_string+";\n")
+			f.write("\t\tders[i*"+str(self.variable_count)+"+"+str(index)+"]"+"= "+derivative_string+";\n")
 			f.close()		
 		
 
@@ -57,7 +57,7 @@ class CGenerator(object):
 
 			ext = '.ispc'	
 			f = open('utils/'+'derivatives.ispc','a')
-			f.write("\t\tders[i]"+" = "+derivative_string+";\n")
+			f.write("\t\tders[i*"+str(self.variable_count)+"+"+str(index)+"]"+" = "+derivative_string+";\n")
 			f.close()	
 		self.count += 1	
 
@@ -67,14 +67,14 @@ class CGenerator(object):
 
 			ext = '.c'			
 			f = open(self.filename+ext,'a')
-			f.write("\t\tdouble %s = values[i];\n" % (var))
+			f.write("\t\tdouble %s = values[i* %d + %d ];\n" % (var, self.variable_count, index))
 			f.close()
 
 		if(self.ispc):
 
 			ext = '.ispc'				
 			f = open('utils/'+'derivatives.ispc','a')
-			f.write("\t\tdouble %s = values[i];\n" % (var))
+			f.write("\t\tdouble %s = values[i* %d + %d ];\n" % (var, self.variable_count, index))
 			# f.write("\t\tprint(\"k = %\\n\",k);");
 			f.close()			
 

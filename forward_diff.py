@@ -371,11 +371,11 @@ def grad_without_traversal(ast, x=0):
     for i, vars_ in enumerate(variables):
         c_code._declare_vars(vars_,i)
 
-    for vars_ in variables:
+    for i,vars_ in enumerate(variables):
         curr_base_variable = Variable(vars_)
         derivative = Expr(fun)._forward_diff() 
         print(derivative) 
-        c_code._generate_expr(curr_base_variable._get(), derivative)
+        c_code._generate_expr(curr_base_variable._get(), derivative,index=i)
 
     c_code._make_footer()
         
