@@ -239,8 +239,8 @@ if __name__ == "__main__":
 
 
 	# functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
-	functions = [ ["((k*k+3*k)-k/4)/k+k*k*k*k", ["k"] ] ]
-	# functions = [ ["1/4+k*k", ["k"] ] ]
+# 	functions = [ ["((k*k+3*k)-k/4)/k+k*k*k*k", ["k"] ] ]
+	functions = [ ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"] ] ]
 	# functions = [ ["((k+k)*2 + pow(k,2))*k", ["k"] ]] 
 
 	# need to manually change the function in pytorch
@@ -256,9 +256,9 @@ if __name__ == "__main__":
 	PYTORCH_FILENAME = "utils/pytorch.py"
 	PYTORCH_OUTPUT = "utils/pytorch_output.txt"	
 	OFFSET = "    "
-	NUM_PARAMS = 1
+	NUM_PARAMS = 0
 	num_vars = len(functions[0][1])
-	NUM_ITERATIONS = 10	
+	NUM_ITERATIONS = 10
 	NUM_THREADS_PYTORCH = 1
 
 
@@ -275,7 +275,8 @@ if __name__ == "__main__":
 	avg_pytorch = []
 	denom = []
 	# run_pytorch(params)
-	while NUM_PARAMS < 1000000:
+    
+	while NUM_PARAMS <= 100000:
 		generate_function_c_file()
 		generate_runnable_c_file()
 		our_times = []
@@ -286,8 +287,8 @@ if __name__ == "__main__":
 			generate_pytorch_file(0, params)
 			pytorch = run_pytorch()
 			ours = run_ours(params)
-			for j in range(len(ours[0])):
-				assert math.isclose(float(pytorch[0][j]), float(ours[0][j]), abs_tol=10**-3)   			
+# 			for j in range(len(ours[0])):
+# 				assert math.isclose(float(pytorch[0][j]), float(ours[0][j]), abs_tol=10**-1)   			
 			our_times.append(float(ours[1]))
 			py_times.append(float(pytorch[1]))
 		print("Parameters: ",params[0][:10])
@@ -297,7 +298,11 @@ if __name__ == "__main__":
 		avg_us.append(sum(our_times) / len(our_times))
 		avg_pytorch.append(sum(py_times) / len(py_times))
 		denom.append(NUM_PARAMS) 
-		NUM_PARAMS = NUM_PARAMS * 10
+		if NUM_PARAMS<10000:
+			NUM_PARAMS += 2000
+		else:
+			NUM_PARAMS = NUM_PARAMS +10000
+        
 
 
 
@@ -309,14 +314,13 @@ if __name__ == "__main__":
 	# params = generate_params()
 	avg_ispc = []
 	denom = []
-	NUM_ITERATIONS = 10	
-	NUM_PARAMS = 1
+	NUM_PARAMS = 0
 	RUN_C = False
 	RUN_ISPC = True
 	RUN_ISPC_1 = True
 	target = 1
 	# run_pytorch(params)
-	while NUM_PARAMS < 1000000:
+	while NUM_PARAMS <= 100000:
 		generate_function_c_file()
 		generate_runnable_c_file()
 		ispc_times = []
@@ -326,17 +330,22 @@ if __name__ == "__main__":
 			ispc_times.append(float(ispc_time[1]))
 		avg_ispc.append(sum(ispc_times) / len(ispc_times))
 		denom.append(NUM_PARAMS) 
-		NUM_PARAMS = NUM_PARAMS * 10			
-
+		if NUM_PARAMS<10000:
+			NUM_PARAMS += 2000
+		else:
+			NUM_PARAMS = NUM_PARAMS +10000
 
 	print("Time taken by C code:",our_times)
 	print("Time taken by ISPC code: ",ispc_times)
 	plt.figure(1)
 	plt.subplot(211)
-	plt.plot(denom, avg_us)
-	plt.plot(denom, avg_ispc)
+    
+	print(denom)
+	plt.plot(denom, avg_us, marker='o')
+	plt.plot(denom, avg_ispc, marker='o')
 
-	plt.plot(denom, avg_pytorch, '--')
+	plt.plot(denom, avg_pytorch, '--', marker='o')
+	plt.xticks(denom)    
 	plt.legend(['Us','ISPC target=default', 'Pytorch'])
 	plt.title('C Code vs Pytorch. # It: '+str(NUM_ITERATIONS))
 	plt.savefig('results/graph.png')
