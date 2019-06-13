@@ -240,8 +240,9 @@ if __name__ == "__main__":
 
 	# functions = [ ["sin(k)*cos(k)+pow(k,2)", ["k"] ] ]
 # 	functions = [ ["((k*k+3*k)-k/4)/k+k*k*k*k", ["k"] ] ]
-	functions = [ ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"] ] ]
-	# functions = [ ["((k+k)*2 + pow(k,2))*k", ["k"] ]] 
+# 	functions = [ ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"] ] ]
+	functions = [ ["((k*k+3*k)-k/4)/(k+k*k*k*k)+k*k*k*k*k + (k-3)*(k-3)*(2*k+1)", ["k"] ] ]
+# functions = [ ["((k+k)*2 + pow(k,2))*k", ["k"] ]] 
 
 	# need to manually change the function in pytorch
 
@@ -348,6 +349,9 @@ if __name__ == "__main__":
 	plt.xticks(denom)    
 	plt.legend(['Us','ISPC target=default', 'Pytorch'])
 	plt.title('C Code vs Pytorch. # It: '+str(NUM_ITERATIONS))
+	txt = functions[0][0] + '\narch = Linux 4.15\nMax params: '+str(denom[-1])+'\nPytorch version: 0.4'
+	plt.figtext(0.5, -1.0, txt, wrap=True, horizontalalignment='center', fontsize=12)
+
 	plt.savefig('results/graph.png')
 
 	print("Avg Us: " + str(avg_us) )

@@ -3,7 +3,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "../objs/derivatives_ispc.h"
-#define N 100000
+#define N 6000
  #define num_vars 1
 void read_file_to_array(char* filename, double *args) {
     FILE *file = fopen (filename, "r" );
