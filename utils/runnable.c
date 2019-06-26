@@ -67,14 +67,14 @@ int main(int argc, char* argv[]) {
         // ElapsedMicroseconds.QuadPart *= 1000000;
         // ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
 
-        double delta = (ElapsedMicroseconds.QuadPart)/(double)Frequency.QuadPart;
+        double delta = (ElapsedMicroseconds.QuadPart)/(double)Frequency.QuadPart; // seconds
 
     #else
         struct timespec tstart={0,0}, tend={0,0};
         clock_gettime(CLOCK_MONOTONIC, &tstart);
         compute(values, num_params, ders);
         clock_gettime(CLOCK_MONOTONIC, &tend);
-        double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
+        double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec); // seconds
     #endif
 
     FILE *fp;
