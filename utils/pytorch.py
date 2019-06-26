@@ -9,5 +9,5 @@ start_time_pytorch = time.time()
 y.backward(torch.ones_like(k))
 k.grad
 end_time_pytorch = time.time()
-runtime = end_time_pytorch - start_time_pytorch
+runtime = (end_time_pytorch - start_time_pytorch)
 print( str(runtime) + " " + " ".join(str(x) for x in k.grad.tolist()))

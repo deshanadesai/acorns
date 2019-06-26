@@ -1,12 +1,14 @@
 #ifdef _WIN32
     #include <windows.h>
-    #include "windows_utils.h"
+    // #include "windows_utils.h"
 #endif
 
 #include <math.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <time.h>
 #include <stdio.h>
+#include <stdint.h>
 #include "derivatives.h"
 
 void read_file_to_array(char* filename, double *args, int num_params, int num_vars) {
@@ -49,11 +51,24 @@ int main(int argc, char* argv[]) {
 	read_file_to_array(params_filename, values, num_params, num_vars);
 
     #ifdef _WIN32
-        struct timeval stop, start;
-        clock_gettime_win(0, &start);
+
+        LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
+        LARGE_INTEGER Frequency;
+
+        QueryPerformanceFrequency(&Frequency); 
+        QueryPerformanceCounter(&StartingTime);
+
+        // Activity to be timed
         compute(values, num_params, ders);
-        clock_gettime_win(0, &stop);
-        double delta = ((double)stop.tv_sec + 1.0e-9*stop.tv_usec) - ((double)start.tv_sec + 1.0e-9*start.tv_usec);
+
+        QueryPerformanceCounter(&EndingTime);
+        ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
+
+        // ElapsedMicroseconds.QuadPart *= 1000000;
+        // ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+
+        double delta = (ElapsedMicroseconds.QuadPart)/(double)Frequency.QuadPart;
+
     #else
         struct timespec tstart={0,0}, tend={0,0};
         clock_gettime(CLOCK_MONOTONIC, &tstart);
@@ -62,15 +77,19 @@ int main(int argc, char* argv[]) {
         double delta = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
     #endif
 
-    printf("%f ", delta);
-	FILE *fp;
+    FILE *fp;
 
 	fp = fopen(output_filename, "w+");
 
+    // printf("%" PRId64 "\n", delta);
+    printf("%f ", delta);
+    // fprintf(fp,"%" PRId64 " ", delta);
     fprintf(fp, "%f ", delta);
+
+
 	for(int i = 0; i < num_params*num_vars; i++) {
-        // printf("%f\n", ders[i]);
         fprintf(fp, "%f ", ders[i]);
+        printf("%f", ders[i]);
     }
 	fclose(fp);
 	return 0;
