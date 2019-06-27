@@ -7,6 +7,8 @@ import pycparser.c_ast
 import c_generator
 import argparse
 
+# to do: using pow in reverse dif. might slow down.
+
 class Expr(pycparser.c_ast.Node):
     def __init__(self,node):
         if isinstance(node, str):
@@ -35,32 +37,55 @@ class Expr(pycparser.c_ast.Node):
             return (self.__variable__(self.ast.value))._eval()        
 
 
-    def match_op(self):
+    def match_op(self, reverse = False,  adjoint = None, grad = {}):
         # print("Matching operation",self.ast.op)
-
-        if self.ast.op == '+':
-            return (self.__add__())._forward_diff(self)
-        elif self.ast.op == '-':
-            return (self.__sub__())._forward_diff(self)
-        elif self.ast.op == '*':
-            # print("trying to multiply")            
-            return (self.__mul__())._forward_diff(self)
-        elif self.ast.op == '/':
-            return (self.__truediv__())._forward_diff(self)
+        if reverse:
+            if self.ast.op == '+':
+                    return (self.__add__())._reverse_diff(self, adjoint, grad)
+            elif self.ast.op == '-':
+                return (self.__sub__())._reverse_diff(self, adjoint, grad)
+            elif self.ast.op == '*':
+                # print("trying to multiply")            
+                return (self.__mul__())._reverse_diff(self, adjoint, grad)
+            elif self.ast.op == '/':
+                return (self.__truediv__())._reverse_diff(self, adjoint, grad)
+            else:
+                raise NotImplementedError
         else:
-            raise NotImplementedError
+            if self.ast.op == '+':
+                return (self.__add__())._forward_diff(self)
+            elif self.ast.op == '-':
+                return (self.__sub__())._forward_diff(self)
+            elif self.ast.op == '*':
+                # print("trying to multiply")            
+                return (self.__mul__())._forward_diff(self)
+            elif self.ast.op == '/':
+                return (self.__truediv__())._forward_diff(self)
+            else:
+                raise NotImplementedError
 
-    def match_funccall(self):
+    def match_funccall(self, reverse = False,  adjoint = None, grad = {}):
         func = self.ast.name.name
-        # print(func)
-        if func == 'pow':
-            return (self.__pow__())._forward_diff(self)
-        elif func == 'sin':
-            return (self.__sin__())._forward_diff(self)
-        elif func == 'cos':
-            return (self.__cos__())._forward_diff(self)
+        print(func)
+
+        if reverse:
+            if func == 'pow':
+                return (self.__pow__())._reverse_diff(self, adjoint, grad)
+            elif func == 'sin':
+                return (self.__sin__())._reverse_diff(self, adjoint, grad)
+            elif func == 'cos':
+                return (self.__cos__())._reverse_diff(self, adjoint, grad)
+            else:
+                raise NotImplementedError
         else:
-            raise NotImplementedError
+            if func == 'pow':
+                return (self.__pow__())._forward_diff(self)
+            elif func == 'sin':
+                return (self.__sin__())._forward_diff(self)
+            elif func == 'cos':
+                return (self.__cos__())._forward_diff(self)
+            else:
+                raise NotImplementedError
 
 
     def eval_match_op(self):
@@ -97,6 +122,20 @@ class Expr(pycparser.c_ast.Node):
             return (self.__variable__(self.ast.name))._forward_diff() 
         elif self.type == 'Constant':
             return (self.__variable__(self.ast.value))._forward_diff()
+
+
+
+    def _reverse_diff(self, adjoint, grad):
+        if self.type=='BinaryOp':
+            return self.match_op(reverse = True, adjoint = adjoint, grad = grad)
+        elif self.type ==  'FuncCall':
+            return self.match_funccall(reverse = True, adjoint = adjoint, grad = grad)
+        elif self.type == 'str':
+            return (self.__variable__(self.ast))._reverse_diff(adjoint, grad) 
+        elif self.type == 'ID':
+            return (self.__variable__(self.ast.name))._reverse_diff(adjoint, grad) 
+        elif self.type == 'Constant':
+            return (self.__variable__(self.ast.value))._reverse_diff(adjoint, grad)            
 
 
     def __add__(self):
@@ -142,6 +181,10 @@ class Variable(Expr):
         else:
             return "0"
 
+    # adjoint: str variable. grad: dict type (str, str)
+    def _reverse_diff(self, adjoint, grad):
+        grad[self.name] = grad[self.name]+ " + "+ adjoint
+
     def _get(self):
         return self.name
 
@@ -156,6 +199,9 @@ class Constant(Expr):
 
     def _forward_diff(self):
         return "0"
+
+    def _reverse_diff(self):
+        pass
 
 
 
@@ -182,6 +228,12 @@ class Add(Expr):
         # print("right value will be: ",Expr(cur_node.ast.right)._forward_diff())
         return "(" + "(" + Expr(cur_node.ast.left)._forward_diff()+")" + " + " + "("+Expr(cur_node.ast.right)._forward_diff()+")"+")"
 
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        Expr(cur_node.ast.left)._reverse_diff(adjoint, grad)
+        Expr(cur_node.ast.right)._reverse_diff(adjoint, grad)
+
+
+
 
 class Subtract(Expr):
     def __init__(self):
@@ -192,6 +244,12 @@ class Subtract(Expr):
 
     def _forward_diff(self,cur_node):
         return "(" + "(" + Expr(cur_node.ast.left)._forward_diff()+")" + " - " + "("+Expr(cur_node.ast.right)._forward_diff()+")"+")"
+
+
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        Expr(cur_node.ast.left)._reverse_diff(adjoint, grad)
+        Expr(cur_node.ast.right)._reverse_diff("-" + adjoint, grad)
+
 
 
 class Multiply(Expr):
@@ -214,6 +272,12 @@ class Multiply(Expr):
         return "(" + rhs+ " * " + "("+Expr(cur_node.ast.left)._forward_diff()+")" + " + " \
                         + lhs+ " * " + "("+Expr(cur_node.ast.right)._forward_diff() +")" +")" 
 
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        lhs = Expr(cur_node.ast.left).eval()
+        rhs = Expr(cur_node.ast.right).eval()
+        Expr(cur_node.ast.left)._reverse_diff("("+ adjoint + ")" + "*" + "("+ rhs + ")", grad)
+        Expr(cur_node.ast.right)._reverse_diff("("+ adjoint + ")" + "*" + "("+ lhs + ")", grad)
+
 
 class Divide(Expr):
     def __init__(self):
@@ -228,6 +292,16 @@ class Divide(Expr):
         rhs = Expr(cur_node.ast.right).eval()
         return "(" +rhs+ " * " +Expr(cur_node.ast.left)._forward_diff() + " - " \
                         + lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()+")" + "/ (" + rhs + " * " + rhs+")"
+
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        lhs = Expr(cur_node.ast.left).eval()
+        rhs = Expr(cur_node.ast.right).eval()
+        Expr(cur_node.ast.left)._reverse_diff("("+ adjoint + ")" + "/" + "("+ rhs + ")", grad)
+        Expr(cur_node.ast.right)._reverse_diff("(-("+adjoint +") * ("+ lhs + "))/" + "pow(("+ rhs + "),2)", grad)        
+
+
+
+
 
 class Pow(Expr):
     def __init__(self):
@@ -250,6 +324,13 @@ class Pow(Expr):
                 "("+exp+ " * "+ der_base +" + "+base+ " * "+ der_exp+ " * log("+base+")))"
 
 
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        base = cur_node.ast.args.exprs[0].name
+        exp = cur_node.ast.args.exprs[1].value
+        Expr(base)._reverse_diff( "(" + adjoint + ")"+ "*"+ "("+ exp+")"+" * " + "(pow(" + base +","+ (exp - 1)+"))", grad)
+        Expr(exp)._reverse_diff("(" +  adjoint + ")"+ "*"+ "log("+base+")" +" * " + "pow(" + base +"," + exp +")", grad)
+
+
 class Sine(Expr):        
     def __init__(self):
         pass    
@@ -261,6 +342,10 @@ class Sine(Expr):
     def _forward_diff(self,cur_node):       
         exp = cur_node.ast.args.exprs[0].name
         return "(cos("+ exp +")*"+Expr(exp)._forward_diff()+")"
+
+
+    # def _reverse_diff(self, cur_node, adjoint, grad):
+
 
 
 class Cosine(Expr):
@@ -368,9 +453,15 @@ def grad_without_traversal(ast, x=0):
 
     # fun.show()
 
+    grad = {}
     for i, vars_ in enumerate(variables):
         c_code._declare_vars(vars_,i)
+        grad[vars_] = ''
 
+    print(grad)
+
+    # Expr(fun)._reverse_diff("1.",grad) 
+    # print(grad)
     for i,vars_ in enumerate(variables):
         curr_base_variable = Variable(vars_)
         derivative = Expr(fun)._forward_diff() 
