@@ -183,7 +183,10 @@ class Variable(Expr):
 
     # adjoint: str variable. grad: dict type (str, str)
     def _reverse_diff(self, adjoint, grad):
-        grad[self.name] = grad[self.name]+ " + "+ adjoint
+        if grad[self.name] == '':
+            grad[self.name] = adjoint
+        else:
+            grad[self.name] = grad[self.name]+ " + "+ adjoint
 
     def _get(self):
         return self.name
@@ -460,13 +463,22 @@ def grad_without_traversal(ast, x=0):
 
     print(grad)
 
-    # Expr(fun)._reverse_diff("1.",grad) 
-    # print(grad)
-    for i,vars_ in enumerate(variables):
-        curr_base_variable = Variable(vars_)
-        derivative = Expr(fun)._forward_diff() 
-        print(derivative) 
-        c_code._generate_expr(curr_base_variable._get(), derivative,index=i)
+    if reverse_diff:
+
+        Expr(fun)._reverse_diff("1.",grad) 
+        print(grad)
+        i = 0
+        for k,v in grad.items():
+            c_code._generate_expr(k, v,index=i)
+            i += 1
+
+
+    else:
+        for i,vars_ in enumerate(variables):
+            curr_base_variable = Variable(vars_)
+            derivative = Expr(fun)._forward_diff() 
+            print(derivative) 
+            c_code._generate_expr(curr_base_variable._get(), derivative,index=i)
 
     c_code._make_footer()
         
@@ -484,6 +496,7 @@ if __name__ == "__main__":
     parser.add_argument('-func', type = str, dest = 'func', help='function name')
     parser.add_argument('-ccode', type = str, dest = 'ccode', help='function name')
     parser.add_argument('-ispc', type = str, dest = 'ispc', help='function name')
+    parser.add_argument('-reverse', type = str, default = 'False', dest = 'reverse', help='function name')
 
     parser.add_argument('--output_filename', type = str, default ='c_code', help='file name')    
     parser.add_argument('--nth_der', type = int, help='nth derivative')
@@ -505,6 +518,12 @@ if __name__ == "__main__":
         ispc = True
     else:
         ispc = False
+
+
+    if parser.reverse == 'True':
+        reverse_diff = True
+    else:
+        reverse_diff = False
 
     print("CCODE: ",ccode)
     print("ISPC CODE: ",ispc)
