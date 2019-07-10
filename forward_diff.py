@@ -519,7 +519,6 @@ if __name__ == "__main__":
     else:
         ispc = False
 
-
     if parser.reverse == 'True':
         reverse_diff = True
     else:

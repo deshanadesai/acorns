@@ -5,7 +5,7 @@ from subprocess import PIPE, run
 import forward_diff
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
 import sys
@@ -35,7 +35,7 @@ def generate_function_c_file():
 
 def generate_derivatives_c_file():
     vars = ",".join(str(x) for x in functions[0][1])
-    cmd = "python forward_diff.py " + INPUT_FILENAME + " p -ccode "+ str(RUN_C) + " -ispc "+ str(RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_0\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
+    cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode "+ str(RUN_C) + " -ispc "+ str(RUN_ISPC)+" -reverse True --vars \"" + vars + "\" -func \"function_0\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
     os.system(cmd)
 
 def generate_params(num_params):
@@ -86,7 +86,7 @@ def parse_output(filename):
     return [values, runtime]
 
 def run_pytorch():
-    cmd = "python " + PYTORCH_FILENAME + " > " + PYTORCH_OUTPUT
+    cmd = "python3 " + PYTORCH_FILENAME + " > " + PYTORCH_OUTPUT
     os.system(cmd)
     return(parse_output(PYTORCH_OUTPUT))
 
@@ -135,7 +135,7 @@ def convert_params_to_list(params):
     return current_params
 
 if __name__ == "__main__":
-    functions = [ ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"] ] ]
+    functions = [ ["((k*k+3*k)-k/4)/k+k*k", ["k"] ] ] #*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"] ] ]
     INPUT_FILENAME = 'utils/functions.c'
     DERIVATIVES_FILENAME = 'utils/derivatives'
     UTILS_FILENAME = 'utils/windows_utils.c'
