@@ -68,7 +68,7 @@ def generate_pytorch_file(func_num):
     importString = "import torch\nimport time\nimport numpy as np\n\n"
     var = functions[func_num][1][0]
     threads = "torch.set_num_threads(" + str(NUM_THREADS_PYTORCH) + ")\n"
-    varString = var + " = torch.tensor(np.load('" + NUMPY_PARAMS_FILENAME + "'), requires_grad=True)\n"
+    varString = var + " = torch.tensor(np.load('" + NUMPY_PARAMS_FILENAME + "'), requires_grad=True, dtype=torch.double)\n"
     eqString = "y = " + parse_pytorch(functions[func_num][0]) + "\n"
     main = "start_time_pytorch = time.time()\ny.backward(torch.ones_like(" + var + "))\n" + var + ".grad\n"
     main += "end_time_pytorch = time.time()\nruntime = (end_time_pytorch - start_time_pytorch)\n"
@@ -173,17 +173,21 @@ if __name__ == "__main__":
     avg_pytorch = []
     denom = []
     num_params = INIT_NUM_PARAMS
+    
     # generate and compile our code
     generate_function_c_file()
     generate_derivatives_c_file()
     compile_code()
     
     while num_params <= 100000:
+
         # generate parameters 
         params = generate_params(num_params)
         print_param_to_file(params)
+
         # generate pytorch file
         generate_pytorch_file(0)
+
         #initialize arrays for run
         our_times = []
         py_times = []

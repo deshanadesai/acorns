@@ -1,6 +1,5 @@
 #ifdef _WIN32
     #include <windows.h>
-    // #include "windows_utils.h"
 #endif
 
 #include <math.h>
