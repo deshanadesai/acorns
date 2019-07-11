@@ -183,7 +183,9 @@ class Variable(Expr):
 
     # adjoint: str variable. grad: dict type (str, str)
     def _reverse_diff(self, adjoint, grad):
-        if grad[self.name] == '':
+        if self.name not in grad:
+            pass
+        elif grad[self.name] == '':
             grad[self.name] = adjoint
         else:
             grad[self.name] = grad[self.name]+ " + "+ adjoint
@@ -203,7 +205,7 @@ class Constant(Expr):
     def _forward_diff(self):
         return "0"
 
-    def _reverse_diff(self):
+    def _reverse_diff(self, adjoint, grad):
         pass
 
 
@@ -313,13 +315,18 @@ class Pow(Expr):
         # print("evaluation of: ")
         # cur_node.ast.show()
         base = cur_node.ast.args.exprs[0].name
-        exp = cur_node.ast.args.exprs[1].value        
+        try:        
+            exp = cur_node.ast.args.exprs[1].value
+        except AttributeError:
+            exp = Expr(cur_node.ast.args.exprs[1]).eval()     
         return "(pow(%s,%s))" % (Expr(base).eval(),exp) # TODO
 
     def _forward_diff(self,cur_node):
         base = cur_node.ast.args.exprs[0].name
-        exp = cur_node.ast.args.exprs[1].value
-
+        try:        
+            exp = cur_node.ast.args.exprs[1].value
+        except AttributeError:
+            exp = Expr(cur_node.ast.args.exprs[1]).eval()
         der_base = Expr(base)._forward_diff()
         der_exp = Expr(exp)._forward_diff()
 
@@ -329,8 +336,11 @@ class Pow(Expr):
 
     def _reverse_diff(self, cur_node, adjoint, grad):
         base = cur_node.ast.args.exprs[0].name
-        exp = cur_node.ast.args.exprs[1].value
-        Expr(base)._reverse_diff( "(" + adjoint + ")"+ "*"+ "("+ exp+")"+" * " + "(pow(" + base +","+ (exp - 1)+"))", grad)
+        try:        
+            exp = cur_node.ast.args.exprs[1].value
+        except AttributeError:
+            exp = Expr(cur_node.ast.args.exprs[1]).eval()     
+        Expr(base)._reverse_diff( "(" + adjoint + ")"+ "*"+ "("+ exp+")"+" * " + "(pow(" + base +","+ "("+exp +"- 1)"+"))", grad)
         Expr(exp)._reverse_diff("(" +  adjoint + ")"+ "*"+ "log("+base+")" +" * " + "pow(" + base +"," + exp +")", grad)
 
 
@@ -504,10 +514,15 @@ if __name__ == "__main__":
 
     parser = parser.parse_args()
 
+
     filename = parser.filename
     variables = parser.variables.split(",")
     expression = parser.expr
     output_filename = parser.output_filename
+
+    print(output_filename)
+
+
 
     if parser.ccode == 'True':
         ccode = True
@@ -518,6 +533,7 @@ if __name__ == "__main__":
         ispc = True
     else:
         ispc = False
+
 
     if parser.reverse == 'True':
         reverse_diff = True
