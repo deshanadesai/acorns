@@ -3,6 +3,7 @@ import sys
 from collections import namedtuple
 import math
 from pycparser import parse_file
+from pycparser import c_parser
 import pycparser.c_ast
 import c_generator
 import argparse
@@ -75,6 +76,8 @@ class Expr(pycparser.c_ast.Node):
                 return (self.__sin__())._reverse_diff(self, adjoint, grad)
             elif func == 'cos':
                 return (self.__cos__())._reverse_diff(self, adjoint, grad)
+            elif func == 'log':
+                return (self.__log__())._reverse_diff(self, adjoint, grad)
             else:
                 raise NotImplementedError
         else:
@@ -84,6 +87,8 @@ class Expr(pycparser.c_ast.Node):
                 return (self.__sin__())._forward_diff(self)
             elif func == 'cos':
                 return (self.__cos__())._forward_diff(self)
+            elif func == 'log':
+                return (self.__log__())._forward_diff(self)
             else:
                 raise NotImplementedError
 
@@ -104,10 +109,12 @@ class Expr(pycparser.c_ast.Node):
         func = self.ast.name.name
         if func == 'pow':
             return (self.__pow__())._eval(self)
-        if func == 'sin':
+        elif func == 'sin':
             return (self.__sin__())._eval(self)
-        if func == 'cos':
-            return (self.__cos__())._eval(self)                        
+        elif func == 'cos':
+            return (self.__cos__())._eval(self)      
+        elif func == 'log':
+            return (self.__log__())._eval(self)
         else:
             raise NotImplementedError
 
@@ -159,6 +166,9 @@ class Expr(pycparser.c_ast.Node):
     def __cos__(self):
         return Cosine()
 
+    def __log__(self):
+        return Log()
+
     def __variable__(self, name):
         # if name == curr_base_variable._get():
         #     return base_vars[0]
@@ -183,11 +193,15 @@ class Variable(Expr):
 
     # adjoint: str variable. grad: dict type (str, str)
     def _reverse_diff(self, adjoint, grad):
+        # print("VAR:")
+        # print(self.name)
+        # print(adjoint)
+        # print(grad)         
         if self.name not in grad:
             pass
         elif grad[self.name] == '':
             grad[self.name] = adjoint
-        else:
+        else:            
             grad[self.name] = grad[self.name]+ " + "+ adjoint
 
     def _get(self):
@@ -234,8 +248,13 @@ class Add(Expr):
         return "(" + "(" + Expr(cur_node.ast.left)._forward_diff()+")" + " + " + "("+Expr(cur_node.ast.right)._forward_diff()+")"+")"
 
     def _reverse_diff(self, cur_node, adjoint, grad):
+        # print("ADD:")
+        # print(cur_node)
+        # print(adjoint)
+        # print(grad)        
         Expr(cur_node.ast.left)._reverse_diff(adjoint, grad)
         Expr(cur_node.ast.right)._reverse_diff(adjoint, grad)
+
 
 
 
@@ -252,6 +271,10 @@ class Subtract(Expr):
 
 
     def _reverse_diff(self, cur_node, adjoint, grad):
+        # print("SUBTRACT:")
+        # print(cur_node)
+        # print(adjoint)
+        # print(grad)        
         Expr(cur_node.ast.left)._reverse_diff(adjoint, grad)
         Expr(cur_node.ast.right)._reverse_diff("-" + adjoint, grad)
 
@@ -278,8 +301,13 @@ class Multiply(Expr):
                         + lhs+ " * " + "("+Expr(cur_node.ast.right)._forward_diff() +")" +")" 
 
     def _reverse_diff(self, cur_node, adjoint, grad):
+        # print("MULTIPLY:")
         lhs = Expr(cur_node.ast.left).eval()
         rhs = Expr(cur_node.ast.right).eval()
+        # print(cur_node)
+        # print(adjoint)
+        # print(grad)
+        # the adjoint of the left node is the adjoint of the current node * the diff of current node wrt the left node
         Expr(cur_node.ast.left)._reverse_diff("("+ adjoint + ")" + "*" + "("+ rhs + ")", grad)
         Expr(cur_node.ast.right)._reverse_diff("("+ adjoint + ")" + "*" + "("+ lhs + ")", grad)
 
@@ -299,11 +327,33 @@ class Divide(Expr):
                         + lhs+ " * " +Expr(cur_node.ast.right)._forward_diff()+")" + "/ (" + rhs + " * " + rhs+")"
 
     def _reverse_diff(self, cur_node, adjoint, grad):
+        # print("DIVIDE:")
+        # print(cur_node)
+        # print(adjoint)
+        # print(grad)        
         lhs = Expr(cur_node.ast.left).eval()
         rhs = Expr(cur_node.ast.right).eval()
         Expr(cur_node.ast.left)._reverse_diff("("+ adjoint + ")" + "/" + "("+ rhs + ")", grad)
         Expr(cur_node.ast.right)._reverse_diff("(-("+adjoint +") * ("+ lhs + "))/" + "pow(("+ rhs + "),2)", grad)        
 
+
+
+class Log(Expr):
+    def __init__(self):
+        pass 
+
+
+    def _eval(self,cur_node):
+        exp = cur_node.ast.args.exprs[0].name
+        return "(log("+Expr(exp).eval()+"))"
+
+    def _forward_diff(self,cur_node):       
+        exp = cur_node.ast.args.exprs[0].name
+        return "(1/("+ exp +")*"+Expr(exp)._forward_diff()+")"
+
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        exp = cur_node.ast.args.exprs[0].name
+        Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (1/("+exp+"))")           
 
 
 
@@ -357,7 +407,21 @@ class Sine(Expr):
         return "(cos("+ exp +")*"+Expr(exp)._forward_diff()+")"
 
 
-    # def _reverse_diff(self, cur_node, adjoint, grad):
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        exp = cur_node.ast.args.exprs[0].name
+        Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (cos("+exp+"))", grad)       
+
+    # def _second_der(self, cur_node):
+    #     exp = cur_node.ast.args.exprs[0].name
+
+    #     firstder_fn = "(cos("+ exp +")*"+Expr(exp)._forward_diff()+")"
+
+    #     parser = c_parser.CParser()
+    #     new_secder_ast = parser.parse(firstder_fn, filename='<none>')
+
+
+    #     return Expr(new_secder_ast)._forward_diff()
+
 
 
 
@@ -372,6 +436,13 @@ class Cosine(Expr):
     def _forward_diff(self,cur_node):
         exp = cur_node.ast.args.exprs[0].name
         return "(-1*sin("+exp +")*"+Expr(exp)._forward_diff()+")"
+
+    def _reverse_diff(self, cur_node, adjoint, grad):
+        exp = cur_node.ast.args.exprs[0].name
+        Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (-1*sin("+exp+"))", grad)           
+
+
+
 
 # def differentiate(node):
 #     # print(show_attrs(node.__class__))
@@ -421,6 +492,25 @@ def grad(ast, x=0):
     fun = ast.ext[-1].body.block_items[1].init
     # fun.show()
     return get_traversal(fun,x)
+
+
+def simplify_equation(equation):
+    assert type(equation) in (str)
+
+    import re
+    m = re.findall(r"(\d)",equation)
+    groups = np.unique(m)
+    for digit in groups: equation = equation.replace("("+digit+")",digit)
+
+    return equation
+
+
+
+def simplify_graph(old_ast):
+    if old_ast.init.type() == 'decl':
+        print('gotcha')
+    elif old_ast.type() == 'BinaryOp':
+        print('no gotcha')
 
 
 def grad_without_traversal(ast, x=0):
@@ -483,12 +573,28 @@ def grad_without_traversal(ast, x=0):
             i += 1
 
 
+    elif second_der:
+        for i,vars_ in enumerate(variables):
+            curr_base_variable = Variable(vars_)
+            derivative = Expr(fun)._forward_diff() 
+            print("First derivative: ")
+            print(derivative) 
+
+            derivative = simplify_equation(derivative)
+            new_parser = c_parser.CParser()
+            new_ast = new_parser.parse("double f = {};".format(derivative), filename='<none>')
+
+            second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
+            print("Second derivative:")
+            print(second_derivative)
+            c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)
+
     else:
         for i,vars_ in enumerate(variables):
             curr_base_variable = Variable(vars_)
             derivative = Expr(fun)._forward_diff() 
             print(derivative) 
-            c_code._generate_expr(curr_base_variable._get(), derivative,index=i)
+            c_code._generate_expr(curr_base_variable._get(), derivative,index=i)        
 
     c_code._make_footer()
         
@@ -507,7 +613,7 @@ if __name__ == "__main__":
     parser.add_argument('-ccode', type = str, dest = 'ccode', help='function name')
     parser.add_argument('-ispc', type = str, dest = 'ispc', help='function name')
     parser.add_argument('-reverse', type = str, default = 'False', dest = 'reverse', help='function name')
-
+    parser.add_argument('-second_der', type = str, default = 'False', dest = 'second_der', help='function name')
     parser.add_argument('--output_filename', type = str, default ='c_code', help='file name')    
     parser.add_argument('--nth_der', type = int, help='nth derivative')
 
@@ -540,6 +646,12 @@ if __name__ == "__main__":
     else:
         reverse_diff = False
 
+    if parser.second_der == 'True':
+        second_der = True
+    else:
+        second_der = False
+
+
     print("CCODE: ",ccode)
     print("ISPC CODE: ",ispc)
     ast = parse_file(filename, use_cpp=True,
@@ -549,4 +661,7 @@ if __name__ == "__main__":
     curr_base_variable = Variable("temp")
     # ast.show()
     ext_index = 0
+    # if len(ast.ext[0].body.block_items)>0:
+    #     ast.ext[0].body.block_items[0].show()
+    #     simplify_graph(ast.ext[0].body.block_items[0])
     grad_without_traversal(ast)
