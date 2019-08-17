@@ -7,6 +7,7 @@ from pycparser import c_parser
 import pycparser.c_ast
 import c_generator
 import argparse
+import numpy as np
 
 # to do: using pow in reverse dif. might slow down.
 
@@ -26,6 +27,8 @@ class Expr(pycparser.c_ast.Node):
 
     def eval(self):
         # print("trying to evaluate----")
+        if self.type=='UnaryOp':
+            return self.eval_match_op()
         if self.type=='BinaryOp':
             return self.eval_match_op()
         elif self.type ==  'FuncCall':
@@ -234,7 +237,10 @@ class Add(Expr):
         # print(Expr(cur_node.ast.left).eval())
         # print("Addition evaluation of: ")
         # cur_node.ast.show()
-
+        if cur_node.type == 'UnaryOp':
+            # print("Add unary op")
+            # print(cur_node.ast.expr)
+            return "("+Expr(cur_node.ast.expr).eval()+")"
         temp= "("+Expr(cur_node.ast.left).eval() + " + " + Expr(cur_node.ast.right).eval()+")"
         # print(temp)
         return temp
@@ -264,6 +270,10 @@ class Subtract(Expr):
         # print("initiating subtract")
         pass    
     def _eval(self,cur_node):
+        if cur_node.type == 'UnaryOp':
+            # print("Unary opppppp")
+            # print(cur_node.ast.expr)
+            return "( -("+Expr(cur_node.ast.expr).eval()+"))"
         return "("+Expr(cur_node.ast.left).eval() + " - " + Expr(cur_node.ast.right).eval()+")"
 
     def _forward_diff(self,cur_node):
@@ -315,7 +325,12 @@ class Multiply(Expr):
 class Divide(Expr):
     def __init__(self):
         pass    
+
     def _eval(self,cur_node):
+        # print(cur_node.ast.left)
+        # print(Expr(cur_node.ast.left).eval())
+        # print(cur_node.ast.right)
+        # print(Expr(cur_node.ast.right).eval())
         return "("+Expr(cur_node.ast.left).eval() + " / " + Expr(cur_node.ast.right).eval()+")"
 
     def _forward_diff(self,cur_node):
@@ -493,14 +508,20 @@ def grad(ast, x=0):
     # fun.show()
     return get_traversal(fun,x)
 
-
 def simplify_equation(equation):
-    assert type(equation) in (str)
+    # assert type(equation) in (str)
 
     import re
+    m = re.findall(r"(\d.)",equation)
+    groups = np.unique(m)
+    for digit in groups: equation = equation.replace("("+digit+")",digit)
+
+
+
     m = re.findall(r"(\d)",equation)
     groups = np.unique(m)
     for digit in groups: equation = equation.replace("("+digit+")",digit)
+
 
     return equation
 
@@ -561,16 +582,61 @@ def grad_without_traversal(ast, x=0):
         c_code._declare_vars(vars_,i)
         grad[vars_] = ''
 
+
+    grad_hess = {}
+    for i, vars_ in enumerate(variables):
+        grad_hess[vars_] = ''        
+
     print(grad)
 
     if reverse_diff:
+        if second_der:
+            Expr(fun)._reverse_diff("1.",grad) 
+            for k,v in grad.items():
+                print("First derivative: ")
 
-        Expr(fun)._reverse_diff("1.",grad) 
-        print(grad)
-        i = 0
-        for k,v in grad.items():
-            c_code._generate_expr(k, v,index=i)
-            i += 1
+                print(k)
+                print(v)
+                simplified = simplify_equation(v)
+                print("Simplified equation: ")
+                print(simplified)
+                new_parser = c_parser.CParser()
+                new_ast = new_parser.parse("double f = {};".format(simplified), filename='<none>')
+
+                Expr(new_ast.ext[0].init)._reverse_diff("1.",grad_hess)
+                print("Second Derivative: ")
+
+                ctr=0
+                for k_hess,v_hess in grad_hess.items():
+                    print("Second derivative : df / d{} d{}:".format(k, k_hess))
+
+                    print(k_hess)
+                    print(v_hess)
+
+                    # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=ctr)
+                    ctr += 1
+
+
+
+
+            # derivative = simplify_equation(derivative)
+            # new_parser = c_parser.CParser()
+            # new_ast = new_parser.parse("double f = {};".format(derivative), filename='<none>')
+
+            # second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
+            # print("Second derivative:")
+            # print(second_derivative)
+            # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)            
+
+
+
+        else:
+            Expr(fun)._reverse_diff("1.",grad) 
+            print(grad)
+            i = 0
+            for k,v in grad.items():
+                c_code._generate_expr(k, v,index=i)
+                i += 1
 
 
     elif second_der:
@@ -584,10 +650,12 @@ def grad_without_traversal(ast, x=0):
             new_parser = c_parser.CParser()
             new_ast = new_parser.parse("double f = {};".format(derivative), filename='<none>')
 
-            second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
-            print("Second derivative:")
-            print(second_derivative)
-            c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)
+            for j, vars_second in enumerate(variables):
+                curr_base_variable = Variable(vars_second)
+                second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
+                print("Second derivative : df / d{} d{}:".format(vars_, vars_second))
+                print(second_derivative)
+                # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)
 
     else:
         for i,vars_ in enumerate(variables):
