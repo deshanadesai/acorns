@@ -4,7 +4,6 @@ import numpy as np
 
 num_params = %s
 %s
-%s
 torch.set_num_threads(1)
 y = %s
 start_time_pytorch = time.time()
@@ -15,4 +14,4 @@ runtime = (end_time_pytorch - start_time_pytorch)
 print(str(runtime))
 %s
 for i in range(num_params):
-    %s
+%s

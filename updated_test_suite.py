@@ -7,7 +7,6 @@ import os
 from subprocess import PIPE, run
 import forward_diff
 import numpy as np
-# matplotlib.use('Agg')
 
 def parse_output(filename, is_wenzel):
     f = open(filename, "r")
@@ -64,14 +63,8 @@ def generate_pytorch_vars(func_num):
 
 def generate_pytorch_prints(func_num):
     print_string = ""
-    for var in functions[func_num][1]:
-        print_string += "print(str({}_list[i]))\n".format(var)
-    return print_string
-
-def generate_pytorch_print_debug(func_num):
-    print_string = ""
-    for var in functions[func_num][1]:
-        print_string += "print({})\n".format(var)
+    for i, var in enumerate(functions[func_num][1]):
+        print_string += "\tprint(str({}_list[i]))\n".format(var)
     return print_string
 
 def generate_pytorch_grads(func_num):
@@ -92,12 +85,11 @@ def generate_pytorch_file(func_num, num_params):
     pytorch_file = open("utils/pytorch.py", "w+")
     num_vars = len(functions[func_num][1])
     variables = generate_pytorch_vars(func_num)
-    print_debug = generate_pytorch_print_debug(func_num)
     function = parse_pytorch(functions[func_num][0])
     grads = generate_pytorch_grads(func_num)
     to_lists = generate_to_lists(func_num)
     prints = generate_pytorch_prints(func_num)
-    pytorch_code = pytorch %  (num_params, variables, print_debug, function, grads, to_lists, prints)
+    pytorch_code = pytorch %  (num_params, variables, function, grads, to_lists, prints)
     pytorch_file.write(pytorch_code)
     pytorch_file.close()
 
@@ -112,33 +104,30 @@ def print_param_to_file(params):
     param_f.write(param_string)
     param_f.close()
 
-def generate_function_c_file():
+def generate_function_c_file(func_num):
     f = open(INPUT_FILENAME, 'w')
-    for i in range(len(functions)):
-        signature = ""
-        if i != 0:
-            signature += "\n"
-        function = functions[i]
-        signature += "int function_" + str(i) + "("
-        for j in range(len(function[1])):
-            var = function[1][j]
-            signature += "double " + var
-            if j == len(function[1]) - 1:
-                signature += ")\n"
-            else:
-                signature += ", "
-        body = "{"
-        body += "\n" + OFFSET + "int p = " + function[0] + ";"
-        body += "\n" + OFFSET + "return 0;"
-        body += "\n}"
-        output = signature + body
-        f.write(output)
+    signature = ""
+    function = functions[func_num]
+    signature += "int function_" + str(func_num) + "("
+    for j in range(len(function[1])):
+        var = function[1][j]
+        signature += "double " + var
+        if j == len(function[1]) - 1:
+            signature += ")\n"
+        else:
+            signature += ", "
+    body = "{"
+    body += "\n" + OFFSET + "int p = " + function[0] + ";"
+    body += "\n" + OFFSET + "return 0;"
+    body += "\n}"
+    output = signature + body
+    f.write(output)
     f.close()
 
-def generate_derivatives_c_file():
-    vars = ",".join(str(x) for x in functions[0][1])
+def generate_derivatives_c_file(func_num):
+    vars = ",".join(str(x) for x in functions[func_num][1])
     cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode " + str(RUN_C) + " -ispc " + str(
-        RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_0\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
+        RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
     os.system(cmd)
 
 # def generate_wenzel_file(func_num, num_params):
@@ -187,7 +176,7 @@ if __name__ == "__main__":
     # functions = [
     #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]]]
     functions = [
-    ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ], 
+    ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ],
     ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
             ]
 
@@ -235,19 +224,19 @@ if __name__ == "__main__":
         num_params = INIT_NUM_PARAMS
 
         # generate and compile our code
-        generate_function_c_file()
-        generate_derivatives_c_file()
+        generate_function_c_file(func_num)
+        generate_derivatives_c_file(func_num)
         compile_ours()
 
-        # while num_params <= 10:
-        for num_params in range(5):
+        while num_params <= 100000:
+        # for num_params in range(2, 5):
 
             # generate parameters
             params = generate_params(num_params, func_num)
             print_param_to_file(params)
 
             # generate other files
-            generate_pytorch_file(0, num_params)
+            generate_pytorch_file(func_num, num_params)
             # generate_wenzel_file(0, num_params)
             # compile_wenzel()
 
@@ -258,10 +247,10 @@ if __name__ == "__main__":
 
             for i in range(NUM_ITERATIONS):
                 pytorch = run_pytorch()
-                ours = run_ours(functions[0], num_params)
+                ours = run_ours(functions[func_num], num_params)
                 # wenzel = run_wenzel(num_params)
-        # 		# for j in range(len(ours[0])):
-        # 		# 	assert math.isclose(float(pytorch[0][j]), float(ours[0][j]), abs_tol=10**-1)
+                # for j in range(len(ours[0])):
+                #     assert math.isclose(float(pytorch[0][j]), float(ours[0][j]), abs_tol=10**-1)
                 our_times.append(float(ours[1]))
                 py_times.append(float(pytorch[1]))
                 # wenzel_times.append(float(wenzel[1]))
@@ -272,24 +261,23 @@ if __name__ == "__main__":
 
             avg_us.append(sum(our_times) / len(our_times))
             avg_pytorch.append(sum(py_times) / len(py_times))
-            # avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
+            # # avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
             denom.append(num_params)
             if num_params < 10000:
                 num_params += 2000
             else:
                 num_params = num_params + 10000
-        print("Time taken by C code:", our_times)
         plt.figure(1)
         plt.subplot(211)
         print(denom)
         plt.plot(denom, avg_us, marker='o')
         plt.plot(denom, avg_pytorch, '--', marker='o')
-        # plt.plot(denom, avg_wenzel, 'go--', marker='o')
+        # # # plt.plot(denom, avg_wenzel, 'go--', marker='o')
         plt.xticks(denom)
         plt.title('C Code vs Pytorch vs. Wenzel. # It: ' +
                 str(NUM_ITERATIONS) + str(torch.__version__))
-        plt.savefig('results/graph.png')
+        plt.savefig('results/graph_{}.png'.format(func_num))
 
         print("Avg Us: " + str(avg_us))
         print("Avg Pytorch: " + str(avg_pytorch))
-        # print("Avg Wenzel: " + str(avg_wenzel))
+        # # print("Avg Wenzel: " + str(avg_wenzel))
