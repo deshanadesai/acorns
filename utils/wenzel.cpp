@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
     Eigen::VectorXd x(2010);
 
-    std::ifstream file("utils/params.txt");
+    std::ifstream file("test_params.txt");
     int i = 0;
     for (std::string line; std::getline(file, line);)
     {
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
         /* There are two independent variables */
         DiffScalarBase::setVariableCount(2);
         DScalar k(0, x[i]);
-        DScalar Fx = ((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k;
+        DScalar Fx = sin(k) + cos(j) + pow(l, 2);
         outfile << Fx.getGradient()(0) << " ";
     }
 

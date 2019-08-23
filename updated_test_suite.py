@@ -7,47 +7,33 @@ import os
 from subprocess import PIPE, run
 import forward_diff
 import numpy as np
-# matplotlib.use('Agg')
 
+def parse_output(filename, is_wenzel):
+    f = open(filename, "r")
+    output = f.read()
+    output_array = output.split()
+    if is_wenzel == True:
+        runtime = output_array[-1]
+        values = output_array[0:-1]
+    else:
+        runtime = output_array[0]
+        values = output_array[1:]
+    return [values, runtime]
 
-def generate_function_c_file():
-    f = open(INPUT_FILENAME, 'w')
-    for i in range(len(functions)):
-        signature = ""
-        if i != 0:
-            signature += "\n"
-        function = functions[i]
-        signature += "int function_" + str(i) + "("
-        for j in range(len(function[1])):
-            var = function[1][j]
-            signature += "double " + var
-            if j == len(function[1]) - 1:
-                signature += ")\n"
-            else:
-                signature += ", "
-        body = "{"
-        body += "\n" + OFFSET + "int p = " + function[0] + ";"
-        body += "\n" + OFFSET + "return 0;"
-        body += "\n}"
-        output = signature + body
-        f.write(output)
-    f.close()
-
-
-def generate_derivatives_c_file():
-    vars = ",".join(str(x) for x in functions[0][1])
-    cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode " + str(RUN_C) + " -ispc " + str(
-        RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_0\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
-    os.system(cmd)
-
-
-def generate_params(num_params):
-    all_params = []
-    for func in functions:
-        func_params = np.random.rand(num_params*num_vars)
-        all_params.append(func_params)
-    return all_params
-
+def generate_params(num_params, function_num):
+    print("Generating params for function_num", function_num) #, " which is: ", functions[function_num][0])
+    num_variables = len(functions[function_num][1])
+    function_params = np.zeros(shape=(num_variables, num_params))
+    for i, var in enumerate(functions[function_num][1]):
+        variable_params = np.random.rand(num_params) * 10
+        np.save("utils/numpy_params/function_{}_param_{}.npy".format(function_num, var), variable_params)
+        function_params[i] = variable_params
+    reshaped = np.reshape(function_params, num_params*num_variables, order='F')
+    param_string = "\n".join(str(x) for x in reshaped)
+    param_f = open("params.txt", "w+")
+    param_f.write(param_string)
+    param_f.close()
+    return reshaped
 
 def parse_pytorch(func):
     finalEq = ""
@@ -64,59 +50,103 @@ def parse_pytorch(func):
     if "sin" in substring or "cos" in substring or "pow" in substring:
         substring = "torch." + substring
     finalEq += substring
+    finalEq = "(" + finalEq + ").sum()"
     return finalEq
 
+def generate_pytorch_vars(func_num):
+    variable_string = ""
+    for i, var in enumerate(functions[func_num][1]):
+        variable_string += "{} = torch.tensor(np.load('utils/numpy_params/function_{}_param_{}.npy'), requires_grad=True, dtype=torch.float)".format(var, func_num, var)
+        if i != len(functions[func_num][1]) - 1: # if it's the last one, don't include a newline
+            variable_string += "\n"
+    return variable_string
 
-def generate_pytorch_file(func_num):
-    np.savez(NUMPY_PARAMS_FILENAME, params)
+def generate_pytorch_prints(func_num):
+    print_string = ""
+    for i, var in enumerate(functions[func_num][1]):
+        print_string += "\tprint(str({}_list[i]))\n".format(var)
+    return print_string
+
+def generate_pytorch_grads(func_num):
+    grad_string = ""
+    for var in functions[func_num][1]:
+        grad_string += "\n{}.grad\n".format(var)
+    return grad_string
+
+def generate_to_lists(func_num):
+    to_list_string = ""
+    for var in functions[func_num][1]:
+        to_list_string += "{}_list = {}.grad.tolist()\n".format(var, var)
+    return to_list_string
+
+def generate_pytorch_file(func_num, num_params):
     with open('utils/static_code/pytorch.txt', 'r') as file:
         pytorch = file.read()
     pytorch_file = open("utils/pytorch.py", "w+")
-    pytorch_code = pytorch % (parse_pytorch(functions[func_num][0]))
+    num_vars = len(functions[func_num][1])
+    variables = generate_pytorch_vars(func_num)
+    function = parse_pytorch(functions[func_num][0])
+    grads = generate_pytorch_grads(func_num)
+    to_lists = generate_to_lists(func_num)
+    prints = generate_pytorch_prints(func_num)
+    pytorch_code = pytorch %  (num_params, variables, function, grads, to_lists, prints)
     pytorch_file.write(pytorch_code)
     pytorch_file.close()
 
-
-def generate_wenzel_file(func_num, params, num_params):
-    param_string = ", ".join(str(x) for x in params[0])
-    with open('utils/static_code/wenzel.txt', 'r') as file:
-        wenzel = file.read()
-    wenzel_file = open("utils/wenzel.cpp", "w+")
-    cpp_code = wenzel % (num_params, PARAMS_FILENAME, num_params, str(
-        functions[func_num][1][0]), str(functions[func_num][0]))
-    wenzel_file.write(cpp_code)
-    wenzel_file.close()
-
-
-def compile_wenzel():
-    os.system("g++ -std=c++11 -I utils/ext/ utils/wenzel.cpp -o utils/wenzel")
-
-
-def run_wenzel(num_params):
-    os.system("./utils/wenzel utils/wenzel_output.txt")
-    return parse_output("utils/wenzel_output.txt", True)
-
-
-def parse_output(filename, is_wenzel):
-    f = open(filename, "r")
-    output = f.read()
-    output_array = output.split()
-    if is_wenzel == True:
-        runtime = output_array[-1]
-        values = output_array[0:-1]
-    else:
-        runtime = output_array[0]
-        values = output_array[1:]
-    return [values, runtime]
-
-
 def run_pytorch():
-    cmd = "python3 " + PYTORCH_FILENAME + " > " + PYTORCH_OUTPUT
+    cmd = "python3 " + "utils/pytorch.py" + " > " + "pytorch_output.txt"
     os.system(cmd)
-    return parse_output(PYTORCH_OUTPUT, False)
+    return parse_output("pytorch_output.txt", False)
 
+def print_param_to_file(params):
+    param_string = "\n".join(str(x) for x in params)
+    param_f = open(PARAMS_FILENAME, "w+")
+    param_f.write(param_string)
+    param_f.close()
 
-def run_ours(params, func, num_params):
+def generate_function_c_file(func_num):
+    f = open(INPUT_FILENAME, 'w')
+    signature = ""
+    function = functions[func_num]
+    signature += "int function_" + str(func_num) + "("
+    for j in range(len(function[1])):
+        var = function[1][j]
+        signature += "double " + var
+        if j == len(function[1]) - 1:
+            signature += ")\n"
+        else:
+            signature += ", "
+    body = "{"
+    body += "\n" + OFFSET + "int p = " + function[0] + ";"
+    body += "\n" + OFFSET + "return 0;"
+    body += "\n}"
+    output = signature + body
+    f.write(output)
+    f.close()
+
+def generate_derivatives_c_file(func_num):
+    vars = ",".join(str(x) for x in functions[func_num][1])
+    cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode " + str(RUN_C) + " -ispc " + str(
+        RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
+    os.system(cmd)
+
+# def generate_wenzel_file(func_num, num_params):
+#     with open('utils/static_code/wenzel.txt', 'r') as file:
+#         wenzel = file.read()
+#     wenzel_file = open("utils/wenzel.cpp", "w+")
+#     cpp_code = wenzel % (num_params, PARAMS_FILENAME, num_params, str(
+#         functions[func_num][1][0]), str(functions[func_num][0]))
+#     wenzel_file.write(cpp_code)
+#     wenzel_file.close()
+
+# def compile_wenzel():
+#     os.system("g++ -std=c++11 -I utils/ext/ utils/wenzel.cpp -o utils/wenzel")
+
+# def run_wenzel(num_params):
+#     os.system("./utils/wenzel utils/wenzel_output.txt")
+#     return parse_output("utils/wenzel_output.txt", True)
+
+def run_ours(func, num_params):
     if sys.platform.startswith('win'):
         print("running....")
         run_command = "\"utils/program.exe\" " + \
@@ -131,26 +161,7 @@ def run_ours(params, func, num_params):
         universal_newlines=True, shell=True)
     return parse_output(OUTPUT_FILENAME, False)
 
-
 def compile_ours():
-    if RUN_ISPC:
-        # if target==1:
-        cmd = "ispc -O3 --opt=fast-math utils/derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
-        os.system(cmd)
-        cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + \
-            RUNNABLE_FILENAME + ".c" + DERIVATIVES_FILENAME + ".c " + " -lm"
-        print(cmd)
-        os.system(cmd)
-        # if target==2:
-        # 	cmd = "ispc -O3 --target=sse4 --opt=fast-math derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
-        # 	os.system(cmd)
-        # 	cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
-        # 	os.system(cmd)
-        # if target ==3:
-        # 	cmd = "ispc -O3 --target=avx --opt=fast-math derivatives.ispc -o objs/derivatives_ispc.o -h objs/derivatives_ispc.h"
-        # 	os.system(cmd)
-        # 	cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " objs/derivatives_ispc.o " + RUNNABLE_FILENAME + ".c" + " -lm"
-        # 	os.system(cmd)
     if RUN_C:
         if sys.platform.startswith('win'):
             cmd = "cl " + RUNNABLE_FILENAME + ".c " + UTILS_FILENAME + " " + \
@@ -161,25 +172,14 @@ def compile_ours():
         print(cmd)
         os.system(cmd)
 
-
-def print_param_to_file(params):
-    param_string = "\n".join(str(x) for x in params[0])
-    np.save(NUMPY_PARAMS_FILENAME, params[0])
-    param_f = open(PARAMS_FILENAME, "w+")
-    param_f.write(param_string)
-    param_f.close()
-
-
-def convert_params_to_list(params):
-    current_params = []
-    for param in params[0]:
-        current_params.append(float(param))
-    return current_params
-
-
 if __name__ == "__main__":
+    # functions = [
+    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]]]
     functions = [
-        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]]]
+    ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ],
+    ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
+            ]
+
     INPUT_FILENAME = 'utils/functions.c'
     DERIVATIVES_FILENAME = 'utils/derivatives'
     UTILS_FILENAME = 'utils/windows_utils.c'
@@ -216,101 +216,68 @@ if __name__ == "__main__":
     if os.path.exists(PYTORCH_OUTPUT):
         os.remove(PYTORCH_OUTPUT)
 
-    avg_us = []
-    avg_pytorch = []
-    avg_wenzel = []
-    denom = []
-    num_params = INIT_NUM_PARAMS
+    for func_num, func in enumerate(functions):
+        avg_us = []
+        avg_pytorch = []
+        avg_wenzel = []
+        denom = []
+        num_params = INIT_NUM_PARAMS
 
-    # generate and compile our code
-    generate_function_c_file()
-    generate_derivatives_c_file()
-    compile_ours()
+        # generate and compile our code
+        generate_function_c_file(func_num)
+        generate_derivatives_c_file(func_num)
+        compile_ours()
 
-    while num_params <= 100000:
+        while num_params <= 100000:
+        # for num_params in range(2, 5):
 
-        # generate parameters
-        params = generate_params(num_params)
-        print_param_to_file(params)
+            # generate parameters
+            params = generate_params(num_params, func_num)
+            print_param_to_file(params)
 
-        # generate other files
-        generate_pytorch_file(0)
-        generate_wenzel_file(0, params, num_params)
-        compile_wenzel()
+            # generate other files
+            generate_pytorch_file(func_num, num_params)
+            # generate_wenzel_file(0, num_params)
+            # compile_wenzel()
 
-        # initialize arrays for run
-        our_times = []
-        py_times = []
-        wenzel_times = []
+            # initialize arrays for run
+            our_times = []
+            py_times = []
+            # wenzel_times = []
 
-        for i in range(NUM_ITERATIONS):
-            pytorch = run_pytorch()
-            ours = run_ours(params, functions[0], num_params)
-            wenzel = run_wenzel(num_params)
-    # 		# for j in range(len(ours[0])):
-    # 		# 	assert math.isclose(float(pytorch[0][j]), float(ours[0][j]), abs_tol=10**-1)
-            our_times.append(float(ours[1]))
-            py_times.append(float(pytorch[1]))
-            wenzel_times.append(float(wenzel[1]))
-        print("Parameters: ", params[0][: 10])
-        print("Snapshot of Our Results:", ours[0][: 10])
-        print("Snapshot of Pytorch results: ", pytorch[0][: 10])
-        print("Snapshot of Wenzel results: ", wenzel[0][: 10])
+            for i in range(NUM_ITERATIONS):
+                pytorch = run_pytorch()
+                ours = run_ours(functions[func_num], num_params)
+                # wenzel = run_wenzel(num_params)
+                # for j in range(len(ours[0])):
+                #     assert math.isclose(float(pytorch[0][j]), float(ours[0][j]), abs_tol=10**-1)
+                our_times.append(float(ours[1]))
+                py_times.append(float(pytorch[1]))
+                # wenzel_times.append(float(wenzel[1]))
+            # print("Parameters: ", params[0][: 10])
+            print("Snapshot of Our Results:", ours[0][: 10])
+            print("Snapshot of Pytorch results: ", pytorch[0][: 10])
+            # print("Snapshot of Wenzel results: ", wenzel[0][: 10])
 
-        avg_us.append(sum(our_times) / len(our_times))
-        avg_pytorch.append(sum(py_times) / len(py_times))
-        avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
-        denom.append(num_params)
-        if num_params < 10000:
-            num_params += 2000
-        else:
-            num_params = num_params + 10000
+            avg_us.append(sum(our_times) / len(our_times))
+            avg_pytorch.append(sum(py_times) / len(py_times))
+            # # avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
+            denom.append(num_params)
+            if num_params < 10000:
+                num_params += 2000
+            else:
+                num_params = num_params + 10000
+        plt.figure(1)
+        plt.subplot(211)
+        print(denom)
+        plt.plot(denom, avg_us, marker='o')
+        plt.plot(denom, avg_pytorch, '--', marker='o')
+        # # # plt.plot(denom, avg_wenzel, 'go--', marker='o')
+        plt.xticks(denom)
+        plt.title('C Code vs Pytorch vs. Wenzel. # It: ' +
+                str(NUM_ITERATIONS) + str(torch.__version__))
+        plt.savefig('results/graph_{}.png'.format(func_num))
 
-    # '''
-    # RUN ISPC
-    # '''
-
-    # # params = generate_params()
-    # avg_ispc = []
-    # denom = []
-    # NUM_PARAMS = 0
-    # RUN_C = False
-    # RUN_ISPC = True
-    # RUN_ISPC_1 = True
-    # target = 1
-    # # run_pytorch(params)
-    # while NUM_PARAMS <= 100000:
-    # 	generate_function_c_file()
-    # 	generate_runnable_c_file()
-    # 	ispc_times = []
-    # 	for i in range(NUM_ITERATIONS):
-    # 		params = generate_params()
-    # 		ispc_time = run_ours(params)
-    # 		ispc_times.append(float(ispc_time[1]))
-    # 	avg_ispc.append(sum(ispc_times) / len(ispc_times))
-    # 	denom.append(NUM_PARAMS)
-    # 	if NUM_PARAMS<10000:
-    # 		NUM_PARAMS += 2000
-    # 	else:
-    # 		NUM_PARAMS = NUM_PARAMS +10000
-    print("Time taken by C code:", our_times)
-    # print("Time taken by ISPC code: ",ispc
-    #
-    # _times)
-    plt.figure(1)
-    plt.subplot(211)
-    print(denom)
-    plt.plot(denom, avg_us, marker='o')
-    # plt.plot(denom, avg_ispc, marker='o')
-    plt.plot(denom, avg_pytorch, '--', marker='o')
-    plt.plot(denom, avg_wenzel, 'go--', marker='o')
-    plt.xticks(denom)
-    # plt.legend(['Us','ISPC target=default', 'Pytorch'])
-    plt.title('C Code vs Pytorch vs. Wenzel. # It: ' +
-              str(NUM_ITERATIONS) + str(torch.__version__))
-    plt.savefig('results/graph.png')
-
-    print("Avg Us: " + str(avg_us))
-    # print("Avg ISPC: " + str(avg_ispc) )
-    print("Avg Pytorch: " + str(avg_pytorch))
-    print("Avg Wenzel: " + str(avg_wenzel))
+        print("Avg Us: " + str(avg_us))
+        print("Avg Pytorch: " + str(avg_pytorch))
+        # # print("Avg Wenzel: " + str(avg_wenzel))
