@@ -79,10 +79,7 @@ int main(int argc, char* argv[]) {
     FILE *fp;
 
 	fp = fopen(output_filename, "w+");
-
-    // printf("%" PRId64 "\n", delta);
     printf("%f ", delta);
-    // fprintf(fp,"%" PRId64 " ", delta);
     fprintf(fp, "%f ", delta);
 
 
