@@ -8,7 +8,6 @@ torch.set_num_threads(1)
 y = (torch.sin(k) +torch. cos(k) +torch. pow(k, 2)).sum()
 start_time_pytorch = time.time()
 y.backward()
-
 k.grad
 
 end_time_pytorch = time.time()

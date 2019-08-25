@@ -12,12 +12,8 @@ def parse_output(filename, is_wenzel):
     f = open(filename, "r")
     output = f.read()
     output_array = output.split()
-    if is_wenzel == True:
-        runtime = output_array[-1]
-        values = output_array[0:-1]
-    else:
-        runtime = output_array[0]
-        values = output_array[1:]
+    runtime = output_array[0]
+    values = output_array[1:]
     return [values, runtime]
 
 def generate_params(num_params, function_num):
@@ -70,7 +66,7 @@ def generate_pytorch_prints(func_num):
 def generate_pytorch_grads(func_num):
     grad_string = ""
     for var in functions[func_num][1]:
-        grad_string += "\n{}.grad\n".format(var)
+        grad_string += "{}.grad\n".format(var)
     return grad_string
 
 def generate_to_lists(func_num):
@@ -130,21 +126,54 @@ def generate_derivatives_c_file(func_num):
         RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
     os.system(cmd)
 
-# def generate_wenzel_file(func_num, num_params):
-#     with open('utils/static_code/wenzel.txt', 'r') as file:
-#         wenzel = file.read()
-#     wenzel_file = open("utils/wenzel.cpp", "w+")
-#     cpp_code = wenzel % (num_params, PARAMS_FILENAME, num_params, str(
-#         functions[func_num][1][0]), str(functions[func_num][0]))
-#     wenzel_file.write(cpp_code)
-#     wenzel_file.close()
+# def plot_graph(avg_us, avg_pytorch, avg_wenzel, denom):
+#     plt.figure(1)
+#     plt.subplot(211)
+#     print(denom)
+#     plt.plot(denom, avg_us, marker='o')
+#     plt.plot(denom, avg_pytorch, '--', marker='o')
+#     # # # plt.plot(denom, avg_wenzel, 'go--', marker='o')
+#     plt.xticks(denom)
+#     plt.title('C Code vs Pytorch vs. Wenzel. # It: ' +
+#             str(NUM_ITERATIONS) + str(torch.__version__))
+#     plt.savefig('results/graph_{}.png'.format(func_num))
+#     plt.clf()
+#     print("Avg Us: " + str(avg_us))
+#     print("Avg Pytorch: " + str(avg_pytorch))
+#     # # print("Avg Wenzel: " + str(avg_wenzel))
 
-# def compile_wenzel():
-#     os.system("g++ -std=c++11 -I utils/ext/ utils/wenzel.cpp -o utils/wenzel")
+def generate_wenzel_file(func_num, num_params):
+    with open('utils/static_code/wenzel.txt', 'r') as file:
+        wenzel = file.read()
+    wenzel_file = open("utils/wenzel.cpp", "w+")
+    num_vars = len(functions[func_num][1])
+    derivatives = generate_wenzel_ders(func_num, num_vars)
+    cpp_code = wenzel % (num_params, num_vars, PARAMS_FILENAME, derivatives)
+    wenzel_file.write(cpp_code)
+    wenzel_file.close()
 
-# def run_wenzel(num_params):
-#     os.system("./utils/wenzel utils/wenzel_output.txt")
-#     return parse_output("utils/wenzel_output.txt", True)
+def compile_wenzel():
+    os.system("g++ -std=c++11 -I utils/ext/ utils/wenzel.cpp -o utils/wenzel")
+
+def run_wenzel(num_params):
+    os.system("./utils/wenzel utils/wenzel_output.txt")
+    return parse_output("utils/wenzel_output.txt", True)
+
+def generate_wenzel_ders(func_num, num_vars):
+    ders_string = "\t\tDScalar "
+    for i, var in enumerate(functions[func_num][1]):
+        ders_string += "{}(0, args[index * {} + {}])".format(var, num_vars, i)
+        if i == num_vars - 1:
+            ders_string += ";\n"
+        else:
+            ders_string += ", "
+    func_string = "\t\tDScalar Fx = {};\n".format(functions[func_num][0])
+    grad_string = ""
+    for i, var in enumerate(functions[func_num][1]):
+        grad_string += "\t\tders[index * {} + {}] = Fx.getGradient()({});".format(num_vars, i, i) 
+        if i != num_vars - 1:
+            grad_string += "\n"
+    return ders_string + func_string + grad_string
 
 def run_ours(func, num_params):
     if sys.platform.startswith('win'):
@@ -174,7 +203,9 @@ def compile_ours():
 
 if __name__ == "__main__":
     # functions = [
-    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]]]
+    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
+    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]]
+    #     ]
     functions = [
     ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ],
     ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
@@ -217,6 +248,7 @@ if __name__ == "__main__":
         os.remove(PYTORCH_OUTPUT)
 
     for func_num, func in enumerate(functions):
+
         avg_us = []
         avg_pytorch = []
         avg_wenzel = []
@@ -229,21 +261,22 @@ if __name__ == "__main__":
         compile_ours()
 
         while num_params <= 100000:
-        # for num_params in range(2, 5):
 
             # generate parameters
             params = generate_params(num_params, func_num)
             print_param_to_file(params)
 
-            # generate other files
+            # generate pytorch file
             generate_pytorch_file(func_num, num_params)
-            # generate_wenzel_file(0, num_params)
+
+            # generate and compile wenzel code
+            # generate_wenzel_file(func_num, num_params)
             # compile_wenzel()
 
             # initialize arrays for run
             our_times = []
             py_times = []
-            # wenzel_times = []
+            wenzel_times = []
 
             for i in range(NUM_ITERATIONS):
                 pytorch = run_pytorch()
@@ -254,30 +287,23 @@ if __name__ == "__main__":
                 our_times.append(float(ours[1]))
                 py_times.append(float(pytorch[1]))
                 # wenzel_times.append(float(wenzel[1]))
+
+            # print for debug purposes
             # print("Parameters: ", params[0][: 10])
             print("Snapshot of Our Results:", ours[0][: 10])
             print("Snapshot of Pytorch results: ", pytorch[0][: 10])
             # print("Snapshot of Wenzel results: ", wenzel[0][: 10])
 
+            # get the average time
             avg_us.append(sum(our_times) / len(our_times))
             avg_pytorch.append(sum(py_times) / len(py_times))
-            # # avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
+            # avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
             denom.append(num_params)
+
             if num_params < 10000:
                 num_params += 2000
             else:
                 num_params = num_params + 10000
-        plt.figure(1)
-        plt.subplot(211)
-        print(denom)
-        plt.plot(denom, avg_us, marker='o')
-        plt.plot(denom, avg_pytorch, '--', marker='o')
-        # # # plt.plot(denom, avg_wenzel, 'go--', marker='o')
-        plt.xticks(denom)
-        plt.title('C Code vs Pytorch vs. Wenzel. # It: ' +
-                str(NUM_ITERATIONS) + str(torch.__version__))
-        plt.savefig('results/graph_{}.png'.format(func_num))
-
         print("Avg Us: " + str(avg_us))
         print("Avg Pytorch: " + str(avg_pytorch))
-        # # print("Avg Wenzel: " + str(avg_wenzel))
+        # print("Avg Wenzel: " + str(avg_wenzel))     
