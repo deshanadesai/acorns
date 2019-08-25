@@ -207,8 +207,8 @@ if __name__ == "__main__":
     #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]]
     #     ]
     functions = [
-    ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ],
-    ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
+    ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ]
+    # ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
             ]
 
     INPUT_FILENAME = 'utils/functions.c'

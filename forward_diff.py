@@ -556,7 +556,11 @@ def grad_without_traversal(ast, x=0):
     der_vars = ast.ext[ext_index].decl.type.args.params
 
     global curr_base_variable
-    c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), c_code = ccode, ispc = ispc)
+
+    if(reverse_diff):
+            c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = (len(variables)*(len(variables)+1))//2, c_code = ccode, ispc = ispc)
+    else:
+        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = len(variables), c_code = ccode, ispc = ispc)
     c_code._make_header()
 
     # for vars_ in der_vars:
@@ -592,41 +596,43 @@ def grad_without_traversal(ast, x=0):
     if reverse_diff:
         if second_der:
             Expr(fun)._reverse_diff("1.",grad) 
-            for k,v in grad.items():
-                print("First derivative: ")
 
-                print(k)
+
+            ctr=0
+            for i, vars_ in enumerate(variables):
+                primary_base_variable = Variable(vars_)
+
+                k = vars_
+                v = grad[vars_]
+
+                print("First derivative: ")
+                print(vars_)
                 print(v)
                 simplified = simplify_equation(v)
                 print("Simplified equation: ")
                 print(simplified)
+
+
                 new_parser = c_parser.CParser()
                 new_ast = new_parser.parse("double f = {};".format(simplified), filename='<none>')
 
                 Expr(new_ast.ext[0].init)._reverse_diff("1.",grad_hess)
                 print("Second Derivative: ")
 
-                ctr=0
-                for k_hess,v_hess in grad_hess.items():
+                for j in range(i, len(variables)):
+
+                    k_hess = variables[j]
+                    v_hess = grad_hess[k_hess]
+
+                    secondary_base_variable = Variable(k_hess)
+
                     print("Second derivative : df / d{} d{}:".format(k, k_hess))
 
                     print(k_hess)
                     print(v_hess)
 
-                    # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=ctr)
-                    ctr += 1
-
-
-
-
-            # derivative = simplify_equation(derivative)
-            # new_parser = c_parser.CParser()
-            # new_ast = new_parser.parse("double f = {};".format(derivative), filename='<none>')
-
-            # second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
-            # print("Second derivative:")
-            # print(second_derivative)
-            # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)            
+                    c_code._generate_expr([primary_base_variable._get(), secondary_base_variable._get()], v_hess,index=ctr)
+                    ctr+=1
 
 
 
@@ -640,8 +646,11 @@ def grad_without_traversal(ast, x=0):
 
 
     elif second_der:
+        ctr=0
         for i,vars_ in enumerate(variables):
             curr_base_variable = Variable(vars_)
+            primary_base_variable = Variable(vars_)
+
             derivative = Expr(fun)._forward_diff() 
             print("First derivative: ")
             print(derivative) 
@@ -650,12 +659,16 @@ def grad_without_traversal(ast, x=0):
             new_parser = c_parser.CParser()
             new_ast = new_parser.parse("double f = {};".format(derivative), filename='<none>')
 
-            for j, vars_second in enumerate(variables):
+            for j in range(i, len(variables)):
+                vars_second = variables[j]
                 curr_base_variable = Variable(vars_second)
+                secondary_base_variable = Variable(vars_second)
+
                 second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
                 print("Second derivative : df / d{} d{}:".format(vars_, vars_second))
                 print(second_derivative)
-                # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)
+                c_code._generate_expr([primary_base_variable._get(), secondary_base_variable._get()], second_derivative,index=ctr)
+                ctr+=1
 
     else:
         for i,vars_ in enumerate(variables):
@@ -666,7 +679,6 @@ def grad_without_traversal(ast, x=0):
 
     c_code._make_footer()
         
-    # c_code._write(derivative)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
