@@ -458,22 +458,6 @@ class Cosine(Expr):
 
 
 
-
-# def differentiate(node):
-#     # print(show_attrs(node.__class__))
-#     if node.__class__.__name__ == 'BinaryOp':
-#         op = node.op
-#         if (op)=='+':
-#             print("x=a+b")
-#         elif (op) == '*':
-#             print("Mult")
-#         else:
-#             print(op)
-
-#     elif node.__class__.__name__ == 'FuncCall':
-#         print(node.name.name)
-#     return
-
 def show_attrs(node):    
     for attr in dir(node):
         print("-----------------")
@@ -534,6 +518,19 @@ def simplify_graph(old_ast):
         print('no gotcha')
 
 
+def expand_equation(equation, dict_):
+    if equation.__class__.__name__ == 'ID':
+        if equation.name in dict_.keys():
+            equation = dict_[equation.name]
+
+    if 'left' in dir(equation):
+        equation.left = expand_equation(equation.left, dict_)
+    if 'right' in dir(equation):
+        equation.right = expand_equation(equation.right, dict_)
+
+    return equation
+
+
 def grad_without_traversal(ast, x=0):
     """
     Returns a function which computes gradient of `fun` with respect to
@@ -567,19 +564,29 @@ def grad_without_traversal(ast, x=0):
     #     c_code._make_decls(vars_.name)
 
     # look for function to differentiate.
+    dict_ = {}
+
     for blocks in range(len(ast.ext[ext_index].body.block_items)):
         if 'name' not in dir(ast.ext[ext_index].body.block_items[blocks]):
             continue
         expr_name = ast.ext[ext_index].body.block_items[blocks].name
 
         if expr_name != expression:
+            dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
             continue
 
         fun = ast.ext[ext_index].body.block_items[blocks].init
 
     assert fun != None
 
-    # fun.show()
+    fun.show()
+
+    fun = expand_equation(fun, dict_)
+
+    print("Expanded equation:")
+
+    fun.show()    
+
 
     grad = {}
     for i, vars_ in enumerate(variables):
