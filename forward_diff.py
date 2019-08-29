@@ -379,7 +379,13 @@ class Pow(Expr):
     def _eval(self,cur_node):
         # print("evaluation of: ")
         # cur_node.ast.show()
-        base = cur_node.ast.args.exprs[0].name
+        print(cur_node.ast.args.exprs)
+        try:
+            base = cur_node.ast.args.exprs[0].name
+        except:
+            base = Expr(cur_node.ast.args.exprs[0]).eval()
+
+
         try:        
             exp = cur_node.ast.args.exprs[1].value
         except AttributeError:
@@ -554,7 +560,7 @@ def grad_without_traversal(ast, x=0):
 
     global curr_base_variable
 
-    if(reverse_diff):
+    if(reverse_diff and second_der):
             c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = (len(variables)*(len(variables)+1))//2, c_code = ccode, ispc = ispc)
     else:
         c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = len(variables), c_code = ccode, ispc = ispc)
@@ -572,7 +578,7 @@ def grad_without_traversal(ast, x=0):
         expr_name = ast.ext[ext_index].body.block_items[blocks].name
 
         if expr_name != expression:
-            dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
+            # dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
             continue
 
         fun = ast.ext[ext_index].body.block_items[blocks].init
@@ -581,7 +587,7 @@ def grad_without_traversal(ast, x=0):
 
     fun.show()
 
-    fun = expand_equation(fun, dict_)
+    # fun = expand_equation(fun, dict_)
 
     print("Expanded equation:")
 

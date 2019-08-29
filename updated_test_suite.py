@@ -122,8 +122,8 @@ def generate_function_c_file(func_num):
 
 def generate_derivatives_c_file(func_num):
     vars = ",".join(str(x) for x in functions[func_num][1])
-    cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode " + str(RUN_C) + " -ispc " + str(
-        RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
+    cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode " + str(RUN_C) + " -reverse " + str(
+        REVERSE)+" -second_der "+ str(SECOND_DER)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
     os.system(cmd)
 
 # def plot_graph(avg_us, avg_pytorch, avg_wenzel, denom):
@@ -196,7 +196,7 @@ def compile_ours():
             cmd = "cl " + RUNNABLE_FILENAME + ".c " + UTILS_FILENAME + " " + \
                 DERIVATIVES_FILENAME + ".c  /link /out:utils/program.exe"
         else:
-            cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " " + RUNNABLE_FILENAME + \
+            cmd = "gcc -O3 -ffast-math -o " + RUNNABLE_FILENAME + " " + RUNNABLE_FILENAME + \
                 ".c " + DERIVATIVES_FILENAME + ".c " + " -lm"
         print(cmd)
         os.system(cmd)
@@ -207,7 +207,9 @@ if __name__ == "__main__":
     #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]]
     #     ]
     functions = [
-    ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ]
+        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]]
+
+    # ["a+a*a*b*c*d*1/(a+b+c+d)+a*b*c*c*c*c*c+(a-b)*(c-d)+(a-b)/(c-d)+d*d*d*c/((a+b-c)*(a+d-c+b))*k+1/k-1/(k+l)", ["k", "l", "a", "b", "c", "d"] ]
     # ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
             ]
 
@@ -227,6 +229,8 @@ if __name__ == "__main__":
     NUM_THREADS_PYTORCH = 1
     RUN_C = True
     RUN_ISPC = False
+    REVERSE = True
+    SECOND_DER = False
 
     if os.path.exists(INPUT_FILENAME):
         os.remove(INPUT_FILENAME)

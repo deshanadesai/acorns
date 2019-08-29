@@ -56,7 +56,7 @@ class CGenerator(object):
 
 			ext = '.c'		
 			f = open(self.filename+ext,'a')
-			f.write("\t\tders[i*"+str(self.derivative_count)+"+"+str(index)+"]"+"= "+derivative_string+"; # {} \n".format('df/('+base+')'))
+			f.write("\t\tders[i*"+str(self.derivative_count)+"+"+str(index)+"]"+"= "+derivative_string+"; // {} \n".format('df/('+base+')'))
 			f.close()					
 		
 
