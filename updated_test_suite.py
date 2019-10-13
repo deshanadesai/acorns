@@ -8,12 +8,15 @@ from subprocess import PIPE, run
 import forward_diff
 import numpy as np
 
-def parse_output(filename, is_wenzel):
+def parse_output(filename):
     f = open(filename, "r")
     output = f.read()
     output_array = output.split()
     runtime = output_array[0]
-    values = output_array[1:]
+    if len(output_array) > 1:
+        values = output_array[1:]
+    else:
+        values = "No values generated"
     return [values, runtime]
 
 def generate_params(num_params, function_num):
@@ -90,9 +93,9 @@ def generate_pytorch_file(func_num, num_params):
     pytorch_file.close()
 
 def run_pytorch():
-    cmd = "python3 " + "utils/pytorch.py" + " > " + "pytorch_output.txt"
+    cmd = "python3 " + "utils/pytorch.py" + " > " + "utils/pytorch_output.txt"
     os.system(cmd)
-    return parse_output("pytorch_output.txt", False)
+    return parse_output("utils/pytorch_output.txt")
 
 def print_param_to_file(params):
     param_string = "\n".join(str(x) for x in params)
@@ -122,25 +125,24 @@ def generate_function_c_file(func_num):
 
 def generate_derivatives_c_file(func_num):
     vars = ",".join(str(x) for x in functions[func_num][1])
-    cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode " + str(RUN_C) + " -ispc " + str(
-        RUN_ISPC)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
+    cmd = "python3 forward_diff.py " + INPUT_FILENAME + " p -ccode " + str(RUN_C) + " -reverse " + str(
+        REVERSE)+" -second_der "+ str(SECOND_DER)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + DERIVATIVES_FILENAME + "\""
     os.system(cmd)
 
-# def plot_graph(avg_us, avg_pytorch, avg_wenzel, denom):
-#     plt.figure(1)
-#     plt.subplot(211)
-#     print(denom)
-#     plt.plot(denom, avg_us, marker='o')
-#     plt.plot(denom, avg_pytorch, '--', marker='o')
-#     # # # plt.plot(denom, avg_wenzel, 'go--', marker='o')
-#     plt.xticks(denom)
-#     plt.title('C Code vs Pytorch vs. Wenzel. # It: ' +
-#             str(NUM_ITERATIONS) + str(torch.__version__))
-#     plt.savefig('results/graph_{}.png'.format(func_num))
-#     plt.clf()
-#     print("Avg Us: " + str(avg_us))
-#     print("Avg Pytorch: " + str(avg_pytorch))
-#     # # print("Avg Wenzel: " + str(avg_wenzel))
+def generate_graph(avg_us, avg_pytorch, avg_wenzel, denom, func_num, function):
+    plt.figure(1)
+    plt.subplot(211)
+    plt.plot(denom, avg_us,
+             denom, avg_pytorch,
+             denom, avg_wenzel)
+    plt.xticks(denom)
+    plt.title('C Code vs Pytorch vs. Wenzel # It: 10')
+    # legend
+    plt.legend( ('Ours', 'Pytorch', 'Wenzel'),
+            shadow=True, loc=(0.01, 0.48), handlelength=1.5, fontsize=16)
+    plt.xlabel(function)
+    plt.savefig('results/graph_{}.png'.format(func_num))
+    plt.clf()
 
 def generate_wenzel_file(func_num, num_params):
     with open('utils/static_code/wenzel.txt', 'r') as file:
@@ -153,16 +155,16 @@ def generate_wenzel_file(func_num, num_params):
     wenzel_file.close()
 
 def compile_wenzel():
-    os.system("g++ -std=c++11 -I utils/ext/ utils/wenzel.cpp -o utils/wenzel")
+    os.system("g++-9 -std=c++11 -I utils/ext/ utils/wenzel.cpp -o utils/wenzel -ffast-math -O3")
 
-def run_wenzel(num_params):
+def run_wenzel():
     os.system("./utils/wenzel utils/wenzel_output.txt")
-    return parse_output("utils/wenzel_output.txt", True)
+    return parse_output("utils/wenzel_output.txt")
 
 def generate_wenzel_ders(func_num, num_vars):
     ders_string = "\t\tDScalar "
     for i, var in enumerate(functions[func_num][1]):
-        ders_string += "{}(0, args[index * {} + {}])".format(var, num_vars, i)
+        ders_string += "{}({}, args[index * {} + {}])".format(var, i, num_vars, i)
         if i == num_vars - 1:
             ders_string += ";\n"
         else:
@@ -188,7 +190,7 @@ def run_ours(func, num_params):
     print(run_command)
     run(run_command, stdout=PIPE, stderr=PIPE,
         universal_newlines=True, shell=True)
-    return parse_output(OUTPUT_FILENAME, False)
+    return parse_output(OUTPUT_FILENAME)
 
 def compile_ours():
     if RUN_C:
@@ -196,20 +198,85 @@ def compile_ours():
             cmd = "cl " + RUNNABLE_FILENAME + ".c " + UTILS_FILENAME + " " + \
                 DERIVATIVES_FILENAME + ".c  /link /out:utils/program.exe"
         else:
-            cmd = "gcc -O3 -o " + RUNNABLE_FILENAME + " " + RUNNABLE_FILENAME + \
+            cmd = "gcc-9 -O3 -ffast-math -o " + RUNNABLE_FILENAME + " " + RUNNABLE_FILENAME + \
                 ".c " + DERIVATIVES_FILENAME + ".c " + " -lm"
         print(cmd)
         os.system(cmd)
 
+def generate_enoki_file(func_num, num_params):
+    with open('utils/static_code/enoki.txt', 'r') as file:
+        enoki = file.read()
+    enoki_file = open("utils/enoki.cpp", "w+")
+
+    num_vars = len(functions[func_num][1])
+
+    derivative = functions[func_num][0]
+    enoki_init_vars = generate_enoki_init_vars(functions[func_num][1])
+    enoki_fill = generate_enoki_fill(functions[func_num][1])
+    enoki_us_vars = generate_enoki_us_vars(functions[func_num][1])
+    set_requires_grads = generate_set_requires_grads(functions[func_num][1])
+    grads = generate_grads(functions[func_num][1])
+    print_to_outfile = generate_print_to_outfile(functions[func_num][1])
+
+    param_filename = "params.txt"
+
+    cpp_code = enoki % (num_params, num_vars, enoki_init_vars, 
+                param_filename, enoki_fill, enoki_us_vars, 
+                set_requires_grads, derivative, grads, print_to_outfile)
+    enoki_file.write(cpp_code)
+    enoki_file.close()
+
+def generate_enoki_init_vars(variables):
+    return_string = ""
+    for var in variables:
+        return_string += "\tFloatX init_{} = zero<FloatX>(num_params);\n".format(var)
+    return return_string
+
+def generate_enoki_fill(variables):
+    return_string = ""
+    for i, var in enumerate(variables):
+        return_string += "\t\tinit_{}[i] = args[i * num_vars + {}];\n".format(var, i)
+    return return_string
+
+def generate_enoki_us_vars(variables):
+    return_string = ""
+    for var in variables:
+        return_string += "\tFloatD {}(init_{});\n".format(var, var)
+    return return_string
+
+def generate_set_requires_grads(variables):
+    return_string = ""
+    for var in variables:
+        return_string += "\tset_requires_gradient({});\n".format(var)
+    return return_string
+
+def generate_grads(variables):
+    return_string = ""
+    for var in variables:
+        return_string += "\tFloatX grad_{} = gradient({});\n".format(var, var)
+    return return_string
+
+def generate_print_to_outfile(variables):
+    return_string = ""
+    for var in variables:
+        return_string += "\t\toutfile << grad_{}[i] << \" \";\n".format(var)
+    return return_string
+
+def compile_enoki():
+    cmd = "g++-9 -std=c++17 -I utils/ext/enoki/include/ -I utils/ext/ utils/enoki.cpp -o utils/enoki -ffast-math -O3"
+    os.system(cmd)
+
+def run_enoki():
+    cmd = "./utils/enoki utils/enoki_output.txt"
+    os.system(cmd)
+    return parse_output("utils/enoki_output.txt")
+
 if __name__ == "__main__":
-    # functions = [
-    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
-    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]]
-    #     ]
     functions = [
-    ["sin(k) + cos(j) + pow(l, 2)", ["k", "j", "l"] ],
-    ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
-            ]
+        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],
+        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
+        ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
+    ]
 
     INPUT_FILENAME = 'utils/functions.c'
     DERIVATIVES_FILENAME = 'utils/derivatives'
@@ -227,6 +294,8 @@ if __name__ == "__main__":
     NUM_THREADS_PYTORCH = 1
     RUN_C = True
     RUN_ISPC = False
+    REVERSE = False
+    SECOND_DER = False
 
     if os.path.exists(INPUT_FILENAME):
         os.remove(INPUT_FILENAME)
@@ -252,6 +321,7 @@ if __name__ == "__main__":
         avg_us = []
         avg_pytorch = []
         avg_wenzel = []
+        avg_enoki = []
         denom = []
         num_params = INIT_NUM_PARAMS
 
@@ -270,34 +340,43 @@ if __name__ == "__main__":
             generate_pytorch_file(func_num, num_params)
 
             # generate and compile wenzel code
-            # generate_wenzel_file(func_num, num_params)
-            # compile_wenzel()
+            # generate_enoki_file(func_num, num_params)
+            # compile_enoki()
+            generate_wenzel_file(func_num, num_params)
+            compile_wenzel()
 
             # initialize arrays for run
             our_times = []
             py_times = []
             wenzel_times = []
+            enoki_times = []
 
             for i in range(NUM_ITERATIONS):
                 pytorch = run_pytorch()
                 ours = run_ours(functions[func_num], num_params)
-                # wenzel = run_wenzel(num_params)
+                # enoki = run_enoki()
+                wenzel = run_wenzel()
                 # for j in range(len(ours[0])):
-                #     assert math.isclose(float(pytorch[0][j]), float(ours[0][j]), abs_tol=10**-1)
+                #     assert math.isclose(float(pytorch[0][j]), float(wenzel[0][j]), abs_tol=10**-1)
+                #     assert math.isclose(float(wenzel[0][j]), float(ours[0][j]), abs_tol=10**-1)
+                #     assert math.isclose(float(ours[0][j]), float(enoki[0][j]), abs_tol=10**-1)
                 our_times.append(float(ours[1]))
                 py_times.append(float(pytorch[1]))
-                # wenzel_times.append(float(wenzel[1]))
+                # enoki_times.append(float(enoki[1]))
+                wenzel_times.append(float(wenzel[1]))
 
             # print for debug purposes
-            # print("Parameters: ", params[0][: 10])
+            print("Parameters: ", params[:10])
             print("Snapshot of Our Results:", ours[0][: 10])
             print("Snapshot of Pytorch results: ", pytorch[0][: 10])
-            # print("Snapshot of Wenzel results: ", wenzel[0][: 10])
+            print("Snapshot of Wenzel results: ", wenzel[0][: 10])
+            # print("Snapshot of Enoki results: ", enoki[0][: 10])
 
             # get the average time
             avg_us.append(sum(our_times) / len(our_times))
             avg_pytorch.append(sum(py_times) / len(py_times))
-            # avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
+            # avg_enoki.append(sum(enoki_times) / len(enoki_times))
+            avg_wenzel.append(sum(wenzel_times) / len(wenzel_times))
             denom.append(num_params)
 
             if num_params < 10000:
@@ -306,4 +385,7 @@ if __name__ == "__main__":
                 num_params = num_params + 10000
         print("Avg Us: " + str(avg_us))
         print("Avg Pytorch: " + str(avg_pytorch))
-        # print("Avg Wenzel: " + str(avg_wenzel))     
+        # print("Avg Enoki: " + str(avg_enoki))
+        print("Avg Wenzel: " + str(avg_wenzel))   
+        generate_graph(avg_us, avg_pytorch, avg_wenzel, denom, func_num, functions[func_num][0])
+  

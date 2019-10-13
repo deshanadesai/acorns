@@ -1,5 +1,3 @@
-
-Etai Shuchatowitz 5:23 PM
 #include <iostream>
 #include <fstream>
 #include <string>
