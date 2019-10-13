@@ -294,7 +294,7 @@ if __name__ == "__main__":
     NUM_THREADS_PYTORCH = 1
     RUN_C = True
     RUN_ISPC = False
-    REVERSE = False
+    REVERSE = True
     SECOND_DER = False
 
     if os.path.exists(INPUT_FILENAME):

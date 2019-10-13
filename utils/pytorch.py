@@ -2,11 +2,18 @@ import torch
 import time
 import numpy as np
 
+<<<<<<< HEAD
 num_params = 2010
 k = torch.tensor(np.load('utils/numpy_params/function_0_param_k.npy'), requires_grad=True, dtype=torch.float)
 j = torch.tensor(np.load('utils/numpy_params/function_0_param_j.npy'), requires_grad=True, dtype=torch.float)
 torch.set_num_threads(1)
 y = (((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j).sum()
+=======
+num_params = 90010
+k = torch.tensor(np.load('utils/numpy_params/function_0_param_k.npy'), requires_grad=True, dtype=torch.float)
+torch.set_num_threads(1)
+y = (((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k).sum()
+>>>>>>> c837a98c0f019023ef5fe45295646abd7160e6c9
 start_time_pytorch = time.time()
 y.backward()
 k.grad

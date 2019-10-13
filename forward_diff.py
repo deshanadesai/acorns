@@ -23,7 +23,6 @@ class Expr(pycparser.c_ast.Node):
             self.ast = node
             # print("AST: ",self.ast.show())
             self.type = node.__class__.__name__ 
-            # print("type: ",self.type)
 
     def eval(self):
         # print("trying to evaluate----")
@@ -38,7 +37,13 @@ class Expr(pycparser.c_ast.Node):
         elif self.type == 'ID':
             return (self.__variable__(self.ast.name))._eval()            
         elif self.type == 'Constant':
-            return (self.__variable__(self.ast.value))._eval()        
+            return (self.__variable__(self.ast.value))._eval()    
+        elif self.type == 'ArrayRef':
+            if self.ast.name.__class__.__name__ == 'ArrayRef':
+
+                return (self.__variable__(self.ast.name.name.name+'[{}]'.format(self.ast.name.subscript.value), self.ast.subscript.value))._eval() 
+            else:
+                return (self.__variable__(self.ast.name.name, self.ast.subscript.value))._eval() 
 
 
     def match_op(self, reverse = False,  adjoint = None, grad = {}):
@@ -70,7 +75,6 @@ class Expr(pycparser.c_ast.Node):
 
     def match_funccall(self, reverse = False,  adjoint = None, grad = {}):
         func = self.ast.name.name
-        print(func)
 
         if reverse:
             if func == 'pow':
@@ -122,7 +126,7 @@ class Expr(pycparser.c_ast.Node):
             raise NotImplementedError
 
     def _forward_diff(self):
-        if self.type=='BinaryOp':
+        if self.type=='BinaryOp' or self.type=='UnaryOp':
             return self.match_op()
         elif self.type ==  'FuncCall':
             return self.match_funccall()
@@ -132,11 +136,16 @@ class Expr(pycparser.c_ast.Node):
             return (self.__variable__(self.ast.name))._forward_diff() 
         elif self.type == 'Constant':
             return (self.__variable__(self.ast.value))._forward_diff()
+        elif self.type == 'ArrayRef':
+            if self.ast.name.__class__.__name__ == 'ArrayRef':
+                return (self.__variable__(self.ast.name.name.name+'[{}]'.format(self.ast.name.subscript.value), self.ast.subscript.value))._eval() 
+            else:
+                return (self.__variable__(self.ast.name.name, self.ast.subscript.value))._eval() 
 
 
 
     def _reverse_diff(self, adjoint, grad):
-        if self.type=='BinaryOp':
+        if self.type=='BinaryOp' :
             return self.match_op(reverse = True, adjoint = adjoint, grad = grad)
         elif self.type ==  'FuncCall':
             return self.match_funccall(reverse = True, adjoint = adjoint, grad = grad)
@@ -172,23 +181,26 @@ class Expr(pycparser.c_ast.Node):
     def __log__(self):
         return Log()
 
-    def __variable__(self, name):
+    def __variable__(self, name, subscript=None):
         # if name == curr_base_variable._get():
         #     return base_vars[0]
         # else:
         # print("Making new variable",name)
-        return Variable(name)
+        return Variable(name, subscript)
 
 
 class Variable(Expr):
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name, subscript=None):
+        if subscript is not None:
+            self.name = name+ "[{}]".format(str(subscript))
+        else:
+            self.name = name
 
-    def _eval(self):
+    def _eval(self, subscript=None):
         # TODO
         return self.name
 
-    def _forward_diff(self):
+    def _forward_diff(self):       
         if self.name == curr_base_variable._get():
             return "1"
         else:
@@ -251,6 +263,8 @@ class Add(Expr):
         # cur_node.ast.show()
         # print(cur_node.ast.right)
         # print("right value will be: ",Expr(cur_node.ast.right)._forward_diff())
+        if cur_node.type == 'UnaryOp':
+            return "("+Expr(cur_node.ast.expr)._forward_diff()+")"
         return "(" + "(" + Expr(cur_node.ast.left)._forward_diff()+")" + " + " + "("+Expr(cur_node.ast.right)._forward_diff()+")"+")"
 
     def _reverse_diff(self, cur_node, adjoint, grad):
@@ -277,6 +291,8 @@ class Subtract(Expr):
         return "("+Expr(cur_node.ast.left).eval() + " - " + Expr(cur_node.ast.right).eval()+")"
 
     def _forward_diff(self,cur_node):
+        if cur_node.type == 'UnaryOp':
+            return "(-("+Expr(cur_node.ast.expr)._forward_diff()+"))"
         return "(" + "(" + Expr(cur_node.ast.left)._forward_diff()+")" + " - " + "("+Expr(cur_node.ast.right)._forward_diff()+")"+")"
 
 
@@ -286,7 +302,7 @@ class Subtract(Expr):
         # print(adjoint)
         # print(grad)        
         Expr(cur_node.ast.left)._reverse_diff(adjoint, grad)
-        Expr(cur_node.ast.right)._reverse_diff("-" + adjoint, grad)
+        Expr(cur_node.ast.right)._reverse_diff("-1*(" + adjoint+")", grad)
 
 
 
@@ -302,10 +318,8 @@ class Multiply(Expr):
     def _forward_diff(self,cur_node):
         lhs = Expr(cur_node.ast.left).eval() # Needs to be a string
         rhs = Expr(cur_node.ast.right).eval()
-        # print("multiplication evaluation of: ")
-        # cur_node.ast.show() 
-        # print("left:",lhs)
-        # print("Right:",rhs)       
+        cur_node.ast.show() 
+
 
         return "(" + rhs+ " * " + "("+Expr(cur_node.ast.left)._forward_diff()+")" + " + " \
                         + lhs+ " * " + "("+Expr(cur_node.ast.right)._forward_diff() +")" +")" 
@@ -318,8 +332,8 @@ class Multiply(Expr):
         # print(adjoint)
         # print(grad)
         # the adjoint of the left node is the adjoint of the current node * the diff of current node wrt the left node
-        Expr(cur_node.ast.left)._reverse_diff("("+ adjoint + ")" + "*" + "("+ rhs + ")", grad)
-        Expr(cur_node.ast.right)._reverse_diff("("+ adjoint + ")" + "*" + "("+ lhs + ")", grad)
+        Expr(cur_node.ast.left)._reverse_diff("(("+ adjoint + ")" + "*" + "("+ rhs + "))", grad)
+        Expr(cur_node.ast.right)._reverse_diff("(("+ adjoint + ")" + "*" + "("+ lhs + "))", grad)
 
 
 class Divide(Expr):
@@ -349,7 +363,7 @@ class Divide(Expr):
         lhs = Expr(cur_node.ast.left).eval()
         rhs = Expr(cur_node.ast.right).eval()
         Expr(cur_node.ast.left)._reverse_diff("("+ adjoint + ")" + "/" + "("+ rhs + ")", grad)
-        Expr(cur_node.ast.right)._reverse_diff("(-("+adjoint +") * ("+ lhs + "))/" + "pow(("+ rhs + "),2)", grad)        
+        Expr(cur_node.ast.right)._reverse_diff("(-1*("+adjoint +") * ("+ lhs + "))/((" + rhs + ") * (" + rhs+"))", grad)        
 
 
 
@@ -359,11 +373,19 @@ class Log(Expr):
 
 
     def _eval(self,cur_node):
-        exp = cur_node.ast.args.exprs[0].name
+        try:
+            exp = cur_node.ast.args.exprs[0].name
+        except:
+            exp = Expr(cur_node.ast.args.exprs[0]).eval()
+        # exp = cur_node.ast.args.exprs[0].name
         return "(log("+Expr(exp).eval()+"))"
 
     def _forward_diff(self,cur_node):       
-        exp = cur_node.ast.args.exprs[0].name
+        # exp = cur_node.ast.args.exprs[0].name
+        try:
+            exp = cur_node.ast.args.exprs[0].name
+        except:
+            exp = Expr(cur_node.ast.args.exprs[0]).eval()
         return "(1/("+ exp +")*"+Expr(exp)._forward_diff()+")"
 
     def _reverse_diff(self, cur_node, adjoint, grad):
@@ -379,7 +401,13 @@ class Pow(Expr):
     def _eval(self,cur_node):
         # print("evaluation of: ")
         # cur_node.ast.show()
-        base = cur_node.ast.args.exprs[0].name
+        # print(cur_node.ast.args.exprs)
+        try:
+            base = cur_node.ast.args.exprs[0].name
+        except:
+            base = Expr(cur_node.ast.args.exprs[0]).eval()
+
+
         try:        
             exp = cur_node.ast.args.exprs[1].value
         except AttributeError:
@@ -387,11 +415,16 @@ class Pow(Expr):
         return "(pow(%s,%s))" % (Expr(base).eval(),exp) # TODO
 
     def _forward_diff(self,cur_node):
-        base = cur_node.ast.args.exprs[0].name
+        try:
+            base = cur_node.ast.args.exprs[0].name
+        except:
+            base = Expr(cur_node.ast.args.exprs[0]).eval()
+
         try:        
             exp = cur_node.ast.args.exprs[1].value
         except AttributeError:
             exp = Expr(cur_node.ast.args.exprs[1]).eval()
+
         der_base = Expr(base)._forward_diff()
         der_exp = Expr(exp)._forward_diff()
 
@@ -400,7 +433,11 @@ class Pow(Expr):
 
 
     def _reverse_diff(self, cur_node, adjoint, grad):
-        base = cur_node.ast.args.exprs[0].name
+        try:
+            base = cur_node.ast.args.exprs[0].name
+        except:
+            base = Expr(cur_node.ast.args.exprs[0]).eval() 
+
         try:        
             exp = cur_node.ast.args.exprs[1].value
         except AttributeError:
@@ -457,22 +494,6 @@ class Cosine(Expr):
         Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (-1*sin("+exp+"))", grad)           
 
 
-
-
-# def differentiate(node):
-#     # print(show_attrs(node.__class__))
-#     if node.__class__.__name__ == 'BinaryOp':
-#         op = node.op
-#         if (op)=='+':
-#             print("x=a+b")
-#         elif (op) == '*':
-#             print("Mult")
-#         else:
-#             print(op)
-
-#     elif node.__class__.__name__ == 'FuncCall':
-#         print(node.name.name)
-#     return
 
 def show_attrs(node):    
     for attr in dir(node):
@@ -534,6 +555,61 @@ def simplify_graph(old_ast):
         print('no gotcha')
 
 
+def match_item(ast):
+    if ast.block_items:
+        for block in ast.block_items:
+            print(type(block))
+            print(block.__class__.__name__ )
+            if (type(block)) == 'c_ast.For':
+                print("True")
+
+def make_graph(ast):
+    fun = None
+
+    for funs in range(len(ast.ext)):
+        if 'decl' not in  dir(ast.ext[funs]):
+            continue
+
+    fun_body = ast.ext[funs].body
+    match_item(fun_body)
+
+
+
+    # fun_body.block_items[0].show()
+
+def expand_equation(equation, dict_):
+    if equation.__class__.__name__ == 'ArrayRef':
+
+        if equation.name.__class__.__name__ == 'ArrayRef':
+            var_name = equation.name.name.name+'[{}][{}]'.format(str(equation.name.subscript.value),str(equation.subscript.value))
+        else:
+            var_name = equation.name.name + '[{}]'.format(str(equation.subscript.value))
+
+        if var_name in dict_.keys():
+            equation = dict_[var_name]
+
+    if equation.__class__.__name__ == 'ID':
+        if equation.name in dict_.keys():
+            equation = dict_[equation.name]
+
+    if 'left' in dir(equation):
+        equation.left = expand_equation(equation.left, dict_)
+    if 'right' in dir(equation):
+        equation.right = expand_equation(equation.right, dict_)
+
+    if 'args' in dir(equation):
+        equation.args = expand_equation(equation.args, dict_)
+
+    if 'exprs' in dir(equation):
+        for i in range(len(equation.exprs)):
+            equation.exprs[i] = expand_equation(equation.exprs[i], dict_)
+
+
+
+
+    return equation
+
+
 def grad_without_traversal(ast, x=0):
     """
     Returns a function which computes gradient of `fun` with respect to
@@ -556,26 +632,54 @@ def grad_without_traversal(ast, x=0):
     der_vars = ast.ext[ext_index].decl.type.args.params
 
     global curr_base_variable
-    c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), c_code = ccode, ispc = ispc)
+
+    if(reverse_diff and second_der):
+            c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = (len(variables)*(len(variables)+1))//2, c_code = ccode, ispc = ispc)
+    else:
+        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = len(variables), c_code = ccode, ispc = ispc)
     c_code._make_header()
 
     # for vars_ in der_vars:
     #     c_code._make_decls(vars_.name)
 
     # look for function to differentiate.
+    dict_ = {}
+    # fix the expanding eqn here
     for blocks in range(len(ast.ext[ext_index].body.block_items)):
         if 'name' not in dir(ast.ext[ext_index].body.block_items[blocks]):
             continue
-        expr_name = ast.ext[ext_index].body.block_items[blocks].name
 
+        if ast.ext[ext_index].body.block_items[blocks].type.__class__.__name__ == 'ArrayDecl':
+
+            if ast.ext[ext_index].body.block_items[blocks].type.type.__class__.__name__ == 'ArrayDecl':
+                expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}][{}]'.format(ast.ext[ext_index].body.block_items[blocks].type.dim.value,ast.ext[ext_index].body.block_items[blocks].type.type.dim.value)
+            else:
+                expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}]'.format(ast.ext[ext_index].body.block_items[blocks].type.dim.value)
+        else:
+            expr_name = ast.ext[ext_index].body.block_items[blocks].name
         if expr_name != expression:
+            dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
             continue
 
         fun = ast.ext[ext_index].body.block_items[blocks].init
 
     assert fun != None
 
-    # fun.show()
+    fun.show()
+
+    # print("dictionary: ")
+    # print(dict_)
+    # print("==============================================")
+
+    print("Function: ")
+    fun.show()
+
+    fun = expand_equation(fun, dict_)
+
+    print("Expanded equation:")
+
+    fun.show()    
+
 
     grad = {}
     for i, vars_ in enumerate(variables):
@@ -583,50 +687,57 @@ def grad_without_traversal(ast, x=0):
         grad[vars_] = ''
 
 
-    grad_hess = {}
-    for i, vars_ in enumerate(variables):
-        grad_hess[vars_] = ''        
+      
 
     print(grad)
 
     if reverse_diff:
         if second_der:
             Expr(fun)._reverse_diff("1.",grad) 
-            for k,v in grad.items():
-                print("First derivative: ")
 
-                print(k)
+
+            ctr=0
+            for i, vars_ in enumerate(variables):
+                primary_base_variable = Variable(vars_)
+
+                k = vars_
+                v = grad[vars_]
+
+                print("First derivative: ")
+                print(vars_)
                 print(v)
                 simplified = simplify_equation(v)
                 print("Simplified equation: ")
                 print(simplified)
+
+
                 new_parser = c_parser.CParser()
                 new_ast = new_parser.parse("double f = {};".format(simplified), filename='<none>')
+
+
+                grad_hess = {}
+                for i_ctr, vars_ in enumerate(variables):
+                    grad_hess[vars_] = ''  
+
+
 
                 Expr(new_ast.ext[0].init)._reverse_diff("1.",grad_hess)
                 print("Second Derivative: ")
 
-                ctr=0
-                for k_hess,v_hess in grad_hess.items():
+                for j in range(i, len(variables)):
+
+                    k_hess = variables[j]
+                    v_hess = grad_hess[k_hess]
+
+                    secondary_base_variable = Variable(k_hess)
+
                     print("Second derivative : df / d{} d{}:".format(k, k_hess))
 
                     print(k_hess)
                     print(v_hess)
 
-                    # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=ctr)
-                    ctr += 1
-
-
-
-
-            # derivative = simplify_equation(derivative)
-            # new_parser = c_parser.CParser()
-            # new_ast = new_parser.parse("double f = {};".format(derivative), filename='<none>')
-
-            # second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
-            # print("Second derivative:")
-            # print(second_derivative)
-            # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)            
+                    c_code._generate_expr([primary_base_variable._get(), secondary_base_variable._get()], v_hess,index=ctr)
+                    ctr+=1
 
 
 
@@ -640,8 +751,12 @@ def grad_without_traversal(ast, x=0):
 
 
     elif second_der:
+        ctr=0
         for i,vars_ in enumerate(variables):
             curr_base_variable = Variable(vars_)
+            print("current base var: ",curr_base_variable. _get())
+            primary_base_variable = Variable(vars_)
+
             derivative = Expr(fun)._forward_diff() 
             print("First derivative: ")
             print(derivative) 
@@ -650,12 +765,16 @@ def grad_without_traversal(ast, x=0):
             new_parser = c_parser.CParser()
             new_ast = new_parser.parse("double f = {};".format(derivative), filename='<none>')
 
-            for j, vars_second in enumerate(variables):
+            for j in range(i, len(variables)):
+                vars_second = variables[j]
                 curr_base_variable = Variable(vars_second)
+                secondary_base_variable = Variable(vars_second)
+
                 second_derivative = Expr(new_ast.ext[0].init)._forward_diff()
                 print("Second derivative : df / d{} d{}:".format(vars_, vars_second))
                 print(second_derivative)
-                # c_code._generate_expr(curr_base_variable._get(), second_derivative,index=i)
+                c_code._generate_expr([primary_base_variable._get(), secondary_base_variable._get()], second_derivative,index=ctr)
+                ctr+=1
 
     else:
         for i,vars_ in enumerate(variables):
@@ -666,7 +785,6 @@ def grad_without_traversal(ast, x=0):
 
     c_code._make_footer()
         
-    # c_code._write(derivative)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -727,6 +845,7 @@ if __name__ == "__main__":
             cpp_args=['-E', r'-Iutils/fake_libc_include'])
 
     curr_base_variable = Variable("temp")
+    make_graph(ast)
     # ast.show()
     ext_index = 0
     # if len(ast.ext[0].body.block_items)>0:

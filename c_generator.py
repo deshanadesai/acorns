@@ -11,10 +11,11 @@ class CGenerator(object):
 		uses string accumulation for returning expressions.
 	"""
 
-	def __init__(self, filename = 'c_code', variable_count = 1, ispc = True, c_code = False):
+	def __init__(self, filename = 'c_code', variable_count = 1, derivative_count = 1, ispc = True, c_code = False):
 		self.indent_level = 0
 		self.filename=filename
 		self.variable_count = variable_count # number of variables
+		self.derivative_count = derivative_count # number of derivatives
 		self.count = 0
 		self.ispc = ispc
 		self.c_code = c_code
@@ -47,17 +48,23 @@ class CGenerator(object):
 
 		if self.c_code:
 
+			base = ''
+			if type(var) is list:
+				base = 'd'+ 'd'.join(var)
+			elif type(var) is str:
+				base = var
+
 			ext = '.c'		
 			f = open(self.filename+ext,'a')
-			f.write("\t\tders[i*"+str(self.variable_count)+"+"+str(index)+"]"+"= "+derivative_string+";\n")
-			f.close()		
+			f.write("\t\tders[i*"+str(self.derivative_count)+"+"+str(index)+"]"+"= "+derivative_string+"; // {} \n".format('df/('+base+')'))
+			f.close()					
 		
 
 		if(self.ispc):
 
 			ext = '.ispc'	
 			f = open('utils/'+'derivatives.ispc','a')
-			f.write("\t\tders[i*"+str(self.variable_count)+"+"+str(index)+"]"+" = "+derivative_string+";\n")
+			f.write("\t\tders[i*"+str(self.derivative_count)+"+"+str(index)+"]"+" = "+derivative_string+";\n")
 			f.close()	
 		self.count += 1	
 
