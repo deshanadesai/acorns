@@ -2,22 +2,28 @@
 #include <fstream>
 #include <string>
 #include <Eigen/Cholesky>
-#include "autodiff.h"
+#include "headers/autodiff.h"
 #include <chrono>
+
 DECLARE_DIFFSCALAR_BASE();
 using namespace std;
 using namespace std::chrono;
 int main(int argc, char **argv)
 {
+   typedef Eigen::Matrix<double, %s, 1> Gradient;
+   typedef Eigen::Matrix<double, %s, %s> Hessian;
+
    string output_filename = argv[1];
    cout << output_filename << endl;
-   typedef Eigen::Vector2d Gradient;
-   typedef Eigen::Matrix2d Hessian;
+
    typedef DScalar2<double, Gradient, Hessian> DScalar;
+
    int num_params = %s;
    int num_vars = %s;
+
    Eigen::VectorXd args(num_params * num_vars);
    Eigen::VectorXd ders(num_params * num_vars);
+
    std::ifstream file("%s");
    int i = 0;
    for (std::string line; std::getline(file, line);)
@@ -26,15 +32,18 @@ int main(int argc, char **argv)
        i++;
    }
    file.close();
+
    ofstream outfile;
    outfile.open(output_filename);
+
    auto start = high_resolution_clock::now();
    for (int index = 0; index < num_params; index++)
    {
        /* There are two independent variables */
-       DiffScalarBase::setVariableCount(2);
+       DiffScalarBase::setVariableCount(%s);
 %s
    }
+
    auto stop = high_resolution_clock::now();
    auto duration = duration_cast<microseconds>(stop - start);
    outfile << (double)duration.count() / 1000000.0 << " ";
@@ -42,6 +51,8 @@ int main(int argc, char **argv)
    {
        outfile << ders[i] << " ";
    }
+
    outfile.close();
+
    return 0;
 }

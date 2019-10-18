@@ -8,7 +8,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdint.h>
-#include "derivatives.h"
+#include "../headers/derivatives.h"
 
 void read_file_to_array(char *filename, double *args, int num_params, int num_vars)
 {
