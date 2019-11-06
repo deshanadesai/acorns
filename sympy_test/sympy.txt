@@ -21,14 +21,11 @@ def replace_all_pow(expression):
         # print(expression)
     return expression
 
-for func in functions:
-
-    sym = " ".join(str(x) for x in func[1])
-    print(sym)
-
+if __name__ == '__main__': 
+    vars_list = %s
     %s = symbols(%s)
-    function = func[0]
-    for var in func[1]:
+    func = %s
+    for var in vars_list:
         der = ccode(simplify(diff(function, eval(var))))
         output = replace_all_pow(der)
         print(output)
