@@ -1,0 +1,2168 @@
+{
+    "4*((C * (1 - C)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 0.0,
+            "us_hessian": 0.0,
+            "wenzel_grad": 0.0,
+            "wenzel_hess": 0.0
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 8.099999999999999e-06,
+            "us_hessian": 8.2e-06,
+            "wenzel_grad": 6.7e-06,
+            "wenzel_hess": 7.7e-06
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 1.38e-05,
+            "us_hessian": 1.16e-05,
+            "wenzel_grad": 1.45e-05,
+            "wenzel_hess": 1.72e-05
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 2.5300000000000002e-05,
+            "us_hessian": 2.2399999999999996e-05,
+            "wenzel_grad": 2.2599999999999997e-05,
+            "wenzel_hess": 2.5000000000000005e-05
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 3.17e-05,
+            "us_hessian": 3.14e-05,
+            "wenzel_grad": 3.28e-05,
+            "wenzel_hess": 3.5e-05
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 4.18e-05,
+            "us_hessian": 3.88e-05,
+            "wenzel_grad": 4.029999999999999e-05,
+            "wenzel_hess": 4.64e-05
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 7.72e-05,
+            "us_hessian": 7.520000000000001e-05,
+            "wenzel_grad": 7.849999999999998e-05,
+            "wenzel_hess": 9.65e-05
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 7.280000000000001e-05,
+            "us_hessian": 6.32e-05,
+            "wenzel_grad": 9.28e-05,
+            "wenzel_hess": 0.00010759999999999999
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 9.54e-05,
+            "us_hessian": 8.489999999999998e-05,
+            "wenzel_grad": 8.989999999999999e-05,
+            "wenzel_hess": 0.0001008
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 0.0001206,
+            "us_hessian": 0.00010979999999999999,
+            "wenzel_grad": 0.0001109,
+            "wenzel_hess": 0.00012650000000000004
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 0.0001417,
+            "us_hessian": 0.00012810000000000002,
+            "wenzel_grad": 0.0001393,
+            "wenzel_hess": 0.00015189999999999998
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 0.0001517,
+            "us_hessian": 0.0001519,
+            "wenzel_grad": 0.00015429999999999998,
+            "wenzel_hess": 0.00017409999999999998
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 0.0001872,
+            "us_hessian": 0.00017999999999999998,
+            "wenzel_grad": 0.00017889999999999998,
+            "wenzel_hess": 0.0002007
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 1,
+            "us_grad": 0.00023369999999999996,
+            "us_hessian": 0.0002049,
+            "wenzel_grad": 0.0001977,
+            "wenzel_hess": 0.00023120000000000004
+        }
+    },
+    "4*4*((E * (1 - E))*(q * (1 - q)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.0,
+            "us_hessian": 0.0,
+            "wenzel_grad": 0.0,
+            "wenzel_hess": 0.0
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 1.5000000000000002e-05,
+            "us_hessian": 3.42e-05,
+            "wenzel_grad": 7.25e-05,
+            "wenzel_hess": 0.0001283
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 3.41e-05,
+            "us_hessian": 6.919999999999999e-05,
+            "wenzel_grad": 0.000154,
+            "wenzel_hess": 0.000263
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 5.08e-05,
+            "us_hessian": 0.00010450000000000002,
+            "wenzel_grad": 0.00020919999999999996,
+            "wenzel_hess": 0.0003894
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 7.139999999999999e-05,
+            "us_hessian": 0.00014299999999999998,
+            "wenzel_grad": 0.00028339999999999995,
+            "wenzel_hess": 0.0004744000000000001
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 9.059999999999999e-05,
+            "us_hessian": 0.0001818,
+            "wenzel_grad": 0.00037,
+            "wenzel_hess": 0.0005445999999999999
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 9.87e-05,
+            "us_hessian": 0.00022129999999999996,
+            "wenzel_grad": 0.0003445,
+            "wenzel_hess": 0.0006053
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.00015549999999999999,
+            "us_hessian": 0.0003114,
+            "wenzel_grad": 0.0005258000000000001,
+            "wenzel_hess": 0.0009144999999999998
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.0002095,
+            "us_hessian": 0.0004224,
+            "wenzel_grad": 0.0006970999999999998,
+            "wenzel_hess": 0.0012207
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.000263,
+            "us_hessian": 0.0005339000000000001,
+            "wenzel_grad": 0.000865,
+            "wenzel_hess": 0.0015244
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.00032819999999999995,
+            "us_hessian": 0.0006576,
+            "wenzel_grad": 0.0010354000000000001,
+            "wenzel_hess": 0.0018217
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.0003918,
+            "us_hessian": 0.0007501,
+            "wenzel_grad": 0.0012131,
+            "wenzel_hess": 0.0021392999999999994
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.00045700000000000005,
+            "us_hessian": 0.0008935,
+            "wenzel_grad": 0.0013826999999999997,
+            "wenzel_hess": 0.0024446999999999997
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 2,
+            "us_grad": 0.0005188,
+            "us_hessian": 0.0009942999999999998,
+            "wenzel_grad": 0.0015559999999999999,
+            "wenzel_hess": 0.0027462
+        }
+    },
+    "4*4*4*((c * (1 - c))*(U * (1 - U))*(W * (1 - W)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.0,
+            "us_hessian": 0.0,
+            "wenzel_grad": 0.0,
+            "wenzel_hess": 3.0999999999999995e-06
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 2.9199999999999998e-05,
+            "us_hessian": 7.569999999999998e-05,
+            "wenzel_grad": 0.0001019,
+            "wenzel_hess": 0.0007597
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 5.7400000000000006e-05,
+            "us_hessian": 0.0001551,
+            "wenzel_grad": 0.00019940000000000002,
+            "wenzel_hess": 0.0013172
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 8.679999999999998e-05,
+            "us_hessian": 0.00023370000000000002,
+            "wenzel_grad": 0.0003132,
+            "wenzel_hess": 0.0020384999999999995
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.000108,
+            "us_hessian": 0.0003156,
+            "wenzel_grad": 0.0004268,
+            "wenzel_hess": 0.0025453
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.00012099999999999999,
+            "us_hessian": 0.0002441,
+            "wenzel_grad": 0.00033800000000000003,
+            "wenzel_hess": 0.0023073
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.00016199999999999998,
+            "us_hessian": 0.0004848000000000001,
+            "wenzel_grad": 0.0004848000000000001,
+            "wenzel_hess": 0.0034720000000000003
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.00024500000000000005,
+            "us_hessian": 0.0007219999999999999,
+            "wenzel_grad": 0.0007315,
+            "wenzel_hess": 0.0051598
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.0003438,
+            "us_hessian": 0.0009824,
+            "wenzel_grad": 0.0009601999999999999,
+            "wenzel_hess": 0.0068911
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.000437,
+            "us_hessian": 0.0012292999999999998,
+            "wenzel_grad": 0.0011496000000000002,
+            "wenzel_hess": 0.008614499999999999
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.0005378999999999999,
+            "us_hessian": 0.0014708,
+            "wenzel_grad": 0.001469,
+            "wenzel_hess": 0.0103328
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.0006195,
+            "us_hessian": 0.0016581999999999999,
+            "wenzel_grad": 0.0017731000000000001,
+            "wenzel_hess": 0.012031799999999999
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.0006883,
+            "us_hessian": 0.0018339,
+            "wenzel_grad": 0.0018532,
+            "wenzel_hess": 0.0137562
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 3,
+            "us_grad": 0.0007779,
+            "us_hessian": 0.0020358,
+            "wenzel_grad": 0.0021391,
+            "wenzel_hess": 0.015559100000000001
+        }
+    },
+    "4*4*4*4*((D * (1 - D))*(z * (1 - z))*(E * (1 - E))*(O * (1 - O)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.0,
+            "us_hessian": 0.0,
+            "wenzel_grad": 0.0,
+            "wenzel_hess": 2.9999999999999997e-06
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 3.909999999999999e-05,
+            "us_hessian": 0.0001338,
+            "wenzel_grad": 0.0001655,
+            "wenzel_hess": 0.0007208
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 7.91e-05,
+            "us_hessian": 0.0002725,
+            "wenzel_grad": 0.0003015,
+            "wenzel_hess": 0.0014304
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.00011279999999999999,
+            "us_hessian": 0.00037810000000000003,
+            "wenzel_grad": 0.0004214999999999999,
+            "wenzel_hess": 0.0020218000000000002
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 8.510000000000001e-05,
+            "us_hessian": 0.0003375,
+            "wenzel_grad": 0.00036300000000000004,
+            "wenzel_hess": 0.0015114
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.00011129999999999998,
+            "us_hessian": 0.000403,
+            "wenzel_grad": 0.00037410000000000004,
+            "wenzel_hess": 0.0017470000000000003
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.0002333,
+            "us_hessian": 0.0008562,
+            "wenzel_grad": 0.0007504,
+            "wenzel_hess": 0.0034875
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.00036199999999999996,
+            "us_hessian": 0.0012459,
+            "wenzel_grad": 0.0011318,
+            "wenzel_hess": 0.0052249
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.0004845,
+            "us_hessian": 0.0016451,
+            "wenzel_grad": 0.0015142,
+            "wenzel_hess": 0.006948600000000001
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.0006218,
+            "us_hessian": 0.0021318,
+            "wenzel_grad": 0.0018889,
+            "wenzel_hess": 0.008746199999999999
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.0007133,
+            "us_hessian": 0.0023767999999999997,
+            "wenzel_grad": 0.0022692,
+            "wenzel_hess": 0.0104964
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.0008506999999999999,
+            "us_hessian": 0.0028074000000000003,
+            "wenzel_grad": 0.0026379,
+            "wenzel_hess": 0.012275999999999999
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.0009360999999999999,
+            "us_hessian": 0.0028699000000000003,
+            "wenzel_grad": 0.0029779999999999997,
+            "wenzel_hess": 0.013828100000000001
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 4,
+            "us_grad": 0.000975,
+            "us_hessian": 0.0030023,
+            "wenzel_grad": 0.0033187,
+            "wenzel_hess": 0.0154574
+        }
+    },
+    "4*4*4*4*4*((x * (1 - x))*(N * (1 - N))*(j * (1 - j))*(l * (1 - l))*(e * (1 - e)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0,
+            "us_hessian": 0.0,
+            "wenzel_grad": 1.0000000000000002e-06,
+            "wenzel_hess": 1.76e-05
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 5.67e-05,
+            "us_hessian": 0.000215,
+            "wenzel_grad": 0.00023080000000000003,
+            "wenzel_hess": 0.0027161
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0001054,
+            "us_hessian": 0.0004287,
+            "wenzel_grad": 0.00046090000000000004,
+            "wenzel_hess": 0.004389
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0001075,
+            "us_hessian": 0.0003615,
+            "wenzel_grad": 0.000441,
+            "wenzel_hess": 0.0041987000000000005
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.00011590000000000001,
+            "us_hessian": 0.0005389,
+            "wenzel_grad": 0.0004411,
+            "wenzel_hess": 0.0055401
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.00015140000000000002,
+            "us_hessian": 0.0006618,
+            "wenzel_grad": 0.0005354000000000001,
+            "wenzel_hess": 0.0066888
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0003181,
+            "us_hessian": 0.0012922,
+            "wenzel_grad": 0.0010762,
+            "wenzel_hess": 0.013793100000000003
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0004963,
+            "us_hessian": 0.0020478000000000002,
+            "wenzel_grad": 0.0016231000000000002,
+            "wenzel_hess": 0.0204493
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0006525000000000001,
+            "us_hessian": 0.0026565,
+            "wenzel_grad": 0.0021644,
+            "wenzel_hess": 0.026828699999999994
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0007921000000000001,
+            "us_hessian": 0.0029974000000000003,
+            "wenzel_grad": 0.0026796999999999997,
+            "wenzel_hess": 0.033585199999999996
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0009083000000000001,
+            "us_hessian": 0.0034525,
+            "wenzel_grad": 0.0032022999999999995,
+            "wenzel_hess": 0.040029499999999996
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0010554,
+            "us_hessian": 0.003988500000000001,
+            "wenzel_grad": 0.0037342,
+            "wenzel_hess": 0.047596299999999994
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0011676,
+            "us_hessian": 0.004309299999999999,
+            "wenzel_grad": 0.0042929,
+            "wenzel_hess": 0.0533007
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 5,
+            "us_grad": 0.0012809,
+            "us_hessian": 0.0047089,
+            "wenzel_grad": 0.0048479000000000005,
+            "wenzel_hess": 0.059533
+        }
+    },
+    "4*4*4*4*4*4*((J * (1 - J))*(R * (1 - R))*(E * (1 - E))*(j * (1 - j))*(d * (1 - d))*(e * (1 - e)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0,
+            "us_hessian": 1.0000000000000002e-06,
+            "wenzel_grad": 1.0000000000000002e-06,
+            "wenzel_hess": 1.7300000000000004e-05
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 6.64e-05,
+            "us_hessian": 0.00028900000000000003,
+            "wenzel_grad": 0.00017859999999999998,
+            "wenzel_hess": 0.0031842999999999997
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0001281,
+            "us_hessian": 0.0005922999999999999,
+            "wenzel_grad": 0.000375,
+            "wenzel_hess": 0.0040691
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0001056,
+            "us_hessian": 0.0005534,
+            "wenzel_grad": 0.00026660000000000003,
+            "wenzel_hess": 0.0042594
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0001402,
+            "us_hessian": 0.0007405000000000001,
+            "wenzel_grad": 0.00035499999999999996,
+            "wenzel_hess": 0.005685999999999999
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0001723,
+            "us_hessian": 0.0009434,
+            "wenzel_grad": 0.00044330000000000004,
+            "wenzel_hess": 0.0070875999999999995
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0003914000000000001,
+            "us_hessian": 0.0019891,
+            "wenzel_grad": 0.0009114,
+            "wenzel_hess": 0.0141295
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0005903999999999999,
+            "us_hessian": 0.0028943,
+            "wenzel_grad": 0.0013295000000000002,
+            "wenzel_hess": 0.021328900000000005
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0007498,
+            "us_hessian": 0.0033928999999999995,
+            "wenzel_grad": 0.0017500999999999999,
+            "wenzel_hess": 0.0279011
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0009247,
+            "us_hessian": 0.0041155,
+            "wenzel_grad": 0.0022075000000000003,
+            "wenzel_hess": 0.035223000000000004
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0010366,
+            "us_hessian": 0.004581099999999999,
+            "wenzel_grad": 0.0026433,
+            "wenzel_hess": 0.041979100000000005
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0012988000000000003,
+            "us_hessian": 0.0054279,
+            "wenzel_grad": 0.0031364999999999995,
+            "wenzel_hess": 0.0490525
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0014304,
+            "us_hessian": 0.006201299999999999,
+            "wenzel_grad": 0.0035694999999999998,
+            "wenzel_hess": 0.05599410000000001
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 6,
+            "us_grad": 0.0016076,
+            "us_hessian": 0.0068743,
+            "wenzel_grad": 0.0040365999999999996,
+            "wenzel_hess": 0.0630763
+        }
+    },
+    "4*4*4*4*4*4*4*((x * (1 - x))*(W * (1 - W))*(P * (1 - P))*(X * (1 - X))*(g * (1 - g))*(e * (1 - e))*(U * (1 - U)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0,
+            "us_hessian": 1.0000000000000002e-06,
+            "wenzel_grad": 1.9e-06,
+            "wenzel_hess": 2.61e-05
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 8.099999999999999e-05,
+            "us_hessian": 0.00042770000000000004,
+            "wenzel_grad": 0.00035260000000000006,
+            "wenzel_hess": 0.0048783
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 8.950000000000001e-05,
+            "us_hessian": 0.0007348,
+            "wenzel_grad": 0.0004994,
+            "wenzel_hess": 0.0053475
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.00012409999999999998,
+            "us_hessian": 0.0007602,
+            "wenzel_grad": 0.0005471,
+            "wenzel_hess": 0.0073883
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.000167,
+            "us_hessian": 0.0010621,
+            "wenzel_grad": 0.0007281999999999999,
+            "wenzel_hess": 0.009845699999999999
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0002065,
+            "us_hessian": 0.0013306,
+            "wenzel_grad": 0.0009176,
+            "wenzel_hess": 0.012308299999999998
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0004731,
+            "us_hessian": 0.0026468000000000004,
+            "wenzel_grad": 0.0018253000000000002,
+            "wenzel_hess": 0.024604999999999995
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0007176,
+            "us_hessian": 0.0038425,
+            "wenzel_grad": 0.0027099,
+            "wenzel_hess": 0.0369105
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0008439999999999999,
+            "us_hessian": 0.004439500000000001,
+            "wenzel_grad": 0.0036339,
+            "wenzel_hess": 0.04930749999999999
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0011160999999999999,
+            "us_hessian": 0.0056995,
+            "wenzel_grad": 0.0045451,
+            "wenzel_hess": 0.0614633
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0013713,
+            "us_hessian": 0.006619699999999999,
+            "wenzel_grad": 0.0054906,
+            "wenzel_hess": 0.07322949999999999
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0015305999999999998,
+            "us_hessian": 0.007543900000000001,
+            "wenzel_grad": 0.0063649000000000015,
+            "wenzel_hess": 0.08576439999999999
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0018537000000000002,
+            "us_hessian": 0.0084567,
+            "wenzel_grad": 0.007313600000000001,
+            "wenzel_hess": 0.09773109999999999
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 7,
+            "us_grad": 0.0021283000000000005,
+            "us_hessian": 0.0099558,
+            "wenzel_grad": 0.008200299999999999,
+            "wenzel_hess": 0.1115209
+        }
+    },
+    "4*4*4*4*4*4*4*4*((P * (1 - P))*(c * (1 - c))*(W * (1 - W))*(o * (1 - o))*(m * (1 - m))*(h * (1 - h))*(M * (1 - M))*(e * (1 - e)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 6e-07,
+            "us_hessian": 1.0000000000000002e-06,
+            "wenzel_grad": 1.4e-06,
+            "wenzel_hess": 3.9e-05
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 9.260000000000001e-05,
+            "us_hessian": 0.00059,
+            "wenzel_grad": 0.0002961,
+            "wenzel_hess": 0.006722700000000001
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.00011580000000000002,
+            "us_hessian": 0.0006866999999999999,
+            "wenzel_grad": 0.0003111,
+            "wenzel_hess": 0.0076825
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.00015250000000000002,
+            "us_hessian": 0.001037,
+            "wenzel_grad": 0.0004254,
+            "wenzel_hess": 0.011595
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.00020309999999999998,
+            "us_hessian": 0.0013464,
+            "wenzel_grad": 0.0005637000000000001,
+            "wenzel_hess": 0.015327499999999999
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.00025810000000000004,
+            "us_hessian": 0.001726,
+            "wenzel_grad": 0.0007001,
+            "wenzel_hess": 0.0190985
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0005583000000000001,
+            "us_hessian": 0.0031527,
+            "wenzel_grad": 0.0013637,
+            "wenzel_hess": 0.0382681
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0008159999999999999,
+            "us_hessian": 0.0045758000000000005,
+            "wenzel_grad": 0.0020389,
+            "wenzel_hess": 0.0574214
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0010548,
+            "us_hessian": 0.005666399999999999,
+            "wenzel_grad": 0.0027226999999999993,
+            "wenzel_hess": 0.07586949999999999
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0013411,
+            "us_hessian": 0.0068262,
+            "wenzel_grad": 0.0034479000000000003,
+            "wenzel_hess": 0.09490359999999999
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0015505000000000002,
+            "us_hessian": 0.0081597,
+            "wenzel_grad": 0.0041395,
+            "wenzel_hess": 0.113689
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0018624000000000002,
+            "us_hessian": 0.009645999999999998,
+            "wenzel_grad": 0.004825299999999999,
+            "wenzel_hess": 0.1327051
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0022470000000000003,
+            "us_hessian": 0.0125598,
+            "wenzel_grad": 0.005553400000000001,
+            "wenzel_hess": 0.1541518
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 8,
+            "us_grad": 0.0025537000000000003,
+            "us_hessian": 0.014805100000000002,
+            "wenzel_grad": 0.006215,
+            "wenzel_hess": 0.17345760000000002
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*((n * (1 - n))*(m * (1 - m))*(s * (1 - s))*(A * (1 - A))*(C * (1 - C))*(N * (1 - N))*(j * (1 - j))*(u * (1 - u))*(k * (1 - k)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 2e-07,
+            "us_hessian": 1.4999999999999998e-06,
+            "wenzel_grad": 2.9999999999999997e-06,
+            "wenzel_hess": 5.81e-05
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0001098,
+            "us_hessian": 0.0007564,
+            "wenzel_grad": 0.000552,
+            "wenzel_hess": 0.0072564000000000005
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0001106,
+            "us_hessian": 0.0008490999999999999,
+            "wenzel_grad": 0.0005166999999999999,
+            "wenzel_hess": 0.0099507
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0001681,
+            "us_hessian": 0.0012951,
+            "wenzel_grad": 0.0007816,
+            "wenzel_hess": 0.014750099999999999
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0002297,
+            "us_hessian": 0.0017163999999999994,
+            "wenzel_grad": 0.0010386999999999998,
+            "wenzel_hess": 0.019833499999999997
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0002848,
+            "us_hessian": 0.0022012,
+            "wenzel_grad": 0.0013201999999999999,
+            "wenzel_hess": 0.024492000000000003
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0005919,
+            "us_hessian": 0.0038996000000000005,
+            "wenzel_grad": 0.0025862,
+            "wenzel_hess": 0.04912540000000001
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.000923,
+            "us_hessian": 0.0057585,
+            "wenzel_grad": 0.0038081000000000005,
+            "wenzel_hess": 0.0736831
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0012375,
+            "us_hessian": 0.007507700000000001,
+            "wenzel_grad": 0.005189000000000001,
+            "wenzel_hess": 0.09758250000000002
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0015444,
+            "us_hessian": 0.009044899999999998,
+            "wenzel_grad": 0.0064307,
+            "wenzel_hess": 0.12120040000000001
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0018571999999999994,
+            "us_hessian": 0.010545700000000002,
+            "wenzel_grad": 0.007807900000000001,
+            "wenzel_hess": 0.1468067
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0021952000000000004,
+            "us_hessian": 0.0125195,
+            "wenzel_grad": 0.0090708,
+            "wenzel_hess": 0.1726816
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0025953000000000005,
+            "us_hessian": 0.015994400000000002,
+            "wenzel_grad": 0.0103219,
+            "wenzel_hess": 0.1985285
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 9,
+            "us_grad": 0.0029714999999999997,
+            "us_hessian": 0.018819400000000003,
+            "wenzel_grad": 0.0115806,
+            "wenzel_hess": 0.22337089999999998
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*((S * (1 - S))*(e * (1 - e))*(t * (1 - t))*(Y * (1 - Y))*(C * (1 - C))*(Q * (1 - Q))*(w * (1 - w))*(G * (1 - G))*(d * (1 - d))*(a * (1 - a)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 1.0000000000000002e-06,
+            "us_hessian": 3.2999999999999997e-06,
+            "wenzel_grad": 2.3000000000000004e-06,
+            "wenzel_hess": 5.81e-05
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0001228,
+            "us_hessian": 0.0009404000000000001,
+            "wenzel_grad": 0.0004717999999999999,
+            "wenzel_hess": 0.007068199999999999
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0001297,
+            "us_hessian": 0.0010398,
+            "wenzel_grad": 0.0004345,
+            "wenzel_hess": 0.0109109
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.00019449999999999996,
+            "us_hessian": 0.0015767000000000003,
+            "wenzel_grad": 0.0006721,
+            "wenzel_hess": 0.0164723
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0002733,
+            "us_hessian": 0.0022051,
+            "wenzel_grad": 0.0008924000000000001,
+            "wenzel_hess": 0.0219062
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0003265,
+            "us_hessian": 0.0026279999999999997,
+            "wenzel_grad": 0.0010868,
+            "wenzel_hess": 0.027430799999999998
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0006944,
+            "us_hessian": 0.004798800000000001,
+            "wenzel_grad": 0.0021658,
+            "wenzel_hess": 0.0550801
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0010808999999999999,
+            "us_hessian": 0.0067342,
+            "wenzel_grad": 0.0032492,
+            "wenzel_hess": 0.08165790000000002
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0013717,
+            "us_hessian": 0.008667800000000002,
+            "wenzel_grad": 0.0042971,
+            "wenzel_hess": 0.1076947
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0017076,
+            "us_hessian": 0.0107799,
+            "wenzel_grad": 0.005400199999999999,
+            "wenzel_hess": 0.13587950000000001
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0020929,
+            "us_hessian": 0.013059699999999999,
+            "wenzel_grad": 0.0065555000000000006,
+            "wenzel_hess": 0.1623855
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0025990000000000006,
+            "us_hessian": 0.0174153,
+            "wenzel_grad": 0.007704199999999999,
+            "wenzel_hess": 0.19372470000000003
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0029651,
+            "us_hessian": 0.0208854,
+            "wenzel_grad": 0.0087122,
+            "wenzel_hess": 0.22210760000000002
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 10,
+            "us_grad": 0.0033307000000000002,
+            "us_hessian": 0.023396899999999998,
+            "wenzel_grad": 0.009821199999999999,
+            "wenzel_hess": 0.2499069
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*((d * (1 - d))*(C * (1 - C))*(G * (1 - G))*(m * (1 - m))*(z * (1 - z))*(W * (1 - W))*(r * (1 - r))*(T * (1 - T))*(A * (1 - A))*(j * (1 - j))*(O * (1 - O)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 1.0000000000000002e-06,
+            "us_hessian": 4e-06,
+            "wenzel_grad": 4.2000000000000004e-06,
+            "wenzel_hess": 0.0001405
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.00014629999999999998,
+            "us_hessian": 0.0011654999999999999,
+            "wenzel_grad": 0.0007982,
+            "wenzel_hess": 0.0132078
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.00014450000000000002,
+            "us_hessian": 0.0013372,
+            "wenzel_grad": 0.0007250000000000001,
+            "wenzel_hess": 0.024213199999999997
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.00023109999999999998,
+            "us_hessian": 0.0020226999999999997,
+            "wenzel_grad": 0.001097,
+            "wenzel_hess": 0.036403200000000004
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0003024,
+            "us_hessian": 0.0025567,
+            "wenzel_grad": 0.0014689999999999998,
+            "wenzel_hess": 0.048406099999999994
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.00038740000000000004,
+            "us_hessian": 0.0031278,
+            "wenzel_grad": 0.0017913000000000002,
+            "wenzel_hess": 0.06051829999999999
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0008118,
+            "us_hessian": 0.005836700000000001,
+            "wenzel_grad": 0.0036843,
+            "wenzel_hess": 0.1208615
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0012296,
+            "us_hessian": 0.0081034,
+            "wenzel_grad": 0.0054853,
+            "wenzel_hess": 0.1812411
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0016187999999999997,
+            "us_hessian": 0.0118211,
+            "wenzel_grad": 0.007351300000000001,
+            "wenzel_hess": 0.24239289999999997
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0020772,
+            "us_hessian": 0.015534999999999998,
+            "wenzel_grad": 0.0091366,
+            "wenzel_hess": 0.3028537
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0025205,
+            "us_hessian": 0.018744900000000002,
+            "wenzel_grad": 0.0111874,
+            "wenzel_hess": 0.36742740000000007
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0029246000000000003,
+            "us_hessian": 0.0218063,
+            "wenzel_grad": 0.012994599999999999,
+            "wenzel_hess": 0.4260523
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0033493000000000004,
+            "us_hessian": 0.025047399999999997,
+            "wenzel_grad": 0.0146398,
+            "wenzel_hess": 0.48506099999999996
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 11,
+            "us_grad": 0.0037203000000000006,
+            "us_hessian": 0.028258299999999997,
+            "wenzel_grad": 0.0167232,
+            "wenzel_hess": 0.5519298
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*((B * (1 - B))*(v * (1 - v))*(t * (1 - t))*(M * (1 - M))*(c * (1 - c))*(K * (1 - K))*(r * (1 - r))*(Q * (1 - Q))*(Y * (1 - Y))*(R * (1 - R))*(d * (1 - d))*(h * (1 - h)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 1.0000000000000002e-06,
+            "us_hessian": 5.600000000000001e-06,
+            "wenzel_grad": 3.1e-06,
+            "wenzel_hess": 0.0001443
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.00015730000000000003,
+            "us_hessian": 0.0013222000000000002,
+            "wenzel_grad": 0.0007175,
+            "wenzel_hess": 0.0140687
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0001708,
+            "us_hessian": 0.0015847,
+            "wenzel_grad": 0.0007334,
+            "wenzel_hess": 0.026591600000000003
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.00025270000000000007,
+            "us_hessian": 0.0023029,
+            "wenzel_grad": 0.0010943,
+            "wenzel_hess": 0.039829199999999995
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.00034710000000000003,
+            "us_hessian": 0.0030196999999999997,
+            "wenzel_grad": 0.0014572,
+            "wenzel_hess": 0.05303220000000001
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0004477000000000001,
+            "us_hessian": 0.0038707,
+            "wenzel_grad": 0.0018173999999999998,
+            "wenzel_hess": 0.06619030000000001
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0009072,
+            "us_hessian": 0.0068752,
+            "wenzel_grad": 0.0036104000000000006,
+            "wenzel_hess": 0.1325662
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0013595,
+            "us_hessian": 0.009485299999999999,
+            "wenzel_grad": 0.005427099999999999,
+            "wenzel_hess": 0.19774130000000004
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0017974999999999998,
+            "us_hessian": 0.01422,
+            "wenzel_grad": 0.0072683,
+            "wenzel_hess": 0.2658427
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.002307,
+            "us_hessian": 0.01874,
+            "wenzel_grad": 0.0090726,
+            "wenzel_hess": 0.333769
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0027639,
+            "us_hessian": 0.0226636,
+            "wenzel_grad": 0.010913099999999998,
+            "wenzel_hess": 0.40020370000000005
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0032044000000000005,
+            "us_hessian": 0.026118199999999998,
+            "wenzel_grad": 0.0127556,
+            "wenzel_hess": 0.4667318
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.0036436000000000003,
+            "us_hessian": 0.0300792,
+            "wenzel_grad": 0.0146123,
+            "wenzel_hess": 0.5338
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 12,
+            "us_grad": 0.004060300000000001,
+            "us_hessian": 0.0335793,
+            "wenzel_grad": 0.016295800000000003,
+            "wenzel_hess": 0.6003387
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*4*((C * (1 - C))*(t * (1 - t))*(W * (1 - W))*(v * (1 - v))*(B * (1 - B))*(U * (1 - U))*(M * (1 - M))*(c * (1 - c))*(e * (1 - e))*(g * (1 - g))*(z * (1 - z))*(w * (1 - w))*(S * (1 - S)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 1.0000000000000002e-06,
+            "us_hessian": 8.6e-06,
+            "wenzel_grad": 5.999999999999999e-06,
+            "wenzel_hess": 0.00021789999999999998
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.00015299999999999998,
+            "us_hessian": 0.0014244000000000001,
+            "wenzel_grad": 0.0011175,
+            "wenzel_hess": 0.018116900000000002
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0001841,
+            "us_hessian": 0.0018531999999999997,
+            "wenzel_grad": 0.0011684999999999998,
+            "wenzel_hess": 0.035571200000000004
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.00026480000000000004,
+            "us_hessian": 0.002792,
+            "wenzel_grad": 0.0017386000000000003,
+            "wenzel_hess": 0.053345500000000004
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0003907,
+            "us_hessian": 0.0037285,
+            "wenzel_grad": 0.0023561,
+            "wenzel_hess": 0.07218339999999998
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.00048669999999999996,
+            "us_hessian": 0.004554000000000001,
+            "wenzel_grad": 0.0029928999999999997,
+            "wenzel_hess": 0.0899929
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0010086000000000001,
+            "us_hessian": 0.0084055,
+            "wenzel_grad": 0.005822000000000001,
+            "wenzel_hess": 0.1786625
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0015003,
+            "us_hessian": 0.0130772,
+            "wenzel_grad": 0.0087788,
+            "wenzel_hess": 0.26833629999999997
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0020077999999999997,
+            "us_hessian": 0.0177174,
+            "wenzel_grad": 0.0116713,
+            "wenzel_hess": 0.3581249
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0025434000000000003,
+            "us_hessian": 0.0222597,
+            "wenzel_grad": 0.0146078,
+            "wenzel_hess": 0.44609109999999996
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0030625,
+            "us_hessian": 0.0266984,
+            "wenzel_grad": 0.0175335,
+            "wenzel_hess": 0.5368248
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0034834999999999996,
+            "us_hessian": 0.0310367,
+            "wenzel_grad": 0.020303799999999997,
+            "wenzel_hess": 0.6266317
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0040567,
+            "us_hessian": 0.035644499999999996,
+            "wenzel_grad": 0.0232634,
+            "wenzel_hess": 0.7098659
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 13,
+            "us_grad": 0.0045581,
+            "us_hessian": 0.0400542,
+            "wenzel_grad": 0.026181700000000002,
+            "wenzel_hess": 0.8071884
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*4*4*((s * (1 - s))*(V * (1 - V))*(d * (1 - d))*(S * (1 - S))*(P * (1 - P))*(r * (1 - r))*(q * (1 - q))*(x * (1 - x))*(y * (1 - y))*(Q * (1 - Q))*(p * (1 - p))*(C * (1 - C))*(t * (1 - t))*(e * (1 - e)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 1.0000000000000002e-06,
+            "us_hessian": 8.099999999999997e-06,
+            "wenzel_grad": 5.899999999999999e-06,
+            "wenzel_hess": 0.00021819999999999994
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.00015780000000000001,
+            "us_hessian": 0.0011825,
+            "wenzel_grad": 0.0006301,
+            "wenzel_hess": 0.019659199999999998
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.00019339999999999998,
+            "us_hessian": 0.0021144,
+            "wenzel_grad": 0.0010165999999999999,
+            "wenzel_hess": 0.03920159999999999
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.00029509999999999996,
+            "us_hessian": 0.0028496,
+            "wenzel_grad": 0.0014926,
+            "wenzel_hess": 0.058665999999999996
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.00041699999999999994,
+            "us_hessian": 0.0040043,
+            "wenzel_grad": 0.001999,
+            "wenzel_hess": 0.0782665
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.0005272,
+            "us_hessian": 0.0049265,
+            "wenzel_grad": 0.0024895,
+            "wenzel_hess": 0.09817129999999999
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.0010733,
+            "us_hessian": 0.0092274,
+            "wenzel_grad": 0.0049471,
+            "wenzel_hess": 0.1956487
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.001598,
+            "us_hessian": 0.014566099999999998,
+            "wenzel_grad": 0.0074939,
+            "wenzel_hess": 0.2950012
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.0021456,
+            "us_hessian": 0.0201115,
+            "wenzel_grad": 0.0099571,
+            "wenzel_hess": 0.39336370000000004
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.0026862,
+            "us_hessian": 0.0252992,
+            "wenzel_grad": 0.012474200000000001,
+            "wenzel_hess": 0.4913164
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.0032042,
+            "us_hessian": 0.0302512,
+            "wenzel_grad": 0.0149781,
+            "wenzel_hess": 0.5914892
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.0037134,
+            "us_hessian": 0.0352092,
+            "wenzel_grad": 0.0174481,
+            "wenzel_hess": 0.6879514
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.0041944,
+            "us_hessian": 0.0404084,
+            "wenzel_grad": 0.0198364,
+            "wenzel_hess": 0.7853567
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 14,
+            "us_grad": 0.004704000000000001,
+            "us_hessian": 0.045378800000000004,
+            "wenzel_grad": 0.022334200000000002,
+            "wenzel_hess": 0.8832668
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*((m * (1 - m))*(v * (1 - v))*(F * (1 - F))*(k * (1 - k))*(x * (1 - x))*(g * (1 - g))*(p * (1 - p))*(t * (1 - t))*(e * (1 - e))*(A * (1 - A))*(Q * (1 - Q))*(H * (1 - H))*(Y * (1 - Y))*(y * (1 - y))*(n * (1 - n)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 1.0000000000000002e-06,
+            "us_hessian": 8.5e-06,
+            "wenzel_grad": 8.5e-06,
+            "wenzel_hess": 0.00026769999999999995
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0001057,
+            "us_hessian": 0.0013564999999999998,
+            "wenzel_grad": 0.0009625999999999999,
+            "wenzel_hess": 0.028964499999999994
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0002055,
+            "us_hessian": 0.0024451,
+            "wenzel_grad": 0.0014809,
+            "wenzel_hess": 0.05802739999999999
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0003202999999999999,
+            "us_hessian": 0.0035344999999999994,
+            "wenzel_grad": 0.0028954000000000002,
+            "wenzel_hess": 0.08835989999999999
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0004580000000000001,
+            "us_hessian": 0.0048445,
+            "wenzel_grad": 0.0029101999999999995,
+            "wenzel_hess": 0.11509069999999999
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0005816,
+            "us_hessian": 0.0059437000000000005,
+            "wenzel_grad": 0.0037033000000000005,
+            "wenzel_hess": 0.14440859999999997
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0011500000000000002,
+            "us_hessian": 0.011460499999999998,
+            "wenzel_grad": 0.007403499999999999,
+            "wenzel_hess": 0.2866527
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0017594,
+            "us_hessian": 0.0175695,
+            "wenzel_grad": 0.011263500000000001,
+            "wenzel_hess": 0.4314608
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.002358,
+            "us_hessian": 0.0234649,
+            "wenzel_grad": 0.0149205,
+            "wenzel_hess": 0.5795858999999999
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0029575,
+            "us_hessian": 0.0293122,
+            "wenzel_grad": 0.018735399999999996,
+            "wenzel_hess": 0.7174389999999999
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0035387,
+            "us_hessian": 0.0350986,
+            "wenzel_grad": 0.0224707,
+            "wenzel_hess": 0.8605402
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0040476999999999996,
+            "us_hessian": 0.0411565,
+            "wenzel_grad": 0.0256122,
+            "wenzel_hess": 1.0077161000000001
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.004675899999999999,
+            "us_hessian": 0.046873599999999994,
+            "wenzel_grad": 0.029969999999999997,
+            "wenzel_hess": 1.147038
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 15,
+            "us_grad": 0.0052764,
+            "us_hessian": 0.0527991,
+            "wenzel_grad": 0.033056999999999996,
+            "wenzel_hess": 1.2975119999999998
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*((h * (1 - h))*(L * (1 - L))*(n * (1 - n))*(s * (1 - s))*(P * (1 - P))*(k * (1 - k))*(E * (1 - E))*(q * (1 - q))*(r * (1 - r))*(l * (1 - l))*(y * (1 - y))*(H * (1 - H))*(G * (1 - G))*(m * (1 - m))*(z * (1 - z))*(f * (1 - f)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0,
+            "us_hessian": 9.100000000000001e-06,
+            "wenzel_grad": 8.400000000000001e-06,
+            "wenzel_hess": 0.0002591
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 6.87e-05,
+            "us_hessian": 0.0013036999999999999,
+            "wenzel_grad": 0.0007554999999999999,
+            "wenzel_hess": 0.023974
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0001386,
+            "us_hessian": 0.0025193000000000004,
+            "wenzel_grad": 0.0014103,
+            "wenzel_hess": 0.0480619
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0002176,
+            "us_hessian": 0.0039843000000000005,
+            "wenzel_grad": 0.0021337,
+            "wenzel_hess": 0.0712305
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0003038,
+            "us_hessian": 0.005269299999999999,
+            "wenzel_grad": 0.0028267000000000006,
+            "wenzel_hess": 0.0953852
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.00037799999999999997,
+            "us_hessian": 0.006447,
+            "wenzel_grad": 0.0035505000000000003,
+            "wenzel_hess": 0.1187262
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0007776,
+            "us_hessian": 0.0123519,
+            "wenzel_grad": 0.007077900000000001,
+            "wenzel_hess": 0.23838910000000002
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0011690000000000001,
+            "us_hessian": 0.018688800000000002,
+            "wenzel_grad": 0.010551600000000001,
+            "wenzel_hess": 0.35705000000000003
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0015476,
+            "us_hessian": 0.0249468,
+            "wenzel_grad": 0.0140955,
+            "wenzel_hess": 0.4762756
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0019019999999999998,
+            "us_hessian": 0.031117,
+            "wenzel_grad": 0.017585999999999997,
+            "wenzel_hess": 0.5972025000000001
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.002262,
+            "us_hessian": 0.0374114,
+            "wenzel_grad": 0.0211136,
+            "wenzel_hess": 0.7177992999999999
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0026095,
+            "us_hessian": 0.0436083,
+            "wenzel_grad": 0.0247842,
+            "wenzel_hess": 0.8337516
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0029693,
+            "us_hessian": 0.0497345,
+            "wenzel_grad": 0.027946,
+            "wenzel_hess": 0.9525146000000001
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 16,
+            "us_grad": 0.0033958,
+            "us_hessian": 0.056019200000000005,
+            "wenzel_grad": 0.0313773,
+            "wenzel_hess": 1.0717089999999998
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*((I * (1 - I))*(D * (1 - D))*(q * (1 - q))*(Q * (1 - Q))*(j * (1 - j))*(T * (1 - T))*(N * (1 - N))*(A * (1 - A))*(y * (1 - y))*(P * (1 - P))*(m * (1 - m))*(B * (1 - B))*(k * (1 - k))*(e * (1 - e))*(w * (1 - w))*(U * (1 - U))*(H * (1 - H)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0,
+            "us_hessian": 1.0899999999999999e-05,
+            "wenzel_grad": 1.0899999999999999e-05,
+            "wenzel_hess": 0.00038770000000000005
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 7.41e-05,
+            "us_hessian": 0.0015176999999999999,
+            "wenzel_grad": 0.0009660000000000001,
+            "wenzel_hess": 0.0360601
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0001539,
+            "us_hessian": 0.0028780000000000003,
+            "wenzel_grad": 0.0018917999999999997,
+            "wenzel_hess": 0.071379
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.00023729999999999997,
+            "us_hessian": 0.004287000000000001,
+            "wenzel_grad": 0.0028672,
+            "wenzel_hess": 0.10679050000000001
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0003217,
+            "us_hessian": 0.0058692,
+            "wenzel_grad": 0.003771599999999999,
+            "wenzel_hess": 0.141976
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0004079,
+            "us_hessian": 0.0072656,
+            "wenzel_grad": 0.004725600000000001,
+            "wenzel_hess": 0.17953330000000003
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0008281,
+            "us_hessian": 0.014035299999999997,
+            "wenzel_grad": 0.009418699999999999,
+            "wenzel_hess": 0.357109
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0012335,
+            "us_hessian": 0.0210752,
+            "wenzel_grad": 0.014229,
+            "wenzel_hess": 0.5385997
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0016365000000000002,
+            "us_hessian": 0.0280997,
+            "wenzel_grad": 0.018878299999999997,
+            "wenzel_hess": 0.7141544000000001
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0020453,
+            "us_hessian": 0.0352389,
+            "wenzel_grad": 0.0237477,
+            "wenzel_hess": 0.8892345
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0023258999999999997,
+            "us_hessian": 0.04222150000000001,
+            "wenzel_grad": 0.0283782,
+            "wenzel_hess": 1.0806689999999999
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0027546,
+            "us_hessian": 0.0488609,
+            "wenzel_grad": 0.032626300000000004,
+            "wenzel_hess": 1.245727
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0031052,
+            "us_hessian": 0.055898399999999994,
+            "wenzel_grad": 0.0373226,
+            "wenzel_hess": 1.421706
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 17,
+            "us_grad": 0.0034785,
+            "us_hessian": 0.06299740000000001,
+            "wenzel_grad": 0.0422784,
+            "wenzel_hess": 1.6127099999999999
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*((M * (1 - M))*(a * (1 - a))*(b * (1 - b))*(y * (1 - y))*(Q * (1 - Q))*(Y * (1 - Y))*(V * (1 - V))*(E * (1 - E))*(O * (1 - O))*(W * (1 - W))*(g * (1 - g))*(s * (1 - s))*(t * (1 - t))*(p * (1 - p))*(B * (1 - B))*(k * (1 - k))*(I * (1 - I))*(F * (1 - F)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0,
+            "us_hessian": 1.1099999999999999e-05,
+            "wenzel_grad": 1e-05,
+            "wenzel_hess": 0.0003403
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 8.68e-05,
+            "us_hessian": 0.0016703,
+            "wenzel_grad": 0.0008957999999999999,
+            "wenzel_hess": 0.034134300000000006
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0001521,
+            "us_hessian": 0.0033296,
+            "wenzel_grad": 0.0017758,
+            "wenzel_hess": 0.06763179999999999
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.00025269999999999996,
+            "us_hessian": 0.004938100000000001,
+            "wenzel_grad": 0.0026529000000000006,
+            "wenzel_hess": 0.1011936
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0003373,
+            "us_hessian": 0.006579299999999999,
+            "wenzel_grad": 0.0035065000000000005,
+            "wenzel_hess": 0.13511639999999997
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.00043559999999999996,
+            "us_hessian": 0.0079049,
+            "wenzel_grad": 0.004391999999999999,
+            "wenzel_hess": 0.1690318
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0008648000000000001,
+            "us_hessian": 0.0157826,
+            "wenzel_grad": 0.0087478,
+            "wenzel_hess": 0.3378689
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0013005,
+            "us_hessian": 0.023612799999999996,
+            "wenzel_grad": 0.013207000000000002,
+            "wenzel_hess": 0.5073783
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0017132000000000002,
+            "us_hessian": 0.0313719,
+            "wenzel_grad": 0.017579,
+            "wenzel_hess": 0.6769744999999999
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0021022,
+            "us_hessian": 0.039092699999999994,
+            "wenzel_grad": 0.0218295,
+            "wenzel_hess": 0.8456451999999999
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0025015,
+            "us_hessian": 0.0469799,
+            "wenzel_grad": 0.026101399999999997,
+            "wenzel_hess": 1.014052
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0029139,
+            "us_hessian": 0.05475659999999999,
+            "wenzel_grad": 0.030348400000000005,
+            "wenzel_hess": 1.187421
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0032890999999999997,
+            "us_hessian": 0.06252759999999999,
+            "wenzel_grad": 0.0347531,
+            "wenzel_hess": 1.3483780000000003
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 18,
+            "us_grad": 0.0036494000000000006,
+            "us_hessian": 0.069968,
+            "wenzel_grad": 0.0388769,
+            "wenzel_hess": 1.5200790000000002
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*4*((a * (1 - a))*(W * (1 - W))*(Y * (1 - Y))*(t * (1 - t))*(X * (1 - X))*(T * (1 - T))*(O * (1 - O))*(D * (1 - D))*(G * (1 - G))*(k * (1 - k))*(V * (1 - V))*(C * (1 - C))*(J * (1 - J))*(q * (1 - q))*(p * (1 - p))*(F * (1 - F))*(S * (1 - S))*(H * (1 - H))*(j * (1 - j)))": {
+        "10": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0,
+            "us_hessian": 1.28e-05,
+            "wenzel_grad": 1.3999999999999998e-05,
+            "wenzel_hess": 0.0006422000000000001
+        },
+        "2010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 8.89e-05,
+            "us_hessian": 0.0018686999999999998,
+            "wenzel_grad": 0.0012482,
+            "wenzel_hess": 0.048445199999999994
+        },
+        "4010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.00016360000000000002,
+            "us_hessian": 0.0037200999999999996,
+            "wenzel_grad": 0.0025085000000000003,
+            "wenzel_hess": 0.096856
+        },
+        "6010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0002657,
+            "us_hessian": 0.0054765000000000005,
+            "wenzel_grad": 0.0036828,
+            "wenzel_hess": 0.14424919999999997
+        },
+        "8010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0003639,
+            "us_hessian": 0.0070788000000000005,
+            "wenzel_grad": 0.004931400000000001,
+            "wenzel_hess": 0.19182200000000002
+        },
+        "10010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0004604,
+            "us_hessian": 0.0088043,
+            "wenzel_grad": 0.0061776999999999995,
+            "wenzel_hess": 0.24167020000000003
+        },
+        "20010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0009089,
+            "us_hessian": 0.017231699999999996,
+            "wenzel_grad": 0.0124108,
+            "wenzel_hess": 0.47969160000000005
+        },
+        "30010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0013616,
+            "us_hessian": 0.02625039999999999,
+            "wenzel_grad": 0.018777300000000004,
+            "wenzel_hess": 0.7231306
+        },
+        "40010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0018046,
+            "us_hessian": 0.034959699999999996,
+            "wenzel_grad": 0.024684199999999996,
+            "wenzel_hess": 0.9603688
+        },
+        "50010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0022110999999999997,
+            "us_hessian": 0.04336270000000001,
+            "wenzel_grad": 0.030978300000000004,
+            "wenzel_hess": 1.2104880000000002
+        },
+        "60010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0025797,
+            "us_hessian": 0.0523826,
+            "wenzel_grad": 0.03713,
+            "wenzel_hess": 1.449576
+        },
+        "70010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0030321999999999997,
+            "us_hessian": 0.0607564,
+            "wenzel_grad": 0.0431488,
+            "wenzel_hess": 1.6774709999999995
+        },
+        "80010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.0034290999999999996,
+            "us_hessian": 0.069251,
+            "wenzel_grad": 0.049196300000000005,
+            "wenzel_hess": 1.917964
+        },
+        "90010": {
+            "flags": "-ffast-math -O3",
+            "num_vars": 19,
+            "us_grad": 0.003867899999999999,
+            "us_hessian": 0.07847649999999999,
+            "wenzel_grad": 0.054987799999999996,
+            "wenzel_hess": 2.1644910000000004
+        }
+    }
+}

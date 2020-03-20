@@ -1,1 +1,0 @@
-4*((Z * (1 - Z))): Wenzel Single -- [2.7e-06] Wenzel Hessian: [1.0100000000000002e-05] Us Single: [6e-07] Us Hessian: [6e-06]
