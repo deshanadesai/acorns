@@ -3,4 +3,4 @@
 
 # Sample Run
 
-1. ```python3 updated_test_suite.py```
+1. ```python3 tests/updated_test_suite.py```
