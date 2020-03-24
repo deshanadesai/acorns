@@ -122,11 +122,8 @@ if __name__ == "__main__":
     NUM_ITERATIONS = 10
     NUM_THREADS_PYTORCH = 1
     RUN_C = True
-    RUN_ISPC = False
-    REVERSE = False
-    SECOND_DER = False
-    WENZEL_COMPILER_VERSION=""
-    STATIC = False
+    WENZEL_COMPILER_VERSION="-5"
+    # STATIC = True
     # cleanup()
 
     output = {}
@@ -139,14 +136,15 @@ if __name__ == "__main__":
 
         avg_us = []
         avg_pytorch = []
-        avg_wenzel = []
+        avg_wenzel_static = []
+        avg_wenzel_dynamic = []
         avg_enoki = []
         denom = []
         num_params = INIT_NUM_PARAMS
 
         # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
-        us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, REVERSE, SECOND_DER)
+        us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, False, False)
         us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, UTILS_FILENAME, DERIVATIVES_FILENAME)
 
 
@@ -162,13 +160,17 @@ if __name__ == "__main__":
             # generate and compile wenzel code
             enoki_utils.generate_enoki_file(functions, func_num, num_params)
             enoki_utils.compile_enoki()
-            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", STATIC)
-            wenzel_utils.compile_wenzel("single", WENZEL_COMPILER_VERSION)
+
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", static=True)
+            wenzel_utils.compile_wenzel("single",True, WENZEL_COMPILER_VERSION)
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", static=False)
+            wenzel_utils.compile_wenzel("single", False, WENZEL_COMPILER_VERSION)
 
             # initialize arrays for run
             our_times = []
             py_times = []
-            wenzel_times = []
+            wenzel_times_static = []
+            wenzel_times_dynamic = []
             enoki_times = []
 
             for i in range(NUM_ITERATIONS):
@@ -176,7 +178,8 @@ if __name__ == "__main__":
                 pytorch = pytorch_utils.run_pytorch()
                 ours = us_utils.run_ours(functions[func_num], num_params, functions, PARAMS_FILENAME, OUTPUT_FILENAME, RUNNABLE_FILENAME)
                 enoki = enoki_utils.run_enoki()
-                wenzel = wenzel_utils.run_wenzel("single")
+                wenzel_static = wenzel_utils.run_wenzel("single", True)
+                wenzel_dynamic = wenzel_utils.run_wenzel("single", False)
 
                 # for j in range(len(ours[0])):
                 #     assert math.isclose(float(pytorch[0][j]), float(wenzel[0][j]), abs_tol=10**-3)
@@ -185,7 +188,8 @@ if __name__ == "__main__":
                 our_times.append(float(ours[1]))
                 py_times.append(float(pytorch[1]))
                 enoki_times.append(float(enoki[1]))
-                wenzel_times.append(float(wenzel[1]))
+                wenzel_times_static.append(float(wenzel_static[1]))
+                wenzel_times_dynamic.append(float(wenzel_dynamic[1]))
             
             # print for debug purposes
             print("Parameters: ", params[:10])
@@ -195,9 +199,14 @@ if __name__ == "__main__":
                 "us": sum(our_times) / len(our_times),
                 "pytorch": sum(py_times) / len(py_times),
                 "enoki": sum(enoki_times) / len(enoki_times),
-                "wenzel": sum(wenzel_times) / len(wenzel_times),
+                "wenzel_static": sum(wenzel_times_static) / len(wenzel_times_static),
+                "wenzel_dynamic": sum(wenzel_times_dynamic) / len(wenzel_times_dynamic),
                 "flags": "-ffast-math -O3",
-                "WENZEL_COMPILER_VERSION": WENZEL_COMPILER_VERSION
+                "WENZEL_COMPILER_VERSION": WENZEL_COMPILER_VERSION,
+                "enoki_speedup": (sum(enoki_times) / len(enoki_times)) / (sum(our_times) / len(our_times)),
+                "wenzel_static_speedup": (sum(wenzel_times_static) / len(wenzel_times_static)) / (sum(our_times) / len(our_times)),
+                "wenzel_dynamic_speedup": (sum(wenzel_times_dynamic) / len(wenzel_times_dynamic)) / (sum(our_times) / len(our_times)),
+                "pytorch_speedup": (sum(py_times) / len(py_times)) / (sum(our_times) / len(our_times))
             }
 
             denom.append(num_params)

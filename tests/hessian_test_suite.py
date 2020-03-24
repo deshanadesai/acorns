@@ -103,11 +103,8 @@ if __name__ == "__main__":
     INIT_NUM_PARAMS = 10
     WENZEL_COMPILER_VERSION = ""
     NUM_ITERATIONS = 10
-    NUM_THREADS_PYTORCH = 1
     RUN_C = True
-    RUN_ISPC = False
-    REVERSE = False
-    STATIC = False
+    # STATIC = False
 
     max_us_single = []
     max_us_hessian = []
@@ -132,10 +129,11 @@ if __name__ == "__main__":
 
         # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
-        us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, derivatives_filename="./tests/utils/hessian/ders_single", reverse=REVERSE, second_der=False)
+
+        us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, derivatives_filename="./tests/utils/hessian/ders_single", reverse=False, second_der=False)
         us_utils.compile_ours(RUN_C, runnable_filename="./tests/utils/static_code/runnable_single", utils_filename=UTILS_FILENAME, derivatives_filename="./tests/utils/hessian/ders_single")
 
-        us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, derivatives_filename="./tests/utils/hessian/ders_hessian", reverse=REVERSE, second_der=True)
+        us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, derivatives_filename="./tests/utils/hessian/ders_hessian", reverse=False, second_der=True)
         us_utils.compile_ours(RUN_C, runnable_filename="./tests/utils/static_code/runnable_hessian", utils_filename=UTILS_FILENAME, derivatives_filename="./tests/utils/hessian/ders_hessian")
 
         while num_params <= MAX_PARAMS:
@@ -146,58 +144,66 @@ if __name__ == "__main__":
             params = generate_params(num_params, func_num)
             print_param_to_file(params)
 
-            # generate and compile wenzel code
-            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", STATIC)
-            wenzel_utils.compile_wenzel("single", compiler_version=WENZEL_COMPILER_VERSION)
-            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "hessian", STATIC)
-            wenzel_utils.compile_wenzel("hessian", compiler_version=WENZEL_COMPILER_VERSION)
+            # generate and compile wenzel code static 
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", True)
+            wenzel_utils.compile_wenzel("single", True, compiler_version=WENZEL_COMPILER_VERSION)
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "hessian", True)
+            wenzel_utils.compile_wenzel("hessian", True, compiler_version=WENZEL_COMPILER_VERSION)
+
+            # wenzel dynamic
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", False)
+            wenzel_utils.compile_wenzel("single", False, compiler_version=WENZEL_COMPILER_VERSION)
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "hessian", False)
+            wenzel_utils.compile_wenzel("hessian", False, compiler_version=WENZEL_COMPILER_VERSION)
 
             # initialize arrays for run
             our_times_single = []
             our_times_hessian = []
-            wenzel_times_single = []
-            wenzel_times_hessian = []
+            wenzel_times_single_static = []
+            wenzel_times_hessian_static = []
+            wenzel_times_single_dynamic = []
+            wenzel_times_hessian_dynamic = []
 
             for i in range(NUM_ITERATIONS):
                 ours_single = us_utils.run_ours(functions[func_num], num_params, functions, PARAMS_FILENAME, output_filename="./tests/utils/hessian/us_output_single.txt", runnable_filename="./tests/utils/static_code/runnable_single")
                 ours_hessian = us_utils.run_ours(functions[func_num], num_params, functions, PARAMS_FILENAME, output_filename="./tests/utils/hessian/us_output_hessian.txt", runnable_filename="./tests/utils/static_code/runnable_hessian")
-                wenzel_single = wenzel_utils.run_wenzel("single")
-                wenzel_double = wenzel_utils.run_wenzel("hessian")
+                wenzel_single_static = wenzel_utils.run_wenzel("single", True)
+                wenzel_double_static = wenzel_utils.run_wenzel("hessian", True)
+                wenzel_single_dynamic = wenzel_utils.run_wenzel("single", False)
+                wenzel_double_dynamic = wenzel_utils.run_wenzel("hessian", False)
                 
                 num_ders = num_vars * num_vars
 
-                assert len(ours_single[0]) == len(wenzel_single[0]) == num_params * num_vars
-                assert len(ours_hessian[0]) == len(wenzel_double[0]) == num_ders * num_params
+                # assert len(ours_single[0]) == len(wenzel_single_static[0]) == num_params * num_vars
+                # assert len(ours_hessian[0]) == len(wenzel_double_static[0]) == num_ders * num_params
 
-                for j in range(len(ours_hessian[0])):
-                    assert math.isclose(float(ours_hessian[0][j]), float(wenzel_double[0][j]), abs_tol=10**1)
-                for j in range(len(ours_single[0])):
-                    assert math.isclose(float(ours_single[0][j]), float(wenzel_single[0][j]), abs_tol=10**1)
+                # for j in range(len(ours_hessian[0])):
+                #     assert math.isclose(float(ours_hessian[0][j]), float(wenzel_double_static[0][j]), abs_tol=10**1)
+                # for j in range(len(ours_single[0])):
+                #     assert math.isclose(float(ours_single[0][j]), float(wenzel_single_static[0][j]), abs_tol=10**1)
 
                 our_times_single.append(float(ours_single[1]))
                 our_times_hessian.append(float(ours_hessian[1]))
-                wenzel_times_single.append(float(wenzel_single[1]))
-                wenzel_times_hessian.append(float(wenzel_double[1]))
-
+                wenzel_times_single_static.append(float(wenzel_single_static[1]))
+                wenzel_times_hessian_static.append(float(wenzel_double_static[1]))
+                wenzel_times_single_dynamic.append(float(wenzel_single_dynamic[1]))
+                wenzel_times_hessian_dynamic.append(float(wenzel_double_dynamic[1]))
             # print for debug purposes
             print("Parameters: ", params[:10])
 
             output[func[0]][num_params] = {
                 "us_grad": sum(our_times_single) / len(our_times_single),
                 "us_hessian": sum(our_times_hessian) / len(our_times_hessian),
-                "wenzel_grad": sum(wenzel_times_single) / len(wenzel_times_single),
-                "wenzel_hess": sum(wenzel_times_hessian) / len(wenzel_times_hessian),
+                "wenzel_grad_static": sum(wenzel_times_single_static) / len(wenzel_times_single_static),
+                "wenzel_hess_static": sum(wenzel_times_hessian_static) / len(wenzel_times_hessian_static),
+                "wenzel_grad_dynamic": sum(wenzel_times_single_dynamic) / len(wenzel_times_single_dynamic),
+                "wenzel_hess_dynamic": sum(wenzel_times_hessian_dynamic) / len(wenzel_times_hessian_dynamic),
                 "flags": "-ffast-math -O3",
                 "num_vars": num_vars,
-                "compiler_version": WENZEL_COMPILER_VERSION,
-                "static": STATIC
+                "compiler_version": WENZEL_COMPILER_VERSION
             }
 
             # get the average time
-            avg_us_single.append(sum(our_times_single) / len(our_times_single))
-            avg_us_hessian.append(sum(our_times_hessian) / len(our_times_hessian))
-            avg_wenzel_single.append(sum(wenzel_times_single) / len(wenzel_times_single))
-            avg_wenzel_hessian.append(sum(wenzel_times_hessian) / len(wenzel_times_hessian))
             denom.append(num_params)
 
             if num_params < 10000:

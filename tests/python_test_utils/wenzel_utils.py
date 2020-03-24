@@ -6,7 +6,7 @@ def generate_wenzel_file(func_num, num_params, functions, params_filename, degre
         if degree == 'single':
             with open('./tests/utils/static_code/grad/wenzel_single_static.txt', 'r') as file:
                 wenzel = file.read()
-                wenzel_file = open("./tests/utils/wenzel_single.cpp", "w+")
+                wenzel_file = open("./tests/utils/wenzel_single_static.cpp", "w+")
                 num_vars = len(functions[func_num][1])
                 derivatives = generate_wenzel_ders(func_num, num_vars, functions, degree)
                 cpp_code = wenzel % (num_vars, num_params, num_vars, params_filename, num_vars, derivatives)
@@ -15,7 +15,7 @@ def generate_wenzel_file(func_num, num_params, functions, params_filename, degre
         else:
             with open('./tests/utils/static_code/hess/wenzel_hessian_static.txt', 'r') as file:
                 wenzel = file.read()  
-                wenzel_file = open("./tests/utils/wenzel_hessian.cpp", "w+")
+                wenzel_file = open("./tests/utils/wenzel_hessian_static.cpp", "w+")
                 num_vars = len(functions[func_num][1])
                 derivatives = generate_wenzel_ders(func_num, num_vars, functions, degree)
                 cpp_code = wenzel % (num_vars, num_vars, num_vars, num_params, num_vars, params_filename, num_vars, derivatives)
@@ -25,7 +25,7 @@ def generate_wenzel_file(func_num, num_params, functions, params_filename, degre
         if degree == 'single':
             with open('./tests/utils/static_code/grad/wenzel_single_dynamic.txt', 'r') as file:
                 wenzel = file.read()
-                wenzel_file = open("./tests/utils/wenzel_single.cpp", "w+")
+                wenzel_file = open("./tests/utils/wenzel_single_dynamic.cpp", "w+")
                 num_vars = len(functions[func_num][1])
                 derivatives = generate_wenzel_ders(func_num, num_vars, functions, degree)
                 cpp_code = wenzel % (num_params, num_vars, params_filename, num_vars, derivatives)
@@ -34,26 +34,40 @@ def generate_wenzel_file(func_num, num_params, functions, params_filename, degre
         else:
             with open('./tests/utils/static_code/hess/wenzel_hessian_dynamic.txt', 'r') as file:
                 wenzel = file.read()  
-                wenzel_file = open("./tests/utils/wenzel_hessian.cpp", "w+")
+                wenzel_file = open("./tests/utils/wenzel_hessian_dynamic.cpp", "w+")
                 num_vars = len(functions[func_num][1])
                 derivatives = generate_wenzel_ders(func_num, num_vars, functions, degree)
                 cpp_code = wenzel % (num_params, num_vars, params_filename, num_vars, derivatives)
                 wenzel_file.write(cpp_code)
                 wenzel_file.close()       
 
-def compile_wenzel(degree, compiler_version=""):
-    if degree == 'single':
-        os.system("g++{} -I ./tests/utils/ext/ ./tests/utils/wenzel_single.cpp -o ./tests/utils/wenzel_single -ffast-math -O3".format(compiler_version))
+def compile_wenzel(degree, static, compiler_version=""):
+    if static:
+        if degree == 'single':
+            os.system("g++{} -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_single_static.cpp -o ./tests/utils/wenzel_single_static -ffast-math -O3".format(compiler_version))
+        else:
+            os.system("g++{} -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_hessian_static.cpp -o ./tests/utils/wenzel_hessian_static -ffast-math -O3".format(compiler_version))
     else:
-        os.system("g++{} -I ./tests/utils/ext/ ./tests/utils/wenzel_hessian.cpp -o ./tests/utils/wenzel_hessian -ffast-math -O3".format(compiler_version))
+        if degree == 'single':
+            os.system("g++{} -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_single_dynamic.cpp -o ./tests/utils/wenzel_single_dynamic -ffast-math -O3".format(compiler_version))
+        else:
+            os.system("g++{} -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_hessian_dynamic.cpp -o ./tests/utils/wenzel_hessian_dynamic -ffast-math -O3".format(compiler_version))
 
-def run_wenzel(degree):
-    if degree == 'single':
-        os.system("./tests/utils/wenzel_single ./tests/utils/wenzel_output_single.txt")
-        return general_utils.parse_output("./tests/utils/wenzel_output_single.txt")
+def run_wenzel(degree, static):
+    if static:
+        if degree == 'single':
+            os.system("./tests/utils/wenzel_single_static ./tests/utils/wenzel_output_single_static.txt")
+            return general_utils.parse_output("./tests/utils/wenzel_output_single_static.txt")
+        else:
+            os.system("./tests/utils/wenzel_hessian_static ./tests/utils/wenzel_output_hessian_static.txt")
+            return general_utils.parse_output("./tests/utils/wenzel_output_hessian_static.txt")
     else:
-        os.system("./tests/utils/wenzel_hessian ./tests/utils/wenzel_output_hessian.txt")
-        return general_utils.parse_output("./tests/utils/wenzel_output_hessian.txt")
+        if degree == 'single':
+            os.system("./tests/utils/wenzel_single_dynamic ./tests/utils/wenzel_output_single_dynamic.txt")
+            return general_utils.parse_output("./tests/utils/wenzel_output_single_dynamic.txt")
+        else:
+            os.system("./tests/utils/wenzel_hessian_dynamic ./tests/utils/wenzel_output_hessian_dynamic.txt")
+            return general_utils.parse_output("./tests/utils/wenzel_output_hessian_dynamic.txt")
 
 def generate_wenzel_ders(func_num, num_vars, functions, degree):
     ders_string = "\t\tDScalar "

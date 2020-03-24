@@ -2,7 +2,7 @@ import torch
 import time
 import numpy as np
 
-num_params = 2010
+num_params = 10
 a = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_a.npy'), requires_grad=True, dtype=torch.float)
 b = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_b.npy'), requires_grad=True, dtype=torch.float)
 c = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_c.npy'), requires_grad=True, dtype=torch.float)

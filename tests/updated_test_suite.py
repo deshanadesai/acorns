@@ -158,7 +158,7 @@ if __name__ == "__main__":
             enoki_utils.generate_enoki_file(functions, func_num, num_params)
             enoki_utils.compile_enoki()
             wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", STATIC)
-            wenzel_utils.compile_wenzel("single", compiler_version=WENZEL_COMPILER_VERSION)
+            wenzel_utils.compile_wenzel("single", STATIC, compiler_version=WENZEL_COMPILER_VERSION)
 
             # initialize arrays for run
             our_times = []
@@ -171,7 +171,7 @@ if __name__ == "__main__":
                 pytorch = pytorch_utils.run_pytorch()
                 ours = us_utils.run_ours(functions[func_num], num_params, functions, PARAMS_FILENAME, OUTPUT_FILENAME, RUNNABLE_FILENAME)
                 enoki = enoki_utils.run_enoki()
-                wenzel = wenzel_utils.run_wenzel("single")
+                wenzel = wenzel_utils.run_wenzel("single", STATIC)
 
                 # for j in range(len(ours[0])):
                     # assert math.isclose(float(pytorch[0][j]), float(wenzel[0][j]), abs_tol=10**-1)

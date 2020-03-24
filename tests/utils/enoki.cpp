@@ -22,7 +22,7 @@ using FloatD = DiffArray<FloatX>;
 
 int main(int argc, char **argv)
 {
-    int num_params = 2010;
+    int num_params = 10;
     int num_vars = 4;
     Eigen::VectorXd args(num_params * num_vars);
 	FloatX init_a = zero<FloatX>(num_params);
