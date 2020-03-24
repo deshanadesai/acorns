@@ -39,7 +39,7 @@ def run_ours(func, num_params, functions, params_filename, output_filename, runn
             str(num_params) + " " + \
             str(len(func[1])) + " " + params_filename + " " + output_filename
     else:
-        run_command = "./" + runnable_filename + " " + \
+        run_command = runnable_filename + " " + \
             str(num_params) + " " + \
             str(len(func[1])) + " " + params_filename + " " + output_filename
     print(run_command)
@@ -47,13 +47,14 @@ def run_ours(func, num_params, functions, params_filename, output_filename, runn
         universal_newlines=True, shell=True)
     return general_utils.parse_output(output_filename)
 
-def compile_ours(run_c, runnable_filename, utils_filename, derivatives_filename):
+def compile_ours(run_c, runnable_filename, utils_filename, derivatives_filename, compiler_version=""):
+    print(compiler_version)
     if run_c:
         if sys.platform.startswith('win'):
             cmd = "cl " + runnable_filename + ".c " + utils_filename + " " + \
                 derivatives_filename + ".c  /link /out:utils/program.exe"
         else:
-            cmd = "gcc -O3 -ffast-math -o " + runnable_filename + " " + runnable_filename + \
+            cmd = "gcc" + compiler_version + " -O3 -ffast-math -o " + runnable_filename + " " + runnable_filename + \
                 ".c " + derivatives_filename + ".c -lm"
         print(cmd)
         os.system(cmd)

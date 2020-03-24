@@ -8,13 +8,13 @@ import json
 from subprocess import PIPE, run
 import numpy as np
 import shutil
+from datetime import datetime
 
 sys.path.append('tests/python_test_utils')
 import enoki_utils
 import pytorch_utils
 import wenzel_utils
 import us_utils
-
 
 sys.path.append('src')
 import forward_diff
@@ -120,6 +120,7 @@ if __name__ == "__main__":
     RUN_ISPC = False
     REVERSE = False
     SECOND_DER = False
+    COMPILER_VERSION="-5"
     # cleanup()
 
     output = {}
@@ -140,7 +141,7 @@ if __name__ == "__main__":
         # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, REVERSE, SECOND_DER)
-        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, UTILS_FILENAME, DERIVATIVES_FILENAME)
+        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, UTILS_FILENAME, DERIVATIVES_FILENAME, compiler_version=COMPILER_VERSION)
 
 
         while num_params <= 100000:
@@ -156,7 +157,7 @@ if __name__ == "__main__":
             enoki_utils.generate_enoki_file(functions, func_num, num_params)
             enoki_utils.compile_enoki()
             wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single")
-            wenzel_utils.compile_wenzel("single")
+            wenzel_utils.compile_wenzel("single", compiler_version=COMPILER_VERSION)
 
             # initialize arrays for run
             our_times = []
@@ -189,7 +190,8 @@ if __name__ == "__main__":
                 "pytorch": sum(py_times) / len(py_times),
                 "enoki": sum(enoki_times) / len(enoki_times),
                 "wenzel": sum(wenzel_times) / len(wenzel_times),
-                "flags": "-ffast-math -O3"
+                "flags": "-ffast-math -O3",
+                "compiler_version": COMPILER_VERSION
             }
 
             denom.append(num_params)
@@ -198,7 +200,7 @@ if __name__ == "__main__":
             else:
                 num_params = num_params + 10000
 
-        # generate_graph(avg_us, avg_pytorch, avg_wenzel, denom, func_num, functions[func_num][0])
-    output_file = open('./tests/results/full_results.json', "w+")
+    file_suffix = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+    output_file = open('./tests/results/grad/full_results-{}.json'.format(file_suffix), "w+")
     output_file.write(json.dumps(output, indent=4, sort_keys=True))
     output_file.close()

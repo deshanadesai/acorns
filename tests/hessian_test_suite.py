@@ -8,6 +8,7 @@ from subprocess import PIPE, run
 import numpy as np
 import shutil
 import json
+from datetime import datetime
 
 sys.path.append('./tests/python_test_utils')
 import us_utils
@@ -42,8 +43,6 @@ def cleanup():
         os.remove(INPUT_FILENAME)
     if os.path.exists(OUTPUT_FILENAME):
         os.remove(OUTPUT_FILENAME)
-    if os.path.exists(NUMPY_PARAMS_FILENAME):
-        os.remove(NUMPY_PARAMS_FILENAME)
     if os.path.exists(PARAMS_FILENAME):
         os.remove(PARAMS_FILENAME)
 
@@ -102,6 +101,7 @@ if __name__ == "__main__":
     PARAMS_FILENAME = './tests/utils/hessian/params.txt'
     MAX_PARAMS = 50000
     INIT_NUM_PARAMS = 10
+    COMPILER_VERSION = "-4.9"
     # num_vars = len(functions[0][1])
     NUM_ITERATIONS = 10
     NUM_THREADS_PYTORCH = 1
@@ -133,10 +133,10 @@ if __name__ == "__main__":
         # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, derivatives_filename="./tests/utils/hessian/ders_single", reverse=REVERSE, second_der=False)
-        us_utils.compile_ours(RUN_C, runnable_filename="./tests/utils/static_code/runnable_single", utils_filename=UTILS_FILENAME, derivatives_filename="./tests/utils/hessian/ders_single")
+        us_utils.compile_ours(RUN_C, runnable_filename="./tests/utils/static_code/runnable_single", utils_filename=UTILS_FILENAME, derivatives_filename="./tests/utils/hessian/ders_single", compiler_version=COMPILER_VERSION)
 
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, derivatives_filename="./tests/utils/hessian/ders_hessian", reverse=REVERSE, second_der=True)
-        us_utils.compile_ours(RUN_C, runnable_filename="./tests/utils/static_code/runnable_hessian", utils_filename=UTILS_FILENAME, derivatives_filename="./tests/utils/hessian/ders_hessian")
+        us_utils.compile_ours(RUN_C, runnable_filename="./tests/utils/static_code/runnable_hessian", utils_filename=UTILS_FILENAME, derivatives_filename="./tests/utils/hessian/ders_hessian", compiler_version=COMPILER_VERSION)
 
         while num_params <= MAX_PARAMS:
 
@@ -148,9 +148,9 @@ if __name__ == "__main__":
 
             # generate and compile wenzel code
             wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single")
-            wenzel_utils.compile_wenzel("single")
+            wenzel_utils.compile_wenzel("single", compiler_version=COMPILER_VERSION)
             wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "hessian")
-            wenzel_utils.compile_wenzel("hessian")
+            wenzel_utils.compile_wenzel("hessian", compiler_version=COMPILER_VERSION)
 
             # initialize arrays for run
             our_times_single = []
@@ -188,7 +188,8 @@ if __name__ == "__main__":
                 "wenzel_grad": sum(wenzel_times_single) / len(wenzel_times_single),
                 "wenzel_hess": sum(wenzel_times_hessian) / len(wenzel_times_hessian),
                 "flags": "-ffast-math -O3",
-                "num_vars": num_vars
+                "num_vars": num_vars,
+                "compiler_version": COMPILER_VERSION
             }
 
             # get the average time
@@ -205,6 +206,7 @@ if __name__ == "__main__":
             else:
                 num_params = num_params + 100000
 
-    output_file = open('./tests/results/full_results_hessian.json', "w+")
+    file_suffix = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+    output_file = open('./tests/results/hess/full_results_hessian-{}.json'.format(file_suffix), "w+")
     output_file.write(json.dumps(output, indent=4, sort_keys=True))
     output_file.close()

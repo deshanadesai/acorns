@@ -22,11 +22,12 @@ using FloatD = DiffArray<FloatX>;
 
 int main(int argc, char **argv)
 {
-    int num_params = 30010;
-    int num_vars = 2;
+    int num_params = 4010;
+    int num_vars = 3;
     Eigen::VectorXd args(num_params * num_vars);
-	FloatX init_K = zero<FloatX>(num_params);
-	FloatX init_L = zero<FloatX>(num_params);
+	FloatX init_B = zero<FloatX>(num_params);
+	FloatX init_a = zero<FloatX>(num_params);
+	FloatX init_W = zero<FloatX>(num_params);
  
     string output_filename = argv[1];
     ofstream outfile;
@@ -43,31 +44,36 @@ int main(int argc, char **argv)
     file.close();
     for (int i = 0; i < num_params; i++)
     {
-		init_K[i] = args[i * num_vars + 0];
-		init_L[i] = args[i * num_vars + 1];
+		init_B[i] = args[i * num_vars + 0];
+		init_a[i] = args[i * num_vars + 1];
+		init_W[i] = args[i * num_vars + 2];
 
     }
 
-	FloatD K(init_K);
-	FloatD L(init_L);
+	FloatD B(init_B);
+	FloatD a(init_a);
+	FloatD W(init_W);
  
-	set_requires_gradient(K);
-	set_requires_gradient(L);
+	set_requires_gradient(B);
+	set_requires_gradient(a);
+	set_requires_gradient(W);
  
-    FloatD function = 4*4*((K * (1 - K))*(L * (1 - L))); // derivative
+    FloatD function = 4*4*4*((B * (1 - B))*(a * (1 - a))*(W * (1 - W))); // derivative
 
     auto start = high_resolution_clock::now();
     backward(function);
-	FloatX grad_K = gradient(K);
-	FloatX grad_L = gradient(L);
+	FloatX grad_B = gradient(B);
+	FloatX grad_a = gradient(a);
+	FloatX grad_W = gradient(W);
  
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     outfile << (double)duration.count() / 1000000.0 << " ";
     for (int i = 0; i < num_params; i++)
     {
-		outfile << grad_K[i] << " ";
-		outfile << grad_L[i] << " ";
+		outfile << grad_B[i] << " ";
+		outfile << grad_a[i] << " ";
+		outfile << grad_W[i] << " ";
  
     }
     outfile.close();

@@ -21,11 +21,11 @@ def generate_wenzel_file(func_num, num_params, functions, params_filename, degre
             wenzel_file.write(cpp_code)
             wenzel_file.close()
 
-def compile_wenzel(degree):
+def compile_wenzel(degree, compiler_version=""):
     if degree == 'single':
-        os.system("g++ -DNDEBUG -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_single.cpp -o ./tests/utils/wenzel_single -ffast-math -O3")
+        os.system("g++{} -DNDEBUG -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_single.cpp -o ./tests/utils/wenzel_single -ffast-math -O3".format(compiler_version))
     else:
-        os.system("g++ -DNDEBUG -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_hessian.cpp -o ./tests/utils/wenzel_hessian -ffast-math -O3")
+        os.system("g++{} -DNDEBUG -std=c++11 -I ./tests/utils/ext/ ./tests/utils/wenzel_hessian.cpp -o ./tests/utils/wenzel_hessian -ffast-math -O3".format(compiler_version))
 
 def run_wenzel(degree):
     if degree == 'single':
