@@ -8,17 +8,19 @@
 DECLARE_DIFFSCALAR_BASE();
 using namespace std;
 using namespace std::chrono;
+
+typedef Eigen::Matrix<double, Eigen::Dynamic, 1> Gradient;
+typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> Hessian;
+
 int main(int argc, char **argv)
 {
-   typedef Eigen::Matrix<double, 1, 1> Gradient;
-   typedef Eigen::Matrix<double, 1, 1> Hessian;
 
    string output_filename = argv[1];
    cout << output_filename << endl;
 
    typedef DScalar2<double, Gradient, Hessian> DScalar;
 
-   int num_params = 2010;
+   int num_params = 10;
    int num_vars = 1;
    int num_ders = num_vars * num_vars;
 
@@ -42,8 +44,8 @@ int main(int argc, char **argv)
    {
        /* There are two independent variables */
        DiffScalarBase::setVariableCount(1);
-		DScalar R(0, args[index * 1 + 0]);
-		DScalar Fx = 4*((R * (1 - R)));
+		DScalar D(0, args[index * 1 + 0]);
+		DScalar Fx = 4*((D * (1 - D)));
 		ders[index * 1 + 0] = Fx.getHessian()(0);
    }
 

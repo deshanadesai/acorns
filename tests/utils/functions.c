@@ -1,5 +1,5 @@
-int function_2(double B, double a, double W)
+int function_0(double a, double b, double c, double d)
 {
-    int p = 4*4*4*((B * (1 - B))*(a * (1 - a))*(W * (1 - W)));
+    int p = (a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)));
     return 0;
 }

@@ -1,5 +1,5 @@
-int function_0(double R)
+int function_0(double D)
 {
-    int p = 4*((R * (1 - R)));
+    int p = 4*((D * (1 - D)));
     return 0;
 }

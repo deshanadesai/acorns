@@ -66,7 +66,7 @@ def generate_two_graph(avg_us, avg_them, denom, function, label, num_vars):
     plt.ylabel('time (s)')
     plt.tight_layout()
     plt.figtext(0.99, 0.01, "y={}".format(function), horizontalalignment='right', fontsize=5)
-    plt.savefig('./tests/results/grad/graphs/graph_{}_{}.png'.format(label, num_vars))
+    plt.savefig('./tests/results/grad/graphs/gcc49/graph_{}_{}.png'.format(label, num_vars))
     plt.clf()
 
 def generate_full_graph(avg_us, avg_pytorch, avg_wenzel, avg_enoki, denom, function, label, num_vars):
@@ -85,7 +85,7 @@ def generate_full_graph(avg_us, avg_pytorch, avg_wenzel, avg_enoki, denom, funct
     plt.ylabel('time (s)')
     plt.tight_layout()
     plt.figtext(0.99, 0.01, "y={}".format(function), horizontalalignment='right', fontsize=5)
-    plt.savefig('./tests/results/grad/graphs/graph_{}_full.png'.format(num_vars))
+    plt.savefig('./tests/results/grad/graphs/gcc49/graph_{}_full.png'.format(num_vars))
     plt.clf()
 
 def generate_max_graph(avg_us, avg_pytorch, avg_wenzel, avg_enoki, denom):
@@ -103,10 +103,10 @@ def generate_max_graph(avg_us, avg_pytorch, avg_wenzel, avg_enoki, denom):
     plt.xlabel('# vars')
     plt.ylabel('time (s)')
     plt.tight_layout()
-    plt.savefig('./tests/results/grad/graphs/graph_max.png')
+    plt.savefig('./tests/results/grad/graphs/gcc49/graph_max.png')
     plt.clf()
 
-wenzel_times, enoki_times, pytorch_times, us_times, functions, num_params, wenzel_max, enoki_max, pytorch_max, us_max = convert_files_to_lists("./tests/results/grad/full_results_random.json")
+wenzel_times, enoki_times, pytorch_times, us_times, functions, num_params, wenzel_max, enoki_max, pytorch_max, us_max = convert_files_to_lists("./tests/results/grad/full_results_random-gcc49.json")
 
 for i, label in enumerate(functions):
     print(us_times[label])

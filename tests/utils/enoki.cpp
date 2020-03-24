@@ -22,12 +22,13 @@ using FloatD = DiffArray<FloatX>;
 
 int main(int argc, char **argv)
 {
-    int num_params = 4010;
-    int num_vars = 3;
+    int num_params = 2010;
+    int num_vars = 4;
     Eigen::VectorXd args(num_params * num_vars);
-	FloatX init_B = zero<FloatX>(num_params);
 	FloatX init_a = zero<FloatX>(num_params);
-	FloatX init_W = zero<FloatX>(num_params);
+	FloatX init_b = zero<FloatX>(num_params);
+	FloatX init_c = zero<FloatX>(num_params);
+	FloatX init_d = zero<FloatX>(num_params);
  
     string output_filename = argv[1];
     ofstream outfile;
@@ -44,36 +45,41 @@ int main(int argc, char **argv)
     file.close();
     for (int i = 0; i < num_params; i++)
     {
-		init_B[i] = args[i * num_vars + 0];
-		init_a[i] = args[i * num_vars + 1];
-		init_W[i] = args[i * num_vars + 2];
+		init_a[i] = args[i * num_vars + 0];
+		init_b[i] = args[i * num_vars + 1];
+		init_c[i] = args[i * num_vars + 2];
+		init_d[i] = args[i * num_vars + 3];
 
     }
 
-	FloatD B(init_B);
 	FloatD a(init_a);
-	FloatD W(init_W);
+	FloatD b(init_b);
+	FloatD c(init_c);
+	FloatD d(init_d);
  
-	set_requires_gradient(B);
 	set_requires_gradient(a);
-	set_requires_gradient(W);
+	set_requires_gradient(b);
+	set_requires_gradient(c);
+	set_requires_gradient(d);
  
-    FloatD function = 4*4*4*((B * (1 - B))*(a * (1 - a))*(W * (1 - W))); // derivative
+    FloatD function = (a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c))); // derivative
 
     auto start = high_resolution_clock::now();
     backward(function);
-	FloatX grad_B = gradient(B);
 	FloatX grad_a = gradient(a);
-	FloatX grad_W = gradient(W);
+	FloatX grad_b = gradient(b);
+	FloatX grad_c = gradient(c);
+	FloatX grad_d = gradient(d);
  
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     outfile << (double)duration.count() / 1000000.0 << " ";
     for (int i = 0; i < num_params; i++)
     {
-		outfile << grad_B[i] << " ";
 		outfile << grad_a[i] << " ";
-		outfile << grad_W[i] << " ";
+		outfile << grad_b[i] << " ";
+		outfile << grad_c[i] << " ";
+		outfile << grad_d[i] << " ";
  
     }
     outfile.close();

@@ -8,22 +8,22 @@
 DECLARE_DIFFSCALAR_BASE();
 using namespace std;
 using namespace std::chrono;
+
+typedef Eigen::Matrix<double, Eigen::Dynamic, 1> Gradient;
+typedef DScalar1<double, Gradient> DScalar;
+
 int main(int argc, char **argv)
 {
-   typedef Eigen::Matrix<double, 3, 1> Gradient;
-
    string output_filename = argv[1];
    cout << output_filename << endl;
 
-   typedef DScalar1<double, Gradient> DScalar;
-
-   int num_params = 4010;
-   int num_vars = 3;
+   int num_params = 10;
+   int num_vars = 1;
 
    Eigen::VectorXd args(num_params * num_vars);
    Eigen::VectorXd ders(num_params * num_vars);
 
-   std::ifstream file("./tests/utils/params.txt");
+   std::ifstream file("./tests/utils/hessian/params.txt");
    int i = 0;
    for (std::string line; std::getline(file, line);)
    {
@@ -39,12 +39,10 @@ int main(int argc, char **argv)
    for (int index = 0; index < num_params; index++)
    {
        /* There are two independent variables */
-       DiffScalarBase::setVariableCount(3);
-		DScalar B(0, args[index * 3 + 0]), a(1, args[index * 3 + 1]), W(2, args[index * 3 + 2]);
-		DScalar Fx = 4*4*4*((B * (1 - B))*(a * (1 - a))*(W * (1 - W)));
-		ders[index * 3 + 0] = Fx.getGradient()(0);
-		ders[index * 3 + 1] = Fx.getGradient()(1);
-		ders[index * 3 + 2] = Fx.getGradient()(2);
+       DiffScalarBase::setVariableCount(1);
+		DScalar D(0, args[index * 1 + 0]);
+		DScalar Fx = 4*((D * (1 - D)));
+		ders[index * 1 + 0] = Fx.getGradient()(0);
    }
 
    auto stop = high_resolution_clock::now();

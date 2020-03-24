@@ -120,7 +120,8 @@ if __name__ == "__main__":
     RUN_ISPC = False
     REVERSE = False
     SECOND_DER = False
-    COMPILER_VERSION=""
+    WENZEL_COMPILER_VERSION=""
+    STATIC = True
     # cleanup()
 
     output = {}
@@ -141,7 +142,7 @@ if __name__ == "__main__":
         # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, REVERSE, SECOND_DER)
-        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, UTILS_FILENAME, DERIVATIVES_FILENAME, compiler_version=COMPILER_VERSION)
+        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, UTILS_FILENAME, DERIVATIVES_FILENAME)
 
 
         while num_params <= 100000:
@@ -156,8 +157,8 @@ if __name__ == "__main__":
             # generate and compile wenzel code
             enoki_utils.generate_enoki_file(functions, func_num, num_params)
             enoki_utils.compile_enoki()
-            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single")
-            wenzel_utils.compile_wenzel("single", compiler_version=COMPILER_VERSION)
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", STATIC)
+            wenzel_utils.compile_wenzel("single", compiler_version=WENZEL_COMPILER_VERSION)
 
             # initialize arrays for run
             our_times = []
@@ -191,7 +192,7 @@ if __name__ == "__main__":
                 "enoki": sum(enoki_times) / len(enoki_times),
                 "wenzel": sum(wenzel_times) / len(wenzel_times),
                 "flags": "-ffast-math -O3",
-                "compiler_version": COMPILER_VERSION
+                "compiler_version": WENZEL_COMPILER_VERSION
             }
 
             denom.append(num_params)

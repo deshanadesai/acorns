@@ -2,26 +2,30 @@ import torch
 import time
 import numpy as np
 
-num_params = 4010
-B = torch.tensor(np.load('./tests/utils/numpy_params/function_2_param_B.npy'), requires_grad=True, dtype=torch.float)
-a = torch.tensor(np.load('./tests/utils/numpy_params/function_2_param_a.npy'), requires_grad=True, dtype=torch.float)
-W = torch.tensor(np.load('./tests/utils/numpy_params/function_2_param_W.npy'), requires_grad=True, dtype=torch.float)
+num_params = 2010
+a = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_a.npy'), requires_grad=True, dtype=torch.float)
+b = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_b.npy'), requires_grad=True, dtype=torch.float)
+c = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_c.npy'), requires_grad=True, dtype=torch.float)
+d = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_d.npy'), requires_grad=True, dtype=torch.float)
 torch.set_num_threads(1)
-y = (4*4*4*((B * (1 - B))*(a * (1 - a))*(W * (1 - W)))).sum()
+y = ((a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)))).sum()
 start_time_pytorch = time.time()
 y.backward()
-B.grad
 a.grad
-W.grad
+b.grad
+c.grad
+d.grad
 
 end_time_pytorch = time.time()
 runtime = (end_time_pytorch - start_time_pytorch)
 print(str(runtime))
-B_list = B.grad.tolist()
 a_list = a.grad.tolist()
-W_list = W.grad.tolist()
+b_list = b.grad.tolist()
+c_list = c.grad.tolist()
+d_list = d.grad.tolist()
 
 for i in range(num_params):
-	print(str(B_list[i]))
 	print(str(a_list[i]))
-	print(str(W_list[i]))
+	print(str(b_list[i]))
+	print(str(c_list[i]))
+	print(str(d_list[i]))
