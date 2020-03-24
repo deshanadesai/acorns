@@ -125,7 +125,7 @@ if __name__ == "__main__":
     RUN_ISPC = False
     REVERSE = False
     SECOND_DER = False
-    compiler_version="-5"
+    compiler_version=""
     # cleanup()
 
     output = {}

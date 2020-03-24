@@ -101,7 +101,7 @@ if __name__ == "__main__":
     PARAMS_FILENAME = './tests/utils/hessian/params.txt'
     MAX_PARAMS = 50000
     INIT_NUM_PARAMS = 10
-    COMPILER_VERSION = "-4.9"
+    COMPILER_VERSION = ""
     # num_vars = len(functions[0][1])
     NUM_ITERATIONS = 10
     NUM_THREADS_PYTORCH = 1

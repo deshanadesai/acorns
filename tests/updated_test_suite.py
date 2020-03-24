@@ -120,7 +120,7 @@ if __name__ == "__main__":
     RUN_ISPC = False
     REVERSE = False
     SECOND_DER = False
-    COMPILER_VERSION="-5"
+    COMPILER_VERSION=""
     # cleanup()
 
     output = {}
