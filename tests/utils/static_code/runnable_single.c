@@ -1,5 +1,5 @@
 #ifdef _WIN32
-#include <windows.h>
+    #include <windows.h>
 #endif
 
 #include <math.h>
@@ -84,13 +84,13 @@ int main(int argc, char *argv[])
     FILE *fp;
 
     fp = fopen(output_filename, "w+");
-    printf("%f ", delta);
+    // printf("%f ", delta);
     fprintf(fp, "%f ", delta);
 
     for (int i = 0; i < num_params * num_vars; i++)
     {
         fprintf(fp, "%f ", ders[i]);
-        printf("%f", ders[i]);
+        // printf("%f", ders[i]);
     }
     fclose(fp);
     return 0;

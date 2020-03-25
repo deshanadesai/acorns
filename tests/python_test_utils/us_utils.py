@@ -4,8 +4,6 @@ import general_utils
 import os
 from subprocess import PIPE, run
 
-OFFSET = "    "
-
 def generate_function_c_file(func_num, functions, input_filename):
     f = open(input_filename, 'w')
     signature = ""
@@ -47,13 +45,12 @@ def run_ours(func, num_params, functions, params_filename, output_filename, runn
         universal_newlines=True, shell=True)
     return general_utils.parse_output(output_filename)
 
-def compile_ours(run_c, runnable_filename, utils_filename, derivatives_filename):
+def compile_ours(run_c, runnable_filename, derivatives_filename):
     if run_c:
         if sys.platform.startswith('win'):
-            cmd = "cl " + runnable_filename + ".c " + utils_filename + " " + \
-                derivatives_filename + ".c  /link /out:utils/program.exe"
+            cmd = "cl " + runnable_filename + ".c " + derivatives_filename + ".c  /link /out:utils/program.exe"
         else:
             cmd = "gcc -O3 -ffast-math -o " + runnable_filename + " " + runnable_filename + \
-                ".c " + derivatives_filename + ".c -lm"
+                ".c " + derivatives_filename + ".c -lm -fopenmp"
         print(cmd)
         os.system(cmd)

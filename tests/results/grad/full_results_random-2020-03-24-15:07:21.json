@@ -1,0 +1,13 @@
+{
+    "4*((q * (1 - q)))": {
+        "10": {
+            "WENZEL_COMPILER_VERSION": "-5",
+            "enoki": 0.0005543000000000001,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0016333818435668944,
+            "us": 1.1e-06,
+            "wenzel_dynamic": 3.710000000000001e-05,
+            "wenzel_static": 1.2e-06
+        }
+    }
+}

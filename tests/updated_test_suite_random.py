@@ -103,14 +103,13 @@ if __name__ == "__main__":
     alphabets = list(string.ascii_lowercase)
     alphabets.remove('i')
 
-    for k in range(1, 10):
+    for k in range(1, 2):
         function = generate_function.gen_other(k)
         functions.append(function)
         print(function)
 
     INPUT_FILENAME = './tests/utils/functions.c'
     DERIVATIVES_FILENAME = './tests/utils/derivatives'
-    UTILS_FILENAME = './tests/utils/windows_utils.c'
     RUNNABLE_FILENAME = './tests/utils/static_code/runnable_single'
     OUTPUT_FILENAME = './tests/utils/us_output.txt'
     NUMPY_PARAMS_FILENAME = "./tests/utils/params.npy"
@@ -125,6 +124,8 @@ if __name__ == "__main__":
     WENZEL_COMPILER_VERSION="-5"
     # STATIC = True
     # cleanup()
+
+    os.environ["OMP_NUM_THREADS"] = '1'
 
     output = {}
 
@@ -145,7 +146,7 @@ if __name__ == "__main__":
         # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, False, False)
-        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, UTILS_FILENAME, DERIVATIVES_FILENAME)
+        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, DERIVATIVES_FILENAME)
 
 
         while num_params <= 100000:
