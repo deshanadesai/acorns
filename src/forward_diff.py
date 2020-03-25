@@ -780,7 +780,6 @@ def grad_without_traversal(ast, x=0):
                 c_code._generate_expr([primary_base_variable._get(), secondary_base_variable._get()], second_derivative,index=ctr)
                 string = str(i)+','+str(j)
                 dictionary[string] = ctr
-                print(dictionary)
                 
                 ctr+=1
 
@@ -796,7 +795,6 @@ def grad_without_traversal(ast, x=0):
                 secondary_base_variable = Variable(vars_second)
                 string = str(j)+','+str(i)
                 pointer_index = dictionary[string]
-                print(i,j,pointer_index)
                 c_code._generate_copy([primary_base_variable._get(), secondary_base_variable._get()], pointer_index=pointer_index,index=ctr)
                 ctr += 1
 
@@ -807,7 +805,6 @@ def grad_without_traversal(ast, x=0):
             curr_base_variable = Variable(vars_)
             derivative = Expr(fun)._forward_diff() 
             # print(derivative) 
-            print("DER {}".format(curr_base_variable))
             c_code._generate_expr(curr_base_variable._get(), derivative,index=i)        
 
     c_code._make_footer()
@@ -826,6 +823,8 @@ if __name__ == "__main__":
     parser.add_argument('-ccode', type = str, dest = 'ccode', help='function name')
     parser.add_argument('-ispc', type = str, dest = 'ispc', help='function name')
     parser.add_argument('-reverse', type = str, default = 'False', dest = 'reverse', help='function name')
+    parser.add_argument('-verbose', type = str, default = 'False', dest = 'verbose', help='get more info')
+    
     parser.add_argument('-second_der', type = str, default = 'False', dest = 'second_der', help='function name')
     parser.add_argument('--output_filename', type = str, default ='c_code', help='file name')    
     parser.add_argument('--nth_der', type = int, help='nth derivative')
@@ -853,20 +852,35 @@ if __name__ == "__main__":
     else:
         ispc = False
 
+    print("CCODE: ",ccode)
+        
 
     if parser.reverse == 'True':
+        print("Differentiation Method: Reverse")
         reverse_diff = True
     else:
+        print("Differentiation Method: Forward")
         reverse_diff = False
 
     if parser.second_der == 'True':
+        print("Derivative order: Second")
         second_der = True
     else:
+        print("Derivative order: First")
         second_der = False
+        
+        
+    if parser.verbose == 'True':
+        print("Verbose : True")
+        verbose = True
+    else:
+        print("Verbose : False")
+        verbose = False        
 
+    print("Parallel : False")
+    print("Splitted : False")
 
-    print("CCODE: ",ccode)
-    print("ISPC CODE: ",ispc)
+    
     ast = parse_file(filename, use_cpp=True,
             cpp_path='gcc',
             cpp_args=['-E', r'-Iutils/fake_libc_include'])
