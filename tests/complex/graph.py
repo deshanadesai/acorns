@@ -2,7 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import json
+import seaborn as sns
 import re
+
+sns.set(style="darkgrid")
 
 
 keys = ["./tests/complex/hess/3D_P1_non_zero", "./tests/complex/hess/3D_P2_non_zero", "./tests/complex/hess/3D_P2_zero", "./tests/complex/hess/3D_P3_non_zero",
@@ -61,7 +64,11 @@ def convertListToDict(file_list):
                 dynamic_speedup = wenzel_runtime_dynamic / float(data['avg_runtime'])
                 dynamic_speedup_map[key].append(dynamic_speedup)
 
-                if num_lines == 16:
+                print("Key: {}, Num_Lines: {}, Wenzel Runtime Static: {}, Static Speedup: {}, Wenzel Runtime Dynamic: {}, Dynamic Speedup: {}".format(
+                    key, num_lines, wenzel_runtime_static, static_speedup, wenzel_runtime_dynamic, dynamic_speedup
+                ))
+
+                if num_lines == 128:
                     us_by_16_lines.append( float(data['avg_runtime']))
                     wenzel_static.append(wenzel_runtime_static)
                     wenzel_dynamic.append(wenzel_runtime_dynamic)
@@ -89,31 +96,32 @@ def generate_final_graph(us, them_static, them_dynamic, denom):
              denom, them_static, '-go',
              denom, them_dynamic, '-ro')
     # plt.xticks(denom)
-    plt.title('Us vs Mitsuba (Static) vs Mitsuba (Dynamic) # It: 10, 16 Lines Per File')
+    plt.title('Us vs Mitsuba (Static) vs Mitsuba (Dynamic) # It: 10, 128 Lines Per File', fontsize=10)
     # legend
     plt.legend( ('Ours', 'Mitsuba (Static)', 'Mitusba (Dynamic)'),
             shadow=True, loc=(0.01, 0.48), handlelength=1.5, fontsize=10)
     plt.xlabel('# vars')
     plt.ylabel('time (s)')
     plt.tight_layout()
-    plt.savefig('./tests/complex/graphs/graph_by_16.png')
+    plt.savefig('./tests/complex/graphs/graph_by_128.png')
     plt.clf()
 
 def generate_final_speedup_graph(them_static, them_dynamic, denom):
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(denom, them_static, '-go',
-             denom, them_dynamic, '-ro')
-    # plt.xticks(denom)
-    plt.title('Speedup Rate of Mitsuba (Static) vs. Mitsuba (Dynamic) # It: 10, 16 Lines Per File')
+    # plt.figure(1)
+    # plt.subplot(211)
+    plt.plot(denom, them_static, color='#1abc9c', linestyle='dashed',  markersize=7)
+    plt.plot(denom, them_dynamic, color='#f1c40f', linestyle='dashed', markersize=7)
     # legend
+    plt.xlabel('Variables', fontfamily='monospace')
+    plt.ylabel('Speedup', fontfamily='monospace')
     plt.legend( ('Mitsuba (Static)', 'Mitusba (Dynamic)'),
-            shadow=True, handlelength=1.5, fontsize=10)
-    plt.xlabel('# vars')
-    plt.ylabel('% Speedup')
-    plt.tight_layout()
-    plt.savefig('./tests/complex/graphs/graph_by_16_speedup.png')
+            shadow=False, fontsize=10, frameon=False)
+    plt.margins(0,0)
+    plt.savefig("./tests/complex/graphs/test_filename.pdf", bbox_inches = 'tight',
+        pad_inches = 0)
+    # plt.savefig('./tests/complex/graphs/graph_by_128_speedup.pdf')
     plt.clf()
+    
 
 directory = "./tests/complex/hess/"
 file_list = []
@@ -132,41 +140,33 @@ denom = [1, 2, 4, 8, 16, 32, 64, 128]
 
 print("Static 16 Speedup: {}".format(static_16_speedup))
 
-for i, key in enumerate(keys):
-    print(key)
-    index_of_last_underscore = key.rindex("/") + 1
-    label = key[index_of_last_underscore:]
-    generate_two_graph(static_speedup_map[key], denom, 'Speedup of Static {}'.format(label), label, "static", "% Speedup")
-    generate_two_graph(dynamic_speedup_map[key], denom, 'Speedup of Dynamic {}'.format(label), label, "dynamic", "% Speedup")
-    generate_two_graph(compile_map[key], denom, 'Compilation', label, "compile", "time (s)")
+# for i, key in enumerate(keys):
+#     print(key)
+#     index_of_last_underscore = key.rindex("/") + 1
+#     label = key[index_of_last_underscore:]
+#     generate_two_graph(static_speedup_map[key], denom, 'Speedup of Static {}'.format(label), label, "static", "% Speedup")
+#     generate_two_graph(dynamic_speedup_map[key], denom, 'Speedup of Dynamic {}'.format(label), label, "dynamic", "% Speedup")
+#     generate_two_graph(compile_map[key], denom, 'Compilation', label, "compile", "time (s)")
 
-fig, axs = plt.subplots(5, 3)
-plt.rcParams["font.size"] = 5
-params = {
-          'figure.figsize': (20,8),
-          'axes.labelsize': 10,
-          'axes.titlesize': 10,
-          'xtick.labelsize': 5*0.75,
-          'ytick.labelsize': 5*0.75}
-plt.rcParams.update(params)
-fig.tight_layout()
-for i, key in enumerate(keys):
-    if key != "./tests/complex/hess/3D_P4_non_zero":
-        print(key)
-        index_of_last_underscore = key.rindex("/") + 1
-        label = key[index_of_last_underscore:]
-        axs[i, 0].plot(denom, static_speedup_map[key])
-        axs[i, 0].set_title('Speedup of Static {}'.format(label), fontsize=6)
-        axs[i, 1].plot(denom, dynamic_speedup_map[key])
-        axs[i, 1].set_title('Speedup of Dynamic {}'.format(label), fontsize=6)
-        axs[i, 2].plot(denom, compile_map[key])
-        axs[i, 2].set_title('Compilation of {}'.format(label), fontsize=6)
-axs[4, 1].plot(denom, static_speedup_map['./tests/complex/hess/3D_P4_non_zero'])
-axs[4, 1].set_title('Speedup of 3D_P4_non_zero')
-axs[4, 2].plot(denom, compile_map['./tests/complex/hess/3D_P4_non_zero'])
-axs[4, 2].set_title('Compilation of 3D_P4_non_zero')
-plt.savefig('./tests/complex/graphs/same_graph.png')
-plt.clf()
+# fig, axs = plt.subplots(5, 3)
+# fig.tight_layout()
+# for i, key in enumerate(keys):
+#     if key != "./tests/complex/hess/3D_P4_non_zero":
+#         print(key)
+#         index_of_last_underscore = key.rindex("/") + 1
+#         label = key[index_of_last_underscore:]
+#         axs[i, 0].plot(denom, static_speedup_map[key])
+#         axs[i, 0].set_title('Speedup of Static {}'.format(label), fontsize=6)
+#         axs[i, 1].plot(denom, dynamic_speedup_map[key])
+#         axs[i, 1].set_title('Speedup of Dynamic {}'.format(label), fontsize=6)
+#         axs[i, 2].plot(denom, compile_map[key])
+#         axs[i, 2].set_title('Compilation of {}'.format(label), fontsize=6)
+# axs[4, 1].plot(denom, static_speedup_map['./tests/complex/hess/3D_P4_non_zero'])
+# axs[4, 1].set_title('Speedup of 3D_P4_non_zero', fontsize=6)
+# axs[4, 2].plot(denom, compile_map['./tests/complex/hess/3D_P4_non_zero'])
+# axs[4, 2].set_title('Compilation of 3D_P4_non_zero', fontsize=6)
+# plt.savefig('./tests/complex/graphs/same_graph.png')
+# plt.clf()
 
 denom = [12, 30, 30, 60, 105]
 generate_final_graph(us_by_16_lines, wenzel_static, wenzel_dynamic, denom)

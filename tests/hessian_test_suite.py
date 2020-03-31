@@ -96,7 +96,7 @@ if __name__ == "__main__":
     print(functions)
 
     INPUT_FILENAME = './tests/utils/hessian/functions.c'
-    UTILS_FILENAME = './tests/utils/hessian/windows_utils.c'
+    UTILS_FILENAME = './tests/utils/windows/windows_utils.c'
     OUTPUT_FILENAME = './tests/utils/hessian/us_output.txt'
     PARAMS_FILENAME = './tests/utils/hessian/params.txt'
     MAX_PARAMS = 50000
