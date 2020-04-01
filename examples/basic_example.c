@@ -1,0 +1,1 @@
+int function_0(double a, double p){     double energy = a*a*a*a*p+1/(p*p) - 1/p * p/a;     return 0; }
