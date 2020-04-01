@@ -17,8 +17,8 @@ def generate_function_c_file(func_num, functions, input_filename):
         else:
             signature += ", "
     body = "{"
-    body += "\n" + OFFSET + "int p = " + function[0] + ";"
-    body += "\n" + OFFSET + "return 0;"
+    body += "\n\tint p = " + function[0] + ";"
+    body += "\n\treturn 0;"
     body += "\n}"
     output = signature + body
     f.write(output)

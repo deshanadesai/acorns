@@ -98,10 +98,10 @@ def generate_graph(avg_us, avg_pytorch, avg_wenzel, denom, func_num, function):
 
 if __name__ == "__main__":
     functions = [
-        ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)))",["a","b","c","d"]],
-        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],
-        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
-        ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
+        ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)))",["a","b","c","d"]]
+        # ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],
+        # ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
+        # ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
     ]
     INPUT_FILENAME = './tests/utils/functions.c'
     DERIVATIVES_FILENAME = './tests/utils/derivatives'
@@ -142,7 +142,7 @@ if __name__ == "__main__":
         # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, REVERSE, SECOND_DER)
-        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, UTILS_FILENAME, DERIVATIVES_FILENAME)
+        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, DERIVATIVES_FILENAME)
 
 
         while num_params <= 100000:
