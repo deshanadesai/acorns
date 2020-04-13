@@ -74,21 +74,30 @@ def cleanup():
                 print(e)
 
 if __name__ == "__main__":
-    functions = []
-    alphabets = list(string.ascii_lowercase)
-    alphabets.remove('i')
+    # functions = []
+    # alphabets = list(string.ascii_lowercase)
+    # alphabets.remove('i')
 
-    for k in range(1, 10):
-        function = generate_function.gen_other(k)
-        functions.append(function)
-        print(function)
+    # for k in range(4, 5):
+    #     function = generate_function.gen_other(k)
+    #     functions.append(function)
+    #     print(function)
+
+    functions = [
+        # ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)))",["a","b","c","d"]],
+            ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c*e*f*g*h*j*k*l*m*n)))", ["a", "b", "c", "d", "e", "f", "g", "h", "j", "k", "l", "m", "n"]]
+    # #     ["((k*k+3*k)-k/4)/k+k", ["k"]],
+    # #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k", ["k"]],
+    # #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],
+    # #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
+    # #     ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
+    ]
 
     INPUT_FILENAME = './tests/utils/functions.c'
     DERIVATIVES_FILENAME = './tests/utils/derivatives'
-    RUNNABLE_FILENAME = './tests/utils/static_code/runnable_single'
+    RUNNABLE_FILENAME = './tests/utils/static_code/runnable_hessian'
     OUTPUT_FILENAME = './tests/utils/us_output.txt'
     PARAMS_FILENAME = './tests/utils/params.txt'
-    INIT_NUM_PARAMS = 10
     num_vars = len(functions[0][1])
     NUM_ITERATIONS = 10
     RUN_C = True
@@ -108,19 +117,16 @@ if __name__ == "__main__":
 
         avg_us = []
         denom = []
-
-        # generate and compile our code
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
-        us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, False, False)
-        us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, "fdslkjfdlj", DERIVATIVES_FILENAME)
-
         for num_cores in num_cores_as_list:
 
             num_cores_str = str(num_cores)
+            print("Using {} threads".format(num_cores_str))
 
-            print(num_cores_str)
-
-            os.environ["OMP_NUM_THREADS"] = num_cores_str
+            # generate and compile our code
+            us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, False, True)
+            us_utils.generate_omp_derivatives_c_file('./tests/utils/derivatives.c', num_cores_str)
+            us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, DERIVATIVES_FILENAME)
 
             # generate parameters
             params = generate_params(num_params, func_num)

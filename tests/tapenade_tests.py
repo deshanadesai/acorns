@@ -1,6 +1,5 @@
 import sys
 import math
-import matplotlib.pyplot as plt
 import torch
 from timeit import default_timer as timer
 import os
@@ -9,10 +8,13 @@ from subprocess import PIPE, run
 import numpy as np
 import shutil
 from datetime import datetime
+import random, string
 
 sys.path.append('tests/python_test_utils')
 import us_utils
 import tapenade_utils
+import wenzel_utils
+import generate_function
 
 sys.path.append('src')
 import forward_diff
@@ -81,10 +83,22 @@ def cleanup():
 
 if __name__ == "__main__":
     functions = [
-        [   "(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)))",
-            ["a","b","c","d"]
-        ]
+    #     # ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)))",["a","b","c","d"]],
+            ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c*e*f*g*h*j*k*l*m*n*o*p*q*r*s*t*u*v*w*x*y*z)))", ["a", "b", "c", "d", "e", "f", "g", "h", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]]
+    #     ["((k*k+3*k)-k/4)/k+k", ["k"]],
+    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k", ["k"]],
+    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],
+    #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
+    #     ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
     ]
+    functions = []
+    alphabets = list(string.ascii_lowercase)
+    alphabets.remove('i')
+
+    for k in range(2, 3):
+        function = generate_function.gen_other(k)
+        functions.append(function)
+        print(function)
     INPUT_FILENAME = './tests/utils/functions.c'
     DERIVATIVES_FILENAME = './tests/utils/derivatives'
     UTILS_FILENAME = './tests/utils/windows_utils.c'
@@ -96,7 +110,7 @@ if __name__ == "__main__":
     PYTORCH_FILENAME = "./tests/utils/pytorch.py"
     PYTORCH_OUTPUT = "./tests/utils/pytorch_output.txt"
 
-    RUNNABLE_TAPENADE = './tests/utils/static_code/runnable_tapenade'
+    RUNNABLE_TAPENADE = './tests/utils/runnable_tapenade'
     TAPENADE_OUTPUT = './tests/utils/tapenade_output.txt'
 
     INIT_NUM_PARAMS = 10
@@ -106,7 +120,7 @@ if __name__ == "__main__":
     RUN_C = True
     RUN_ISPC = False
     REVERSE = False
-    SECOND_DER = False
+    SECOND_DER = True
     WENZEL_COMPILER_VERSION=""
     STATIC = True
     # cleanup()
@@ -125,35 +139,50 @@ if __name__ == "__main__":
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, REVERSE, SECOND_DER)
         us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, DERIVATIVES_FILENAME)
-        tapenade_utils.compile(RUNNABLE_TAPENADE)
 
-        while num_params <= 100000:
+        # generate and compile tapenade code
+        tapenade_utils.generate_function_c_file(func_num, functions, './tests/utils/tapenade_func.c')
+        tapenade_utils.generate_derivatives_c_file(func_num)
+        tapenade_utils.generate_runnable_tapenade(func[1], len(func[1]), func_num)
+        tapenade_utils.compile('./tests/utils/runnable_tapenade')
+
+        while num_params <= 100:
 
             # generate parameters
             params = generate_params(num_params, func_num)
             print_param_to_file(params)
 
+            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "single", STATIC)
+            wenzel_utils.compile_wenzel("single", STATIC, compiler_version=WENZEL_COMPILER_VERSION)
+
             # initialize arrays for run
             our_times = []
+            wenzel_times = []
             tapenade_times = []
 
             for i in range(NUM_ITERATIONS):
 
                 ours = us_utils.run_ours(functions[func_num], num_params, functions, PARAMS_FILENAME, OUTPUT_FILENAME, RUNNABLE_FILENAME)
                 tapenade = tapenade_utils.run_tapenade(functions[func_num], num_params, functions, PARAMS_FILENAME, TAPENADE_OUTPUT, RUNNABLE_TAPENADE)
+                wenzel = wenzel_utils.run_wenzel("single", STATIC)
+                
                 our_times.append(float(ours[1]))
                 tapenade_times.append(float(tapenade[1]))
+                wenzel_times.append(float(wenzel[1]))
 
+                assert len(tapenade[0]) == len(ours[0]) == len(wenzel[0])
                 
-                for j in range(len(ours[0])):
+                # for j in range(len(ours[0])):
                     # print("Us: {}, Tapenade: {}".format( float(ours[0][j]), float(tapenade[0][j]) ))
-                    assert math.isclose(float(ours[0][j]), float(tapenade[0][j]), abs_tol=10**-5)
+                    # print("Close? {}".format(math.isclose(float(ours[0][j]), float(tapenade[0][j]), abs_tol=10**-1)))
+                    # assert math.isclose(float(ours[0][j]), float(tapenade[0][j]), abs_tol=10**-3)
 
             output[func[0]][num_params] = {
                 "us": sum(our_times) / len(our_times),
                 "tapenade": sum(tapenade_times) / len(tapenade_times),
                 "flags": "-ffast-math -O3",
-                "compiler_version": WENZEL_COMPILER_VERSION
+                "compiler_version": WENZEL_COMPILER_VERSION,
+                "wenzel": sum(wenzel_times) / len(wenzel_times),
             }
 
             if num_params < 10000:

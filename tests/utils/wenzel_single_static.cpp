@@ -10,15 +10,15 @@ using namespace std;
 using namespace std::chrono;
 int main(int argc, char **argv)
 {
-   typedef Eigen::Matrix<double, 4, 1> Gradient;
+   typedef Eigen::Matrix<double, 1, 1> Gradient;
 
    string output_filename = argv[1];
    cout << output_filename << endl;
 
    typedef DScalar1<double, Gradient> DScalar;
 
-   int num_params = 10;
-   int num_vars = 4;
+   int num_params = 90010;
+   int num_vars = 1;
 
    Eigen::VectorXd args(num_params * num_vars);
    Eigen::VectorXd ders(num_params * num_vars);
@@ -39,13 +39,10 @@ int main(int argc, char **argv)
    for (int index = 0; index < num_params; index++)
    {
        /* There are two independent variables */
-       DiffScalarBase::setVariableCount(4);
-		DScalar a(0, args[index * 4 + 0]), b(1, args[index * 4 + 1]), c(2, args[index * 4 + 2]), d(3, args[index * 4 + 3]);
-		DScalar Fx = (a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)));
-		ders[index * 4 + 0] = Fx.getGradient()(0);
-		ders[index * 4 + 1] = Fx.getGradient()(1);
-		ders[index * 4 + 2] = Fx.getGradient()(2);
-		ders[index * 4 + 3] = Fx.getGradient()(3);
+       DiffScalarBase::setVariableCount(1);
+		DScalar k(0, args[index * 1 + 0]);
+		DScalar Fx = sin(k) + cos(k) + pow(k, 2);
+		ders[index * 1 + 0] = Fx.getGradient()(0);
    }
 
    auto stop = high_resolution_clock::now();

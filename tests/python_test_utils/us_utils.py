@@ -30,6 +30,14 @@ def generate_derivatives_c_file(func_num, functions, input_filename, run_c, deri
         reverse)+" -second_der "+ str(second_der)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + derivatives_filename + "\""
     os.system(cmd)
 
+def generate_omp_derivatives_c_file(filename, num_threads):
+    with open(filename) as file:
+        c_code = file.read()
+        c_code = c_code.replace("NUM_THREADS", num_threads)
+        output_file = open(filename, "w+")
+        output_file.write(c_code)
+        output_file.close()
+
 def run_ours(func, num_params, functions, params_filename, output_filename, runnable_filename):
     if sys.platform.startswith('win'):
         print("running....")
@@ -51,6 +59,6 @@ def compile_ours(run_c, runnable_filename, derivatives_filename):
             cmd = "cl " + runnable_filename + ".c " + derivatives_filename + ".c  /link /out:utils/program.exe"
         else:
             cmd = "gcc -O3 -ffast-math -o " + runnable_filename + " " + runnable_filename + \
-                ".c " + derivatives_filename + ".c -lm -fopenmp"
+                ".c " + derivatives_filename + ".c -lm"
         print(cmd)
         os.system(cmd)

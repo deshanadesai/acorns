@@ -1,5 +1,5 @@
-int function_0(double a, double b, double c, double d)
+int function_2(double k)
 {
-	int p = (a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)));
+	int p = sin(k) + cos(k) + pow(k, 2);
 	return 0;
 }

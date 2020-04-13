@@ -16,7 +16,7 @@ def generate_enoki_file(functions, func_num, num_params):
     grads = generate_grads(functions[func_num][1])
     print_to_outfile = generate_print_to_outfile(functions[func_num][1])
 
-    param_filename = "params.txt"
+    param_filename = "./tests/params.txt"
 
     cpp_code = enoki % (num_params, num_vars, enoki_init_vars, 
                 param_filename, enoki_fill, enoki_us_vars, 

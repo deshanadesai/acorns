@@ -33,6 +33,8 @@ class CGenerator(object):
 			f = open(self.filename+ext,'w')
 			# f.write("#include <omp.h>\n")
 			f.write("void compute(double values[], int num_points, double ders[]){\n\n")
+			# f.write("\tomp_set_dynamic(0);\n")
+			# f.write("\tomp_set_num_threads(NUM_THREADS);\n")
 			# f.write("\t#pragma omp parallel for\n")
 			f.write("\tfor(int i = 0; i < num_points; ++i)\n\t{\n") # iterate over
 			f.close()

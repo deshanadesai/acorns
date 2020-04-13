@@ -2,7 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import json
+import seaborn as sns
 import re
+
+sns.set(style="darkgrid")
 
 def atoi(text):
     return int(text) if text.isdigit() else text
@@ -65,61 +68,51 @@ def convert_files_to_lists(file_location):
         wenzel_hess_static_max, wenzel_hess_dynamic_max, us_max_grad, us_max_hess
 
 def generate_two_graph(avg_us, avg_them, denom, function, label, num_vars):
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(denom, avg_us, '-bo',
-             denom, avg_them, '-go')
-    # plt.xticks(denom)
-    plt.title('Us vs {} # It: 10'.format(label))
+    plt.plot(denom, avg_us, color='#1abc9c', linestyle='dashed',  markersize=7)
+    plt.plot(denom, avg_them, color='#f1c40f', linestyle='dashed', markersize=7)
     # legend
-    plt.legend( ('Ours', label),
-            shadow=True, loc=(0.01, 0.48), handlelength=1.5, fontsize=10)
-    plt.xlabel('# params')
-    plt.ylabel('time (s)')
-    plt.tight_layout()
-    plt.figtext(0.99, 0.01, "y={}".format(function), horizontalalignment='right', fontsize=5)
-    plt.savefig('./tests/results/hess/graphs/graph_{}_{}.png'.format(label, num_vars))
+    plt.xlabel('Parameters', fontfamily='monospace')
+    plt.ylabel('Time (s)', fontfamily='monospace')
+    plt.legend( ('Us', label),
+            shadow=False, fontsize=10, frameon=False)
+    plt.margins(0,0)
+    plt.savefig('./tests/results/hess/graphs/graph_{}_{}.pdf'.format(label, num_vars), bbox_inches = 'tight',
+        pad_inches = 0)
+    # plt.savefig('./tests/complex/graphs/graph_by_128_speedup.pdf')
     plt.clf()
 
 def generate_full_graph(avg_us_grad, avg_wenzel_grad_static, avg_wenzel_grad_dynamic, avg_us_hess, avg_wenzel_hess_static, avg_wenzel_hess_dynamic, denom, function, label, num_vars):
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(denom, avg_us_grad,
-             denom, avg_wenzel_grad_static,
-             denom, avg_wenzel_grad_dynamic,
-             denom, avg_us_hess,
-             denom, avg_wenzel_hess_static,
-             denom, avg_wenzel_hess_dynamic)
-    # plt.xticks(denom)
-    plt.title('Us Grad vs Mitsuba Grad (Static) vs. Mitsuba Grad (Dynamic) vs Us Hess vs Mitsuba Hess (Static) vs. Mitsuba Hess (Dynamic) # It: 10')
+    plt.plot(denom, avg_us_grad, color='#1abc9c', linestyle='dashed',  markersize=7)
+    plt.plot(denom, avg_wenzel_grad_static, color='#f1c40f', linestyle='dashed', markersize=7)
+    plt.plot(denom, avg_wenzel_grad_dynamic, color='#3498db', linestyle='dashed', markersize=7)
+    plt.plot(denom, avg_us_hess, color='#34495e', linestyle='dashed', markersize=7)
+    plt.plot(denom, avg_wenzel_hess_static, color='#bdc3c7', linestyle='dashed', markersize=7)
+    plt.plot(denom, avg_wenzel_hess_dynamic, color='#e74c3c', linestyle='dashed', markersize=7)
     # legend
+    plt.xlabel('Parameters', fontfamily='monospace')
+    plt.ylabel('Time (s)', fontfamily='monospace')
     plt.legend( ('Us Grad', 'Mitsuba Grad (Static)', 'Mitsuba Grad (Dynamic)', 'Us Hess', 'Mitsuba Hess (Static)', 'Mitsuba Hess (Dynamic)'),
-            shadow=True, loc=(0.01, 0.48), handlelength=1.5, fontsize=6)
-    plt.xlabel('# params')
-    plt.ylabel('time (s)')
-    # plt.tight_layout()
-    plt.figtext(0.99, 0.01, "y={}".format(function), horizontalalignment='right', fontsize=5)
-    plt.savefig('./tests/results/hess/graphs/graph_{}_full.png'.format(num_vars))
+            shadow=False, fontsize=10, frameon=False)
+    plt.margins(0,0)
+    plt.savefig('./tests/results/hess/graphs/graph_{}_full.pdf'.format(num_vars), bbox_inches = 'tight',
+        pad_inches = 0)
     plt.clf()
 
 def generate_max_graph(max_us_grad, max_wenzel_grad_static, max_wenzel_grad_dynamic, max_us_hess, max_wenzel_hess_static, max_wenzel_hess_dynamic, denom):
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(denom, max_us_grad,
-             denom, max_wenzel_grad_static,
-             denom, max_wenzel_grad_dynamic,
-             denom, max_us_hess,
-             denom, max_wenzel_hess_static,
-             denom, max_wenzel_hess_dynamic)
+    plt.plot(denom, max_us_grad, color='#1abc9c', linestyle='dashed',  markersize=7)
+    plt.plot(denom, max_wenzel_grad_static, color='#f1c40f', linestyle='dashed', markersize=7)
+    plt.plot(denom, max_wenzel_grad_dynamic, color='#3498db', linestyle='dashed', markersize=7)
+    plt.plot(denom, max_us_hess, color='#34495e', linestyle='dashed', markersize=7)
+    plt.plot(denom, max_wenzel_hess_static, color='#bdc3c7', linestyle='dashed', markersize=7)
+    plt.plot(denom, max_wenzel_hess_dynamic, color='#e74c3c', linestyle='dashed', markersize=7)
     # plt.xticks(denom)
-    plt.title('Us Grad vs Mitsuba Grad (Static) vs. Mitsuba Grad (Dynamic) vs Us Hess vs Mitsuba Hess (Static) vs. Mitsuba Hess (Dynamic) # It: 10', fontsize=6)
     # legend
     plt.legend( ('Us Grad', 'Mitsuba Grad (Static)', 'Mitsuba Grad (Dynamic)', 'Us Hess', 'Mitsuba Hess (Static)', 'Mitsuba Hess (Dynamic)'),
             shadow=True, loc=(0.01, 0.48), handlelength=1.5, fontsize=6)
-    plt.xlabel('# variables')
-    plt.ylabel('time (s)')
+    plt.xlabel('Variables')
+    plt.ylabel('Time (s)')
     # plt.tight_layout()
-    plt.savefig('./tests/results/hess/graphs/graph_max_full.png')
+    plt.savefig('./tests/results/hess/graphs/graph_max_full.pdf')
     plt.clf()
 
 wenzel_times_grad_static, wenzel_times_grad_dynamic, wenzel_times_hess_static, \
@@ -127,13 +120,13 @@ wenzel_times_hess_dynamic, us_times_grad, us_times_hess, functions, num_params, 
 wenzel_grad_static_max, wenzel_grad_dynamic_max, wenzel_hess_static_max, \
 wenzel_hess_dynamic_max, us_max_grad, us_max_hess = convert_files_to_lists("./tests/results/hess/full_results_hessian-gcc49.json")
 
-# for i, label in enumerate(functions):
-    # generate_two_graph(us_times_grad[label], wenzel_times_grad_static[label], num_params, label, 'Mitsuba Gradient (Static)', i)
-    # generate_two_graph(us_times_grad[label], wenzel_times_grad_dynamic[label], num_params, label, 'Mitsuba Gradient (Dynamic)', i)
-    # generate_two_graph(us_times_hess[label], wenzel_times_hess_static[label], num_params, label, 'Mitsuba Hessian (Static)', i)
-    # generate_two_graph(us_times_hess[label], wenzel_times_hess_dynamic[label], num_params, label, 'Mitsuba Hessian (Dynamic)', i)
-    # generate_full_graph(us_times_grad[label], wenzel_times_grad_static[label], wenzel_times_grad_dynamic[label], us_times_hess[label],
-    # wenzel_times_hess_static[label], wenzel_times_hess_dynamic[label], num_params, label, 'Wenzel', i)
+for i, label in enumerate(functions):
+    generate_two_graph(us_times_grad[label], wenzel_times_grad_static[label], num_params, label, 'Mitsuba Gradient (Static)', i)
+    generate_two_graph(us_times_grad[label], wenzel_times_grad_dynamic[label], num_params, label, 'Mitsuba Gradient (Dynamic)', i)
+    generate_two_graph(us_times_hess[label], wenzel_times_hess_static[label], num_params, label, 'Mitsuba Hessian (Static)', i)
+    generate_two_graph(us_times_hess[label], wenzel_times_hess_dynamic[label], num_params, label, 'Mitsuba Hessian (Dynamic)', i)
+    generate_full_graph(us_times_grad[label], wenzel_times_grad_static[label], wenzel_times_grad_dynamic[label], us_times_hess[label],
+    wenzel_times_hess_static[label], wenzel_times_hess_dynamic[label], num_params, label, 'Wenzel', i)
 
 generate_max_graph(us_max_grad, wenzel_grad_static_max, wenzel_hess_dynamic_max, us_max_hess,
 wenzel_grad_static_max, wenzel_hess_dynamic_max, range(19))

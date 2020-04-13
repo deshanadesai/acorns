@@ -17,6 +17,7 @@ import pytorch_utils
 import wenzel_utils
 import us_utils
 import generate_function
+import tapenade_utils
 
 sys.path.append('./src')
 import forward_diff
@@ -47,8 +48,6 @@ def cleanup():
         os.remove(INPUT_FILENAME)
     if os.path.exists(DERIVATIVES_FILENAME):
         os.remove(DERIVATIVES_FILENAME)
-    if os.path.exists(UTILS_FILENAME):
-        os.remove(UTILS_FILENAME)
     if os.path.exists(RUNNABLE_FILENAME):
         os.remove(RUNNABLE_FILENAME)
     if os.path.exists(OUTPUT_FILENAME):
@@ -103,7 +102,7 @@ if __name__ == "__main__":
     alphabets = list(string.ascii_lowercase)
     alphabets.remove('i')
 
-    for k in range(1, 2):
+    for k in range(1, 11):
         function = generate_function.gen_other(k)
         functions.append(function)
         print(function)
@@ -122,10 +121,10 @@ if __name__ == "__main__":
     NUM_THREADS_PYTORCH = 1
     RUN_C = True
     WENZEL_COMPILER_VERSION="-5"
+    RUNNABLE_TAPENADE = './tests/utils/runnable_tapenade'
+    TAPENADE_OUTPUT = './tests/utils/tapenade_output.txt'
     # STATIC = True
     # cleanup()
-
-    os.environ["OMP_NUM_THREADS"] = '1'
 
     output = {}
 
@@ -147,6 +146,13 @@ if __name__ == "__main__":
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, DERIVATIVES_FILENAME, False, False)
         us_utils.compile_ours(RUN_C, RUNNABLE_FILENAME, DERIVATIVES_FILENAME)
+
+        # generate and compile tapenade code
+        tapenade_utils.generate_function_c_file(func_num, functions, './tests/utils/tapenade_func.c')
+        tapenade_utils.generate_derivatives_c_file(func_num)
+        tapenade_utils.generate_runnable_tapenade(func[1], len(func[1]), func_num)
+        tapenade_utils.compile('./tests/utils/runnable_tapenade')
+
 
 
         while num_params <= 100000:
@@ -173,6 +179,7 @@ if __name__ == "__main__":
             wenzel_times_static = []
             wenzel_times_dynamic = []
             enoki_times = []
+            tapenade_times = []
 
             for i in range(NUM_ITERATIONS):
 
@@ -181,6 +188,8 @@ if __name__ == "__main__":
                 enoki = enoki_utils.run_enoki()
                 wenzel_static = wenzel_utils.run_wenzel("single", True)
                 wenzel_dynamic = wenzel_utils.run_wenzel("single", False)
+                tapenade = tapenade_utils.run_tapenade(functions[func_num], num_params, functions, PARAMS_FILENAME, TAPENADE_OUTPUT, RUNNABLE_TAPENADE)
+
 
                 # for j in range(len(ours[0])):
                 #     assert math.isclose(float(pytorch[0][j]), float(wenzel[0][j]), abs_tol=10**-3)
@@ -191,6 +200,7 @@ if __name__ == "__main__":
                 enoki_times.append(float(enoki[1]))
                 wenzel_times_static.append(float(wenzel_static[1]))
                 wenzel_times_dynamic.append(float(wenzel_dynamic[1]))
+                tapenade_times.append(float(tapenade[1]))
             
             # print for debug purposes
             print("Parameters: ", params[:10])
@@ -203,11 +213,12 @@ if __name__ == "__main__":
                 "wenzel_static": sum(wenzel_times_static) / len(wenzel_times_static),
                 "wenzel_dynamic": sum(wenzel_times_dynamic) / len(wenzel_times_dynamic),
                 "flags": "-ffast-math -O3",
+                "tapenade": sum(tapenade_times) / len(tapenade_times),
                 "WENZEL_COMPILER_VERSION": WENZEL_COMPILER_VERSION,
-                "enoki_speedup": (sum(enoki_times) / len(enoki_times)) / (sum(our_times) / len(our_times)),
-                "wenzel_static_speedup": (sum(wenzel_times_static) / len(wenzel_times_static)) / (sum(our_times) / len(our_times)),
-                "wenzel_dynamic_speedup": (sum(wenzel_times_dynamic) / len(wenzel_times_dynamic)) / (sum(our_times) / len(our_times)),
-                "pytorch_speedup": (sum(py_times) / len(py_times)) / (sum(our_times) / len(our_times))
+                "enoki_speedup": (sum(enoki_times) / len(enoki_times)),
+                "wenzel_static_speedup": (sum(wenzel_times_static) / len(wenzel_times_static)),
+                "wenzel_dynamic_speedup": (sum(wenzel_times_dynamic) / len(wenzel_times_dynamic)),
+                "pytorch_speedup": (sum(py_times) / len(py_times))
             }
 
             denom.append(num_params)
