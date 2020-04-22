@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     functions = [
         # ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c)))",["a","b","c","d"]],
-            ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c*e*f*g*h*j*k*l*m*n)))", ["a", "b", "c", "d", "e", "f", "g", "h", "j", "k", "l", "m", "n"]]
+            ["(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)*(a*d-b*c*e*f*g*h*j*k*l*m*n*o*p*q*r*s*t*u*v*w*x*y*z)))", ["a", "b", "c", "d", "e", "f", "g", "h", "j", "k", "l", "m", "n", "o", "p"]]
     # #     ["((k*k+3*k)-k/4)/k+k", ["k"]],
     # #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k", ["k"]],
     # #     ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],

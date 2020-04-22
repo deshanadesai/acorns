@@ -4,55 +4,63 @@
         "avg_runtime_static": 8.910000000000001e-05,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 6,
-        "os": "Linux"
+        "os": "Linux",
+        "us": ""
     },
     "2D_P1_zero": {
         "avg_runtime_dynamic": 0.00017130000000000002,
         "avg_runtime_static": 8.12e-05,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 6,
-        "os": "Linux"
+        "os": "Linux",
+        "us": ""
     },
     "2D_P2_non_zero": {
         "avg_runtime_dynamic": 0.0005572999999999999,
         "avg_runtime_static": 0.0002442999999999999,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 12,
-        "os": "Linux"
+        "os": "Linux",
+        "us": ""
     },
     "3D_P1_non_zero": {
         "avg_runtime_dynamic": 0.0017833000000000002,
         "avg_runtime_static": 0.0006493,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 12,
-        "os": "Linux"
+        "os": "Linux",
+        "us": 0.0001691
     },
     "3D_P2_non_zero": {
         "avg_runtime_dynamic": 0.0082459,
         "avg_runtime_static": 0.0054593,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 30,
-        "os": "Linux"
+        "os": "Linux",
+        "us": 0.0004225
     },
     "3D_P2_zero": {
         "avg_runtime_dynamic": 0.0081411,
         "avg_runtime_static": 0.0052917,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 30,
-        "os": "Linux"
+        "os": "Linux",
+        "us": 0.0010913999999999997
     },
     "3D_P3_non_zero": {
         "avg_runtime_dynamic": 0.028935899999999997,
         "avg_runtime_static": 0.026170099999999995,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 60,
-        "os": "Linux"
+        "os": "Linux",
+        "us": 0.0026488
     },
     "3D_P4_non_zero": {
         "avg_runtime_dynamic": 0.5382067,
         "avg_runtime_static": 0.5440087,
         "compile_string": "g++ -std=c++11 -I ext/ filename.cpp -o filename -ffast-math -DEIGEN_STACK_ALLOCATION_LIMIT=0",
         "local_disp_size": 105,
-        "os": "Linux"
+        "os": "Linux",
+        "us": 0.08007520000000001
     }
 }
