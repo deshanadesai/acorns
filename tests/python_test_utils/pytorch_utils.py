@@ -58,8 +58,34 @@ def generate_pytorch_file(func_num, num_params, functions):
     pytorch_code = pytorch %  (num_params, variables, function, grads, to_lists, prints)
     pytorch_file.write(pytorch_code)
     pytorch_file.close()
+    
+
+def generate_variable(func_num, functions):
+    for i, var in enumerate(functions[func_num][1]):
+        return var   
+    
+def generate_pytorch_hessian_file(func_num, num_params, functions):
+    with open('./tests/utils/static_code/pytorch_hessian.txt', 'r') as file:
+        pytorch = file.read()
+    pytorch_file = open("./tests/utils/pytorch_hessian.py", "w+")
+    num_vars = len(functions[func_num][1])
+    variables = generate_pytorch_vars(func_num, functions)
+    function = parse_pytorch(functions[func_num][0])
+    grads = generate_pytorch_grads(func_num, functions)
+    to_lists = generate_to_lists(func_num, functions)
+    prints = generate_pytorch_prints(func_num, functions)
+    vars_tensor = generate_variable(func_num, functions)
+    pytorch_code = pytorch %  (num_params, variables, vars_tensor, function, vars_tensor)
+    pytorch_file.write(pytorch_code)
+    pytorch_file.close()    
 
 def run_pytorch():
     cmd = "python3 " + "./tests/utils/pytorch.py" + " > " + "./tests/utils/pytorch_output.txt"
+    os.system(cmd)
+    return general_utils.parse_output("./tests/utils/pytorch_output.txt")
+
+
+def run_pytorch_hessian():
+    cmd = "python3 " + "./tests/utils/pytorch_hessian.py" + " > " + "./tests/utils/pytorch_output.txt"
     os.system(cmd)
     return general_utils.parse_output("./tests/utils/pytorch_output.txt")
