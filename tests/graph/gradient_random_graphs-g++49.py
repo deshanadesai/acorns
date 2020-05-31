@@ -7,6 +7,8 @@ import re
 
 sns.set(style="darkgrid")
 
+num_params_list = [10, 2010, 4010, 6010, 8010, 10010, 20010, 30010, 40010, 50010, 60010, 70010, 80010, 90010 ]
+
 def atoi(text):
     return int(text) if text.isdigit() else text
 def natural_keys(text):
@@ -45,7 +47,7 @@ def convert_files_to_lists(file_location):
             tapenade_times[key] = []
             functions.append(key)
 
-            for num_params in sorted(data[key],key=natural_keys):
+            for num_params in num_params_list:
                 num_params_set.add(int(num_params))
                 wenzel_static_times[key].append(data[key][num_params]['wenzel_static'])
                 wenzel_dynamic_times[key].append(data[key][num_params]['wenzel_dynamic'])
@@ -64,7 +66,6 @@ def convert_files_to_lists(file_location):
             tapenade_max.append(tapenade_times[key][-1])
 
     print(num_params_set)
-    num_params_list = list(sorted(num_params_set))
     return wenzel_static_times, wenzel_dynamic_times, enoki_times, pytorch_times, us_times, tapenade_times, functions, num_params_list, wenzel_static_max, wenzel_dynamic_max, enoki_max, pytorch_max, us_max, tapenade_max
 
 def generate_two_graph(avg_us, avg_them, denom, function, label, num_vars):

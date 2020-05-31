@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/ders/der_1.c
+
+/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/include/ders_1.h
+
+/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/src/example.c
+stdio.h
+-
+../include/ders_1.h
+/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/include/ders_1.h
+

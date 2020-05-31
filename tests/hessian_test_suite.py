@@ -65,23 +65,6 @@ def cleanup():
             except Exception as e:
                 print(e)
 
-def generate_scaling_graph(max_us_single, max_us_hessian, max_wenzel_single, max_wenzel_hessian, denom):
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(denom, max_us_single,
-             denom, max_us_hessian,
-             denom, max_wenzel_single,
-             denom, max_wenzel_hessian)
-    plt.xticks(denom)
-    plt.title('Scaling Times for 50,000 params # It: 10')
-    # legend
-    plt.legend( ('Us-Single', 'Us-Hessian', 'Wenzel-Single', 'Wenzel-Hessian'),
-            shadow=True, loc=(0.01, 0.48), handlelength=1.5, fontsize=16)
-    plt.savefig('./tests/results/scaling.png')
-    plt.clf()
-
-
-
 if __name__ == "__main__":
     import random, string
     functions = []

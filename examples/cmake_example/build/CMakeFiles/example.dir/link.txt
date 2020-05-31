@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/example.dir/src/example.c.o CMakeFiles/example.dir/ders/der_1.c.o  -o example -rdynamic -lm 
