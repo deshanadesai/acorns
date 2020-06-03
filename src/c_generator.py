@@ -30,6 +30,13 @@ class CGenerator(object):
 		if self.c_code:
 			ext = '.c'
 
+			print("Overwrite previous header files: ",self.filename)
+			f = open(self.filename+'.h','w')
+				
+			f.write("void compute(double values[], int num_points, double ders[]);")
+			f.close()
+                
+
 			f = open(self.filename+ext,'w')
 			# f.write("#include <omp.h>\n")
 			f.write("void compute(double values[], int num_points, double ders[]){\n\n")
@@ -138,5 +145,3 @@ class CGenerator(object):
 		self._make_header()
 		self._generate_expr(derivative_string)
 		self._make_footer()
-
-
