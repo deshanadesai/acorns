@@ -7,7 +7,7 @@ import re
 
 sns.set(style="darkgrid")
 
-num_params = [10, 2010, 4010, 6010, 8010, 10010, 20010, 30010, 40010, 50010, 60010, 70010, 80010, 90010 ]
+num_params_list = [10, 2010, 4010, 6010, 8010, 10010, 20010, 30010, 40010, 50010, 60010, 70010, 80010, 90010]
 
 def atoi(text):
     return int(text) if text.isdigit() else text

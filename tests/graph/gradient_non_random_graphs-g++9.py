@@ -7,6 +7,8 @@ import re
 
 sns.set(style="darkgrid")
 
+num_params_list = [10, 2010, 4010, 6010, 8010, 10010, 20010, 30010, 40010, 50010, 60010, 70010, 80010, 90010]
+
 def atoi(text):
     return int(text) if text.isdigit() else text
 def natural_keys(text):
@@ -76,7 +78,7 @@ def generate_two_graph(avg_us, avg_them, denom, function, label, num_vars):
     plt.legend( ('Us', label),
             shadow=False, fontsize=10, frameon=False)
     plt.margins(0,0)
-    plt.savefig('./tests/results/grad/graphs/gcc49/non-random/graph_{}_{}.pdf'.format(label, num_vars), bbox_inches = 'tight',
+    plt.savefig('./tests/results/grad/graphs/g++9/non-random/graph_{}_{}.pdf'.format(label, num_vars), bbox_inches = 'tight',
         pad_inches = 0)
     # plt.savefig('./tests/complex/graphs/graph_by_128_speedup.pdf')
     plt.clf()
@@ -97,7 +99,7 @@ def generate_full_graph(avg_us, avg_pytorch, avg_wenzel_static, avg_wenzel_dynam
     plt.legend( ('Ours', 'Pytorch', 'Mitsuba (Static)', 'Mitsuba (Dynamic)', 'Enoki', 'Tapenade'),
             shadow=False, fontsize=10, frameon=False)
     plt.margins(0,0)
-    plt.savefig('./tests/results/grad/graphs/gcc49/non-random/graph_{}_full.pdf'.format(num_vars), bbox_inches = 'tight',
+    plt.savefig('./tests/results/grad/graphs/g++9/non-random/graph_{}_full.pdf'.format(num_vars), bbox_inches = 'tight',
         pad_inches = 0)
     plt.clf()
 
@@ -116,7 +118,7 @@ def generate_full_graph_without_dynamic(avg_us, avg_pytorch, avg_wenzel_static, 
     plt.legend( ('Ours', 'Pytorch', 'Mitsuba (Static)', 'Enoki', 'Tapenade'),
             shadow=False, fontsize=10, frameon=False)
     plt.margins(0,0)
-    plt.savefig('./tests/results/grad/graphs/gcc49/non-random/graph_{}_full_no_dynamic.pdf'.format(num_vars), bbox_inches = 'tight',
+    plt.savefig('./tests/results/grad/graphs/g++9/non-random/graph_{}_full_no_dynamic.pdf'.format(num_vars), bbox_inches = 'tight',
         pad_inches = 0)
     plt.clf()
 
@@ -132,7 +134,7 @@ def generate_full_graph_without_dynamic(avg_us, avg_pytorch, avg_wenzel_static, 
 #     plt.legend( ('Ours', 'Pytorch', 'Mitsuba (Static)', 'Mitsuba (Dynamic)', 'Enoki'),
 #             shadow=False, fontsize=10, frameon=False)
 #     plt.margins(0,0)
-#     plt.savefig('./tests/results/grad/graphs/gcc49/random/graph_{}_full.pdf'.format(num_vars), bbox_inches = 'tight',
+#     plt.savefig('./tests/results/grad/graphs/g++9/random/graph_{}_full.pdf'.format(num_vars), bbox_inches = 'tight',
 #         pad_inches = 0)
 #     plt.clf()
 
@@ -148,9 +150,9 @@ def generate_max_graph(avg_us, avg_pytorch, avg_wenzel_static, avg_wenzel_dynami
     plt.xlabel('Variables')
     plt.ylabel('Time (s)')
     plt.margins(0,0)
-    plt.savefig('./tests/results/grad/graphs/gcc49/non-random/graph_max.pdf')
+    plt.savefig('./tests/results/grad/graphs/g++9/non-random/graph_max.pdf')
     plt.clf()
-wenzel_static_times, wenzel_dynamic_times, enoki_times, pytorch_times, us_times, tapenade_times, functions, num_params, wenzel_static_max, wenzel_dynamic_max, enoki_max, pytorch_max, us_max, tapenade_max = convert_files_to_lists("./tests/results/grad/json/non-random/full_results-2020-04-12-19:05:42.json")
+wenzel_static_times, wenzel_dynamic_times, enoki_times, pytorch_times, us_times, tapenade_times, functions, num_params, wenzel_static_max, wenzel_dynamic_max, enoki_max, pytorch_max, us_max, tapenade_max = convert_files_to_lists("./tests/results/grad/json/non-random/full_results-2020-04-12-18:37:43.json")
 
 for i, label in enumerate(functions):
     print(us_times[label])

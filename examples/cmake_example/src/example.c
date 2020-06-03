@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/ders_1.h"
+#include "../ders/der_1.h"
 
 int main(int argc, char* argv) {
 

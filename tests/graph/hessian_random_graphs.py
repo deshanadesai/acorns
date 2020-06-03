@@ -79,7 +79,7 @@ def generate_two_graph(avg_us, avg_them, denom, function, label, num_vars):
     plt.legend( ('Us', label),
             shadow=False, fontsize=10, frameon=False)
     plt.margins(0,0)
-    plt.savefig('./tests/results/hess/graphs/graph_{}_{}.pdf'.format(label, num_vars), bbox_inches = 'tight',
+    plt.savefig('./tests/results/hess/graphs/random/graph_{}_{}.pdf'.format(label, num_vars), bbox_inches = 'tight',
         pad_inches = 0)
     # plt.savefig('./tests/complex/graphs/graph_by_128_speedup.pdf')
     plt.clf()
@@ -100,7 +100,7 @@ def generate_four_graph(avg_us, avg_wenzel_static, avg_wenzel_dynamic, avg_pytor
     plt.legend( ('Ours', 'Mitsuba (Static)', 'Mitsuba (Dynamic)', 'Pytorch'),
             shadow=False, fontsize=10, frameon=False)
     plt.margins(0,0)
-    plt.savefig('./tests/results/hess/graphs/full/graph_{}_static_and_dynamic.pdf'.format(num_vars), bbox_inches = 'tight',
+    plt.savefig('./tests/results/hess/graphs/random/full/graph_{}_static_and_dynamic.pdf'.format(num_vars), bbox_inches = 'tight',
         pad_inches = 0)
     plt.clf()
 
@@ -135,12 +135,12 @@ def generate_max_graph(max_us_hess, max_wenzel_hess_static, max_wenzel_hess_dyna
     plt.legend( ('Ours', 'Mitsuba (Static)', 'Mitsuba (Dynamic)', 'Pytorch'),
             shadow=False, fontsize=10, frameon=False)
     plt.margins(0,0)
-    plt.savefig('./tests/results/hess/graphs/max/graph_max.pdf', bbox_inches = 'tight',
+    plt.savefig('./tests/results/hess/graphs/random/max/graph_max.pdf', bbox_inches = 'tight',
         pad_inches = 0)
     plt.clf()
 
 
-file_location = "./tests/results/hess/json/full_results_hessian-2020-05-22-15:54:45.json"
+file_location = "./tests/results/hess/json/full_results_hessian-2020-05-22-11:05:38.json"
 
 wenzel_times_hess_static, wenzel_times_hess_dynamic, us_times_hess, functions, num_params, \
 wenzel_hess_static_max, wenzel_hess_dynamic_max, us_max_hess, \
