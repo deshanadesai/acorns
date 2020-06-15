@@ -11,7 +11,7 @@ from datetime import datetime
 
 sys.path.append('tests/python_test_utils')
 
-sys.path.append('src')
+sys.path.append('acorns')
 
 import forward_diff
 import tapenade_utils

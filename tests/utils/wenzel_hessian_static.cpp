@@ -10,16 +10,16 @@ using namespace std;
 using namespace std::chrono;
 int main(int argc, char **argv)
 {
-   typedef Eigen::Matrix<double, 1, 1> Gradient;
-   typedef Eigen::Matrix<double, 1, 1> Hessian;
+   typedef Eigen::Matrix<double, 2, 1> Gradient;
+   typedef Eigen::Matrix<double, 2, 2> Hessian;
 
    string output_filename = argv[1];
    cout << output_filename << endl;
 
    typedef DScalar2<double, Gradient, Hessian> DScalar;
 
-   int num_params = 40010;
-   int num_vars = 1;
+   int num_params = 6010;
+   int num_vars = 2;
    int num_ders = num_vars * num_vars;
 
    Eigen::VectorXd args(num_params * num_vars);
@@ -41,10 +41,14 @@ int main(int argc, char **argv)
    for (int index = 0; index < num_params; index++)
    {
        /* There are two independent variables */
-       DiffScalarBase::setVariableCount(1);
-		DScalar k(0, args[index * 1 + 0]);
-		DScalar Fx = sin(k) + cos(k) + pow(k, 2);
-		ders[index * 1 + 0] = Fx.getHessian()(0);
+       DiffScalarBase::setVariableCount(2);
+		DScalar k(0, args[index * 2 + 0]), j(1, args[index * 2 + 1]);
+		DScalar Fx = ((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j;
+		ders[index * 4 + 0] = Fx.getHessian()(0);
+		ders[index * 4 + 1] = Fx.getHessian()(1);
+		ders[index * 4 + 2] = Fx.getHessian()(3);
+		ders[index * 4 + 3] = Fx.getHessian()(2);
+
    }
 
    auto stop = high_resolution_clock::now();

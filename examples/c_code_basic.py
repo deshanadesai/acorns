@@ -1,7 +1,7 @@
 import sys, os
 import pytest
 sys.path.append('../')
-import src.forward_diff as fd
+import acorns.forward_diff as fd
 
     
 c_function = "int function_test(double a, double p){ \

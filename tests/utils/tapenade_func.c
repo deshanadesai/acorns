@@ -1,5 +1,5 @@
-double function_2(double k)
+double function_0(double k, double j)
 {
-double p = sin(k) + cos(k) + pow(k, 2);
+double p = ((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j;
 	return p;
 }

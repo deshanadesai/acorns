@@ -5,7 +5,7 @@ import math
 from pycparser import parse_file
 from pycparser import c_parser
 import pycparser.c_ast
-import src.c_generator as c_generator
+import acorns.c_generator as c_generator
 import argparse
 import numpy as np
 import pycparser.c_parser as c_parser

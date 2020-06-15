@@ -26,8 +26,14 @@ def generate_function_c_file(func_num, functions, input_filename):
 
 def generate_derivatives_c_file(func_num, functions, input_filename, run_c, derivatives_filename, reverse, second_der):
     vars = ",".join(str(x) for x in functions[func_num][1])
-    cmd = "python3 src/forward_diff.py " + input_filename + " p -ccode " + str(run_c) + " -reverse " + str(
-        reverse)+" -second_der "+ str(second_der)+" --vars \"" + vars + "\" -func \"function_" + str(func_num) + "\" --output_filename \"" + derivatives_filename + "\""
+    
+    reverse_string = ""
+    if reverse:
+        reverse_string += " --reverse "
+    second_der_string = ""
+    if second_der:
+        second_der_string += " --second_der "
+    cmd = "python3 acorns/forward_diff.py " + input_filename + " p " + reverse_string + second_der_string +" --vars \"" + vars + "\" --func \"function_" + str(func_num) + "\" --output_filename \"" + derivatives_filename + "\""
     os.system(cmd)
 
 def generate_omp_derivatives_c_file(filename, num_threads):

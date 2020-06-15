@@ -17,7 +17,7 @@ import wenzel_utils
 import us_utils
 import tapenade_utils
 
-sys.path.append('src')
+sys.path.append('acorns')
 import forward_diff
 
 def generate_params(num_params, function_num):
