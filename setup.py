@@ -11,7 +11,7 @@ setuptools.setup(
     description="An Automatic Generator for Gradients and Hessians ofC99 functions",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/deshanadesai/autodiff",
+    url="https://github.com/deshanadesai/acorns",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -19,4 +19,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    package_dir="src",
 )
