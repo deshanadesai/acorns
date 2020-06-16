@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/deshanadesai/acorns",
-    packages=setuptools.find_packages(exclude=("tests", "examples"), where="acorns"),
+    packages=setuptools.find_packages(exclude=("tests", "examples")),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
