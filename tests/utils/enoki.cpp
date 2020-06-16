@@ -22,16 +22,16 @@ using FloatD = DiffArray<FloatX>;
 
 int main(int argc, char **argv)
 {
-    int num_params = 90010;
+    int num_params = 10;
     int num_vars = 1;
     Eigen::VectorXd args(num_params * num_vars);
-	FloatX init_k = zero<FloatX>(num_params);
+	FloatX init_T = zero<FloatX>(num_params);
  
     string output_filename = argv[1];
     ofstream outfile;
     outfile.open(output_filename);
 
-    std::ifstream file("./tests/params.txt");
+    std::ifstream file("./tests/utils/params.txt");
 
     int i = 0;
     for (std::string line; std::getline(file, line);)
@@ -42,26 +42,26 @@ int main(int argc, char **argv)
     file.close();
     for (int i = 0; i < num_params; i++)
     {
-		init_k[i] = args[i * num_vars + 0];
+		init_T[i] = args[i * num_vars + 0];
 
     }
 
-	FloatD k(init_k);
+	FloatD T(init_T);
  
-	set_requires_gradient(k);
+	set_requires_gradient(T);
  
-    FloatD function = sin(k) + cos(k) + pow(k, 2); // derivative
+    FloatD function = 4*((T * (1 - T))); // derivative
 
     auto start = high_resolution_clock::now();
     backward(function);
-	FloatX grad_k = gradient(k);
+	FloatX grad_T = gradient(T);
  
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     outfile << (double)duration.count() / 1000000.0 << " ";
     for (int i = 0; i < num_params; i++)
     {
-		outfile << grad_k[i] << " ";
+		outfile << grad_T[i] << " ";
  
     }
     outfile.close();

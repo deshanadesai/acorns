@@ -4,15 +4,15 @@
 
 
 /*
-  Differentiation of function_2 in reverse (adjoint) mode:
-   gradient     of useful results: k function_2
-   with respect to varying inputs: k
-   RW status of diff variables: k:incr function_2:in-killed
+  Differentiation of function_0 in reverse (adjoint) mode:
+   gradient     of useful results: function_0 T
+   with respect to varying inputs: T
+   RW status of diff variables: function_0:in-killed T:incr
 */
-void function_2_b(double k, double *kb, double function_2b) {
-    double p = sin(k) + cos(k) + pow(k, 2);
+void function_0_b(double T, double *Tb, double function_0b) {
+    double p = 4*(T*(1-T));
     double pb = 0.0;
-    double function_2;
-    pb = function_2b;
-    *kb = *kb + (cos(k)+2*pow(k, 2-1)-sin(k))*pb;
+    double function_0;
+    pb = function_0b;
+    *Tb = *Tb + (4-8*T)*pb;
 }

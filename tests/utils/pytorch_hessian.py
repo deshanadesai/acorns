@@ -3,22 +3,38 @@ import time
 import numpy as np
 import torch.autograd.functional as F
 
-num_params = 6010
-k = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_k.npy'), requires_grad=True, dtype=torch.float)
-j = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_j.npy'), requires_grad=True, dtype=torch.float)
+num_vars = 1
+num_params = 10
+g = torch.tensor(np.load('./tests/utils/numpy_params/function_0_param_g.npy'), requires_grad=True, dtype=torch.float)
 torch.set_num_threads(1)
 
-def make_func(k):
-     return (((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j).sum()
+def make_func(g):
+     return (4*((g * (1 - g)))).sum()
      
 start_time_pytorch = time.time()
 
-output = F.hessian(make_func, k.data)
+hessians = F.hessian(make_func, (g.data))
 
 end_time_pytorch = time.time()
 runtime = (end_time_pytorch - start_time_pytorch)
 print(str(runtime))
 
-output = output.data.numpy()
+data = []
+if num_vars > 1:
+     for j, hessian in enumerate(hessians):
+          for k, tup in enumerate(hessian):
+               tup_data = tup.data.numpy()
+               tup_list = []
+               for i in range(num_params):
+                    tup_list.append(tup_data[i][i])
+               data.append(tup_list)
+else:
+     tup_list = []
+     for j, hessian in enumerate(hessians):
+          hess_data = hessian.data.numpy()
+          tup_list.append(hess_data[j])
+     data.append(tup_list)
+ 
 for i in range(num_params):
-    print(output[i][i])
+     for j in range(len(data)):
+          print(data[j][i])

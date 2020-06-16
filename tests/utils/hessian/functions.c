@@ -1,5 +1,5 @@
-int function_0(double k, double j)
+int function_0(double g)
 {
-	int p = ((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j;
+	int p = 4*((g * (1 - g)));
 	return 0;
 }

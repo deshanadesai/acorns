@@ -49,7 +49,6 @@ def generate_pytorch_file(func_num, num_params, functions):
     with open('./tests/utils/static_code/pytorch.txt', 'r') as file:
         pytorch = file.read()
     pytorch_file = open("./tests/utils/pytorch.py", "w+")
-    num_vars = len(functions[func_num][1])
     variables = generate_pytorch_vars(func_num, functions)
     function = parse_pytorch(functions[func_num][0])
     grads = generate_pytorch_grads(func_num, functions)
@@ -61,8 +60,21 @@ def generate_pytorch_file(func_num, num_params, functions):
     
 
 def generate_variable(func_num, functions):
+    var_str = ""
     for i, var in enumerate(functions[func_num][1]):
-        return var   
+        var_str += str(var)
+        if i != len(functions[func_num][1]) - 1:
+            var_str += ","
+    return var_str   
+
+def generate_variable_data(func_num, functions):
+    var_data_str = "("
+    for i, var in enumerate(functions[func_num][1]):
+        var_data_str += "{}.data".format(var)
+        if i != len(functions[func_num][1]) - 1:
+            var_data_str += ","
+    var_data_str += ")"
+    return var_data_str  
     
 def generate_pytorch_hessian_file(func_num, num_params, functions):
     with open('./tests/utils/static_code/pytorch_hessian.txt', 'r') as file:
@@ -71,11 +83,9 @@ def generate_pytorch_hessian_file(func_num, num_params, functions):
     num_vars = len(functions[func_num][1])
     variables = generate_pytorch_vars(func_num, functions)
     function = parse_pytorch(functions[func_num][0])
-    grads = generate_pytorch_grads(func_num, functions)
-    to_lists = generate_to_lists(func_num, functions)
-    prints = generate_pytorch_prints(func_num, functions)
     vars_tensor = generate_variable(func_num, functions)
-    pytorch_code = pytorch %  (num_params, variables, vars_tensor, function, vars_tensor)
+    vars_data = generate_variable_data(func_num, functions)
+    pytorch_code = pytorch %  (num_vars, num_params, variables, vars_tensor, function, vars_data)
     pytorch_file.write(pytorch_code)
     pytorch_file.close()    
 

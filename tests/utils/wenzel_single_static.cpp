@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 
    typedef DScalar1<double, Gradient> DScalar;
 
-   int num_params = 90010;
+   int num_params = 10;
    int num_vars = 1;
 
    Eigen::VectorXd args(num_params * num_vars);
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
    {
        /* There are two independent variables */
        DiffScalarBase::setVariableCount(1);
-		DScalar k(0, args[index * 1 + 0]);
-		DScalar Fx = sin(k) + cos(k) + pow(k, 2);
+		DScalar T(0, args[index * 1 + 0]);
+		DScalar Fx = 4*((T * (1 - T)));
 		ders[index * 1 + 0] = Fx.getGradient()(0);
    }
 

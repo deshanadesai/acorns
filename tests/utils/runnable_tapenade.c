@@ -38,17 +38,17 @@ void read_file_to_array(char *filename, double *args, int num_params, int num_va
 
 
 /*
-  Differentiation of function_2 in reverse (adjoint) mode:
-   gradient     of useful results: k function_2
-   with respect to varying inputs: k
-   RW status of diff variables: k:incr function_2:in-killed
+  Differentiation of function_0 in reverse (adjoint) mode:
+   gradient     of useful results: function_0 T
+   with respect to varying inputs: T
+   RW status of diff variables: function_0:in-killed T:incr
 */
-void function_2_b(double k, double *kb, double function_2b) {
-    double p = sin(k) + cos(k) + pow(k, 2);
+void function_0_b(double T, double *Tb, double function_0b) {
+    double p = 4*(T*(1-T));
     double pb = 0.0;
-    double function_2;
-    pb = function_2b;
-    *kb = *kb + (cos(k)+2*pow(k, 2-1)-sin(k))*pb;
+    double function_0;
+    pb = function_0b;
+    *Tb = *Tb + (4-8*T)*pb;
 }
 
 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
     // Activity to be timed
 
-    // compute(values, num_params, ders);
+    compute(values, num_params, ders);
 
     QueryPerformanceCounter(&EndingTime);
     ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
@@ -97,11 +97,11 @@ int main(int argc, char *argv[])
     struct timespec tstart = {0, 0}, tend = {0, 0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
     for (int i = 0; i < num_params; i++) {
-		double k = values[i * 1 + 0];
-		double kb = 0;
-		double function_2b = 1;
-		function_2_b(k, &kb, function_2b);
-		ders[i * 1 + 0] = kb;
+		double T = values[i * 1 + 0];
+		double Tb = 0;
+		double function_0b = 1;
+		function_0_b(T, &Tb, function_0b);
+		ders[i * 1 + 0] = Tb;
 
     }
     clock_gettime(CLOCK_MONOTONIC, &tend);

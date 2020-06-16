@@ -2,10 +2,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import json
-import seaborn as sns
 import re
+import math
 
-sns.set(style="darkgrid")
+fontsize = 30
+num_params = [78, 465, 465, 1830]
+
+
+def convert_split_size_to_number_of_files(split_sizes, num_params):
+    num_files = []
+    for split in split_sizes:
+        num_file = math.ceil(float(num_params) / float(split))
+        num_files.append(num_file)
+    num_files.reverse()
+    return num_files
 
 
 def atoi(text):
@@ -47,10 +57,12 @@ def convert_files_to_lists(file_location):
 
 
 def generate_two_graph(avg_us, denom, function, suffix=""):
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(1, 1, 1)
     plt.plot(denom, avg_us, color='#1abc9c', linestyle='dashed',  markersize=7)
-    # legend
-    plt.xlabel('Number of Lines per File', fontfamily='monospace')
-    plt.ylabel('Time (s)', fontfamily='monospace')
+    plt.ylim(1.e+00, 1.e+06)
+    plt.setp(ax.get_xticklabels(), fontsize=20)
+    plt.setp(ax.get_yticklabels(), fontsize=20)
     plt.yscale('log')
     plt.margins(0, 0)
     plt.savefig('./tests/complex/graphs/runs/{}-{}.pdf'.format(function, suffix), bbox_inches='tight',
@@ -61,8 +73,11 @@ def generate_two_graph(avg_us, denom, function, suffix=""):
 runtimes, compile_times, functions, split_list, = convert_files_to_lists(
     "./tests/complex/data/runs/data_no_j.json")
 
-for function in functions:
+for i, function in enumerate(functions):
+    num_files = convert_split_size_to_number_of_files(
+        split_list, num_params[i])
+    print(num_files)
     # generate_two_graph(runtimes[function], split_list, function, suffix="Runtimes")
     generate_two_graph(compile_times[function],
-                       split_list, function, suffix="Compile Times")
+                       num_files, function, suffix="Compile Times")
     # generate_full_graph_without_dynamic(us_times[label], pytorch_times[label], wenzel_static_times[label], enoki_times[label], tapenade_times[label], num_params, label, 'Wenzel', i)

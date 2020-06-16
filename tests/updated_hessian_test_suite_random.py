@@ -147,6 +147,8 @@ if __name__ == "__main__":
                 wenzel_static = wenzel_utils.run_wenzel("hessian", True)
                 wenzel_dynamic = wenzel_utils.run_wenzel("hessian", False)
 
+                print("Pytorch: {}\n Us: {}\n Wenzel Static: {}\n Wenzel Dynamic: {}".format(pytorch, ours, wenzel_static, wenzel_dynamic))
+
                 our_times.append(float(ours[1]))
                 py_times.append(float(pytorch[1]))
                 wenzel_times_static.append(float(wenzel_static[1]))

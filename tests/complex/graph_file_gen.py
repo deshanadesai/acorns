@@ -2,10 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import json
-import seaborn as sns
 import re
-
-sns.set(style="darkgrid")
 
 
 def atoi(text):
@@ -47,10 +44,12 @@ def convert_files_to_lists(file_location):
 
 
 def generate_two_graph(avg_us, denom, function, suffix=""):
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(1, 1, 1)
     plt.plot(denom, avg_us, color='#1abc9c', linestyle='dashed',  markersize=7)
-    # legend
-    plt.xlabel('Number of Lines per File', fontfamily='monospace')
-    plt.ylabel('Time (s)', fontfamily='monospace')
+    plt.ylim(1.e+02, 1.e+05)
+    plt.setp(ax.get_xticklabels(), fontsize=20)
+    plt.setp(ax.get_yticklabels(), fontsize=20)
     plt.yscale('log')
     plt.margins(0, 0)
     plt.savefig('./tests/complex/graphs/file_gen/{}-{}.pdf'.format(function, suffix), bbox_inches='tight',

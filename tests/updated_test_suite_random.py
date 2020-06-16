@@ -190,6 +190,7 @@ if __name__ == "__main__":
                 wenzel_dynamic = wenzel_utils.run_wenzel("single", False)
                 tapenade = tapenade_utils.run_tapenade(functions[func_num], num_params, functions, PARAMS_FILENAME, TAPENADE_OUTPUT, RUNNABLE_TAPENADE)
 
+                print("Pytorch: {}\n Us: {}\n Enoki: {}\n Tapenade: {}\n Wenzel Static: {}\n Wenzel Dynamic: {}".format(pytorch, ours, enoki, tapenade, wenzel_static, wenzel_dynamic))
 
                 # for j in range(len(ours[0])):
                 #     assert math.isclose(float(pytorch[0][j]), float(wenzel[0][j]), abs_tol=10**-3)
