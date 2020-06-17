@@ -45,13 +45,10 @@ class Generator(pycparser.c_ast.Node):
 				return self.variables[n.name]
 		return n.name
 
-	def generic_visit(self, node):
-		if node is None:
-			return ''
-		else:
-			return "bye"
-
-			# return ''.join(self.visit(c) for c_name, c in node.children())		
+	# def generic_visit(self, node):
+	# 	if node is None:
+	# 		return ''
+	# 		# return ''.join(self.visit(c) for c_name, c in node.children())		
 
 	def visit_FuncCall(self, n):
 		if (n.name.name) == 'log':
@@ -71,7 +68,6 @@ class Generator(pycparser.c_ast.Node):
 			return '*'+self.visit(n.expr)
 
 	def visit_BinaryOp(self, n, subscript=False):
-		# print("Enter binary op",n,subscript)
 		if n.op == '+':
 			left = self.visit(n.left, subscript=subscript)
 			right = self.visit(n.right, subscript=subscript)
@@ -82,17 +78,11 @@ class Generator(pycparser.c_ast.Node):
 				arr_subscripts = self.flatten(left,[])
 				left = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				left = left.format(*arr_subscripts[1:])
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables[item] for item in arr_subscripts[1:]]
-				# left = arr_string.format(*arr_val)
 
 			if type(right).__name__ == 'list':
 				arr_subscripts = self.flatten(right,[])
 				right = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				right = right.format(*arr_subscripts[1:])
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables(item) for item in arr_subscripts[1:]]
-				# right = arr_string.format(*arr_val)
 
 			if left in self.variables:
 				left = self.variables[left]
@@ -102,37 +92,21 @@ class Generator(pycparser.c_ast.Node):
 			if left.isnumeric() and right.isnumeric():
 				return str(int(left)+int(right))
 
-			# print("in addition")
-			# print(left)
-			# print(right)
-			# print("=======================")
 			return "("+left +") + ("+right+")"	
 		elif n.op == '*':
 			left = self.visit(n.left, subscript = subscript)
 			right = self.visit(n.right, subscript = subscript)
 
-			# print(n)
-			# print("left:",left)
-			# print("right: ",right)
 
 			if type(left).__name__ == 'list':
 				arr_subscripts = self.flatten(left,[])
 				left = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				left = left.format(*arr_subscripts[1:])
-				# arr_subscripts = self.flatten(left)
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables[item] for item in arr_subscripts[1:]]
-				# left = arr_string.format(*arr_val)
 
 			if type(right).__name__ == 'list':
 				arr_subscripts = self.flatten(right,[])
 				right = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				right = right.format(*arr_subscripts[1:])
-				# arr_subscripts = self.flatten(right)
-
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables(item) for item in arr_subscripts[1:]]
-				# right = arr_string.format(*arr_val)
 
 
 			if left in self.variables:
@@ -148,32 +122,18 @@ class Generator(pycparser.c_ast.Node):
 			left = self.visit(n.left, subscript = subscript)
 			right = self.visit(n.right, subscript = subscript)
 
-			# print(n)
-			# print("left:",left)
-			# print("right: ",right)
 
 			if type(left).__name__ == 'list':
 				arr_subscripts = self.flatten(left,[])
 				left = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				left = left.format(*arr_subscripts[1:])
-				# arr_subscripts = self.flatten(left)
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables[item] for item in arr_subscripts[1:]]
-				# left = arr_string.format(*arr_val)
 
 			if type(right).__name__ == 'list':
 				arr_subscripts = self.flatten(right,[])
 				right = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				right = right.format(*arr_subscripts[1:])
-				# arr_subscripts = self.flatten(right)
-
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables(item) for item in arr_subscripts[1:]]
-				# right = arr_string.format(*arr_val)
-
 
 			if left in self.variables:
-				# print('substituting ',left,' with value ',self.variables[left])
 				left = self.variables[left]
 			if right in self.variables:
 				right = self.variables[right]
@@ -192,20 +152,11 @@ class Generator(pycparser.c_ast.Node):
 				arr_subscripts = self.flatten(left,[])
 				left = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				left = left.format(*arr_subscripts[1:])
-				# arr_subscripts = self.flatten(left)
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables[item] for item in arr_subscripts[1:]]
-				# left = arr_string.format(*arr_val)
 
 			if type(right).__name__ == 'list':
 				arr_subscripts = self.flatten(right,[])
 				right = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
 				right = right.format(*arr_subscripts[1:])
-				# arr_subscripts = self.flatten(right)
-
-				# arr_string = arr_subscripts[0]+'[{}]'*len(arr_subscripts[1:])
-				# arr_val = [self.variables(item) for item in arr_subscripts[1:]]
-				# right = arr_string.format(*arr_val)
 
 			if left in self.variables:
 				left = self.variables[left]
@@ -237,47 +188,30 @@ class Generator(pycparser.c_ast.Node):
 
 		var_name = self.visit(n.cond.left)
 
-		# print(var_name,  symbol, threshold)
-
 		self.symbols.append(symbol)
 		self.thresholds.append(int(threshold))
 		self.names_vars.append(var_name)
 		self.names_vars_init.append(names_vars_init)
 
 		# Assuming next is one increment
-		print(n.next)
-		print("Statement of loop")
-		print(n.stmt.block_items[0].__class__.__name__)
-		print(n.stmt.__class__.__name__)
 		if n.stmt.__class__.__name__ == 'Compound' and n.stmt.block_items[0].__class__.__name__ == 'For':
-			# print("Nested for loop detected")
-			# n.stmt.show()
 			loop_stmt = self.visit(n.stmt)
 		else:
 			np_aranges = [np.array(np.arange(0,self.thresholds[i])) for i,s in enumerate(self.names_vars)]
-			print(np_aranges)
 			list_counters = np.array(np.meshgrid(*np_aranges)).T.reshape(-1,len(self.names_vars))
-			print(list_counters)
 
 			for counter in list_counters:
 				for i,item in enumerate(counter):
 					self.variables[self.names_vars[i]] = str(item)
-				print(n.stmt)
 				vars_, value = self.visit(n.stmt)
 
 
 				var_string = vars_[0]+'[{}]'*len(vars_[1:])
-				print("====================================")
-				print(var_string.format(*vars_[1:])+' = '+ str(value)+";")
 				f = open(output_filename+".c","a")
 				f.write(var_string.format(*vars_[1:])+' = '+ str(value)+";\n")
 				f.close()
-				# print("====================================")
 
 
-
-
-			# print("Deleting variables: ",self.names_vars)
 			for v in self.names_vars:
 				del self.variables[v]
 			self.names_vars=[]
@@ -294,9 +228,6 @@ class Generator(pycparser.c_ast.Node):
 
 	def visit_Compound(self, n):
 		return self.visit(n.block_items[0])
-		# for block in n.block_items:
-		# 	results = self.visit(block)
-		# 	print("Are you here")
 
 
 	def flatten(self, x, flattened):
@@ -317,7 +248,6 @@ class Generator(pycparser.c_ast.Node):
 		name = self.visit(n.lvalue, subscript=subscript)
 		value = self.visit(n.rvalue, subscript=subscript)
 		value = self.eval_arrayref(value)
-		# print("Returning stuff", self.flatten(name,[]), value)
 		return self.flatten(name,[]), value
 
 	def eval_arrayref(self, l):
@@ -330,19 +260,15 @@ class Generator(pycparser.c_ast.Node):
 	
 
 	def visit_ExprList(self, n):
-		print("here")
 		visited_subexprs = []
 		for expr in n.exprs:
-			print(expr)
 			visited_subexprs.append(self.visit(expr))
 		return "[{}]".format(','.join(visited_subexprs))
 
 	# log(..) produces weird in pycparser
 	def visit_ExprList_from_FuncCall(self, n):
-		print("here")
 		visited_subexprs = []
 		for expr in n.exprs:
-			print(expr)
 			visited_subexprs.append(self.visit(expr))
 		return "{}".format(','.join(visited_subexprs))
 
@@ -352,28 +278,16 @@ class Generator(pycparser.c_ast.Node):
 		# no_type is used when a Decl is part of a DeclList, where the type is
 		# explicitly only for the first declaration in a list.
 		#
-		# print(n)
-		# print(n.init.__class__.__name__)
 		if n.init.__class__.__name__=='BinaryOp':
 			self.variables[n.name] = self.visit(n.init)
 		elif n.init.__class__.__name__ == 'FuncCall':
 			self.variables[n.name] = self.visit(n.init)
 		elif n.init == None:
 			self.variables[n.name] = None
-			# f = open(output_filename+".c","a")
-			# f.write(n.type.type.names[0] +" "+n.name +";\n")
-			# f.close()
 
 		else:
-			# print(n)
 			self.variables[n.name] = n.init.value
-			# f = open(output_filename+".c","a")
-			# f.write(n.type.type.names[0] +" "+n.name + "=" + n.init.value + ";\n")
-			# f.close()
 
-
-
-		# print("New variable: ",n.name, " = ", self.variables[n.name])
 		return n.name
 
 
@@ -409,15 +323,13 @@ def match_item(ast):
 	gen = Generator()
 	if ast.block_items:
 		for block in ast.block_items:
-			print('In match item')
-			print(type(block))
-			print(block)
+			# print('In match item')
+			# print(type(block))
+			# print(block)
 			res = gen.visit(block)
 			if type(res).__name__=='tuple':
-				# print(res)
 				# came from assignment or array ref. assumed assignment
 				f = open(output_filename+".c","a")
-				# print("double "+res[0][0]+' = '+ res[1]+";\n")
 				f.write(res[0][0]+' = '+ res[1]+";\n")
 				f.close()
 
