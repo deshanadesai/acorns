@@ -27,14 +27,22 @@ class Generator(pycparser.c_ast.Node):
 	def _make_indent(self):
 		return ' ' * self.indent_level
 
-	def visit(self, node, subscript = False):
+	def visit(self, node, subscript = False, controller_vars = False):
 		method = 'visit_' + node.__class__.__name__
+
+
 		
 		if subscript:
-			return getattr(self, method)(node, subscript)
-		else:
-			return getattr(self, method)(node)
+			if method == 'visit_Decl' or method == 'visit_DeclList':
+				return getattr(self, method)(node, subscript, controller_vars=controller_vars)
+			else:
+				return getattr(self, method)(node, subscript)
 
+		else:
+			if method == 'visit_Decl' or method == 'visit_DeclList':
+				return getattr(self, method)(node, controller_vars=controller_vars)
+			else:
+				return getattr(self, method)(node)
 
 	def visit_Constant(self, n, subscript=False):
 		return n.value
@@ -170,9 +178,7 @@ class Generator(pycparser.c_ast.Node):
 			return "("+left +") / ("+right+")"	
 
 	def visit_For(self, n):
-		print("For loop detected")
-		names_vars_init = self.visit(n.init)
-		print("variables initialized")
+		names_vars_init = self.visit(n.init, controller_vars = True)
 
 		# for loop info extracted
 		symbol = n.cond.op
@@ -274,28 +280,42 @@ class Generator(pycparser.c_ast.Node):
 
 
 
-	def visit_Decl(self, n, no_type=False):
+	def visit_Decl(self, n, no_type=False, controller_vars = False):
 		# no_type is used when a Decl is part of a DeclList, where the type is
 		# explicitly only for the first declaration in a list.
 		#
+
 		if n.init.__class__.__name__=='BinaryOp':
 			self.variables[n.name] = self.visit(n.init)
 		elif n.init.__class__.__name__ == 'FuncCall':
 			self.variables[n.name] = self.visit(n.init)
 		elif n.init == None:
-			self.variables[n.name] = None
+			if n.name in constants:
+				self.variables[n.name] = None
+
+			if not controller_vars:
+				f = open(output_filename+".c","a")
+				f.write(n.type.type.names[0] + " " +n.type.declname+";\n")
+				f.close()
 
 		else:
-			self.variables[n.name] = n.init.value
+			if n.name in constants:
+				self.variables[n.name] = n.init.value
+
+			if not controller_vars:
+				f = open(output_filename+".c","a")
+				f.write(n.type.type.names[0] + " " +n.type.declname+" = " + n.init.value+";\n")
+				f.close()
 
 		return n.name
 
 
 
-	def visit_DeclList(self, n):
+	def visit_DeclList(self, n, controller_vars = False):
 		names = []
 		for decl in n.decls:
-			names.append(self.visit(decl))
+			# this will break if something other than a decl is passed
+			names.append(self.visit(decl, controller_vars = controller_vars))
 		return names
 		# s = self.visit(n.decls[0])
 		# print("in decl list")
@@ -384,13 +404,14 @@ if __name__ == "__main__":
 
     parser.add_argument('filename', type = str, help='file name')
     parser.add_argument('output_filename', type = str, default ='output_fun', help='op file name')    
+    parser.add_argument('--constants', type = str, default ='', help = 'constants separated by commas')    
 
 
 
     parser = parser.parse_args()
     filename = parser.filename
     output_filename = parser.output_filename
-
+    constants = parser.constants.split(',')
 
 
 
