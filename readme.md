@@ -46,7 +46,7 @@ fd.grad(ast, 'energy', ['a','p'], func = 'function_test', output_filename = 'tes
 
 ### Known problems
 
-- Support for nested loops is limited to two.
+- pycparser refuses to deal with headers
 - Does not currently support complicated data structures.
 
 ### Package Contents:
