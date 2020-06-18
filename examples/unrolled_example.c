@@ -1,4 +1,4 @@
-void cross_entropy(const double **a, const double **b){
+double cross_entropy(const double **a, const double **b){
 	double loss = 0;
     for(int i=0; i<2; i++){
         for(int j=0; j<2; j++ ){
@@ -7,4 +7,5 @@ void cross_entropy(const double **a, const double **b){
         }
         }
     }
+    return loss;
 }

@@ -279,6 +279,10 @@ class Generator(pycparser.c_ast.Node):
 		return "{}".format(','.join(visited_subexprs))
 
 
+	def visit_Return(self, n):
+		f = open(output_filename+".c","a")
+		f.write("return " +n.expr.name+";\n")
+		f.close()		
 
 	def visit_Decl(self, n, no_type=False, controller_vars = False):
 		# no_type is used when a Decl is part of a DeclList, where the type is
