@@ -325,10 +325,6 @@ class Log(Expr):
         return "(1/(" + exp + ")*"+Expr(exp)._forward_diff()+")"
 
     def _reverse_diff(self, cur_node, adjoint, grad):
-<<<<<<< HEAD
-        exp = cur_node.ast.args.exprs[0].name
-        Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (1/("+exp+"))")
-=======
         try:
             exp = cur_node.ast.args.exprs[0].name
         except:
@@ -336,7 +332,6 @@ class Log(Expr):
         Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (1/("+exp+"))", grad)           
 
 
->>>>>>> master
 
 
 class Pow(Expr):
