@@ -27,8 +27,9 @@ Once the conda-forge channel has been enabled, acorns can be installed with:
 
 Please refer to the `examples/` directory and the `basic_example.ipynb` for more examples. Here is a basic usage of the package:
 
+
 ```
-import acorns.forward_diff as fd
+import acorns
 
     
 c_function = "int function_test(double a, double p){ \
@@ -36,13 +37,10 @@ c_function = "int function_test(double a, double p){ \
     return 0; \
 }"
 
-ast = fd.prepare_graph(c_function)
-
-ast.show()
-
-fd.grad(ast, 'energy', ['a','p'], func = 'function_test', output_filename = 'test_grad_forward',
+acorns.autodiff(c_function, 'energy', ['a','p'], func = 'function_test', output_filename = 'test_grad_forward',
        output_func = 'compute_grad_forward')
 ```
+
 
 ### Known problems
 
