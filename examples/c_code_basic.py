@@ -1,7 +1,7 @@
 import sys, os
 import pytest
 sys.path.append('../')
-import acorns.forward_diff as fd
+import acorns
 
     
 c_function = "int function_test(double a, double p){ \
@@ -9,17 +9,16 @@ c_function = "int function_test(double a, double p){ \
     return 0; \
 }"
 
-ast = fd.prepare_graph(c_function)
 
 if not os.path.exists('output'):
     os.mkdir('output')
-fd.grad(ast, 'energy', ['a','p'], func = 'function_test', output_filename = 'output/test_grad_forward',
+acorns.autodiff(c_function, 'energy', ['a','p'], func = 'function_test', output_filename = 'output/test_grad_forward',
        output_func = 'compute_grad_forward')
-fd.grad(ast, 'energy', ['a','p'], func = 'function_test', reverse_diff = True, output_filename = 'output/test_grad_reverse',
+acorns.autodiff(c_function, 'energy', ['a','p'], func = 'function_test', reverse_diff = True, output_filename = 'output/test_grad_reverse',
        output_func = 'compute_grad_reverse')
-fd.grad(ast, 'energy', ['a','p'], func = 'function_test', second_der = True, output_filename = 'output/test_hessian_forward',
+acorns.autodiff(c_function, 'energy', ['a','p'], func = 'function_test', second_der = True, output_filename = 'output/test_hessian_forward',
        output_func = 'compute_hessian_forward')
-fd.grad(ast, 'energy', ['a','p'], func = 'function_test', second_der = True, reverse_diff = True, 
+acorns.autodiff(c_function, 'energy', ['a','p'], func = 'function_test', second_der = True, reverse_diff = True, 
         output_filename = 'output/test_hessian_reverse',  output_func = 'compute_hessian_reverse')
 
 print("\n\n%========= Run ===========%\n")

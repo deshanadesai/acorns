@@ -23,6 +23,8 @@ class Generator(pycparser.c_ast.Node):
 		self.symbols = []
 		self.thresholds = []
 		self.names_vars_init = []
+		self.output_filename = ''
+		self.constants = []
 
 	def _make_indent(self):
 		return ' ' * self.indent_level
@@ -381,7 +383,12 @@ def make_graph(ast, output_filename):
     f.close()
 
 
-def prepare_graph_from_file(filename, output_filename):
+def prepare_graph_from_file(filename, output_file, constants_list = []):
+    
+    global  output_filename,  constants
+
+    output_filename = output_file
+    constants =  constants_list
 
     ast = parse_file(filename, use_cpp=False,
             cpp_path='gcc',
@@ -392,7 +399,12 @@ def prepare_graph_from_file(filename, output_filename):
     return ast
 
 
-def prepare_graph(function, output_filename):
+def prepare_graph(function, output_file, constants_list = []):
+    
+    global  output_filename, constants
+
+    output_filename = output_file
+    constants =  constants_list
 
     c_parser_obj = c_parser.CParser()
     ast = c_parser_obj.parse(function)
