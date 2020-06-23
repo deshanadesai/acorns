@@ -325,8 +325,18 @@ class Log(Expr):
         return "(1/(" + exp + ")*"+Expr(exp)._forward_diff()+")"
 
     def _reverse_diff(self, cur_node, adjoint, grad):
+<<<<<<< HEAD
         exp = cur_node.ast.args.exprs[0].name
         Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (1/("+exp+"))")
+=======
+        try:
+            exp = cur_node.ast.args.exprs[0].name
+        except:
+            exp = Expr(cur_node.ast.args.exprs[0]).eval()
+        Expr(exp)._reverse_diff("(" + adjoint + ") * "+" (1/("+exp+"))", grad)           
+
+
+>>>>>>> master
 
 
 class Pow(Expr):
@@ -435,17 +445,22 @@ def get_traversal(fun, x):
     return 0
 
 
-def grad(ast, x=0):
-    """
-    Returns a function which computes gradient of `fun` with respect to
-    positional argument number `x`. The returned function takes the 
-    same arguments as `fun` , but returns the gradient instead. The function
-    `fun` is expected to be scalar valued. The gradient has the same type as argument."""
-    assert type(x) in (int, tuple, list), x
+# def grad(ast, x=0):
+#     """
+#     Returns a function which computes gradient of `fun` with respect to
+#     positional argument number `x`. The returned function takes the 
+#     same arguments as `fun` , but returns the gradient instead. The function
+#     `fun` is expected to be scalar valued. The gradient has the same type as argument."""
+#     assert type(x) in (int, tuple, list), x
 
+<<<<<<< HEAD
     fun = ast.ext[-1].body.block_items[1].init
     return get_traversal(fun, x)
 
+=======
+#     fun = ast.ext[-1].body.block_items[1].init
+#     return get_traversal(fun,x)
+>>>>>>> master
 
 def simplify_equation(equation):
     import re
@@ -560,13 +575,62 @@ def grad(ast, expression, variables, func='function',
     c_code._make_header(output_func)
 
     dict_ = {}
-    # fix the expanding eqn here
+
+
+    # old code: looks for a new variable declaration and processes it only then.
+    # for blocks in range(len(ast.ext[ext_index].body.block_items)):
+    #     print(dir(ast.ext[ext_index].body.block_items[blocks]))
+    #     if 'name' not in dir(ast.ext[ext_index].body.block_items[blocks]):
+    #         continue
+
+    #     if ast.ext[ext_index].body.block_items[blocks].type.__class__.__name__ == 'ArrayDecl':
+
+    #         if ast.ext[ext_index].body.block_items[blocks].type.type.__class__.__name__ == 'ArrayDecl':
+    #             expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}][{}]'.format(ast.ext[ext_index].body.block_items[blocks].type.dim.value,ast.ext[ext_index].body.block_items[blocks].type.type.dim.value)
+    #         else:
+    #             expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}]'.format(ast.ext[ext_index].body.block_items[blocks].type.dim.value)
+    #     else:
+    #         expr_name = ast.ext[ext_index].body.block_items[blocks].name
+    #     if expr_name != expression:
+    #         dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
+    #         continue
+
+    #     fun = ast.ext[ext_index].body.block_items[blocks].init
+
+
+
+
+    # looks for an assignment
     for blocks in range(len(ast.ext[ext_index].body.block_items)):
-        if 'name' not in dir(ast.ext[ext_index].body.block_items[blocks]):
-            continue
+        if ast.ext[ext_index].body.block_items[blocks].__class__.__name__ == 'Decl':
+            if ast.ext[ext_index].body.block_items[blocks].type.__class__.__name__ == 'ArrayDecl':
+                expr_name = ""
+                arr = ast.ext[ext_index].body.block_items[blocks].type
+                while arr.__class__.__name__!="TypeDecl":
+                    expr_name += "[{}]".format(arr.dim.value)
+                    arr = arr.type
+                expr_name = arr.declname+expr_name            
+            else:
+                expr_name = ast.ext[ext_index].body.block_items[blocks].name
 
-        if ast.ext[ext_index].body.block_items[blocks].type.__class__.__name__ == 'ArrayDecl':
+            if expr_name in dict_.keys():
+                substite_in_fun = ast.ext[ext_index].body.block_items[blocks].init
+                dict_[expr_name] = expand_equation(substite_in_fun, dict_)
+            else:
+                dict_[expr_name] = expand_equation(ast.ext[ext_index].body.block_items[blocks].init, dict_)     
+                
 
+            if expr_name != expression:
+                continue       
+
+
+            fun = dict_[expr_name]
+
+
+
+
+
+<<<<<<< HEAD
             if ast.ext[ext_index].body.block_items[blocks].type.type.__class__.__name__ == 'ArrayDecl':
                 expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}][{}]'.format(
                     ast.ext[ext_index].body.block_items[blocks].type.dim.value, ast.ext[ext_index].body.block_items[blocks].type.type.dim.value)
@@ -578,8 +642,37 @@ def grad(ast, expression, variables, func='function',
         if expr_name != expression:
             dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
             continue
+=======
 
-        fun = ast.ext[ext_index].body.block_items[blocks].init
+
+        if ast.ext[ext_index].body.block_items[blocks].__class__.__name__ == 'Assignment':
+
+            # dealing with array names
+            if ast.ext[ext_index].body.block_items[blocks].lvalue.__class__.__name__ == 'ArrayRef':
+                expr_name = ""
+                arr = ast.ext[ext_index].body.block_items[blocks].lvalue
+                while arr.__class__.__name__!="ID":
+                    expr_name += "[{}]".format(arr.subscript.value)
+                    arr = arr.name
+                expr_name = arr.name+expr_name
+            # scalar variables
+            else:
+                expr_name = ast.ext[ext_index].body.block_items[blocks].lvalue.name
+
+
+            # has the variable been encountered before
+            if expr_name in dict_.keys():
+                substite_in_fun = ast.ext[ext_index].body.block_items[blocks].rvalue
+                dict_[expr_name] = expand_equation(substite_in_fun, dict_)
+            else:
+                dict_[expr_name] = expand_equation(ast.ext[ext_index].body.block_items[blocks].rvalue, dict_)
+            
+
+            if expr_name != expression:
+                continue
+>>>>>>> master
+
+            fun = dict_[expr_name]
 
     assert fun != None
 
@@ -591,7 +684,7 @@ def grad(ast, expression, variables, func='function',
     # print("Function: ")
     # fun.show()
 
-    fun = expand_equation(fun, dict_)
+    # fun = expand_equation(fun, dict_)
 
     # print("Expanded equation:")
     # fun.show()
@@ -721,8 +814,13 @@ def prepare_graph(function):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
+<<<<<<< HEAD
     parser.add_argument('filename', type=str, help='file name')
     parser.add_argument('expr', type=str, help='file name')
+=======
+    parser.add_argument('filename', type = str, help='file name')
+    parser.add_argument('expr', type = str, help='expression')
+>>>>>>> master
     parser.add_argument('-v', '--vars',
                         type=str, action='store',
                         dest='variables',
