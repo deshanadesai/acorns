@@ -1,5 +1,5 @@
-int function_0(double g)
+int function_1(double k)
 {
-	int p = 4*((g * (1 - g)));
+	int p = sin(k) + cos(k) + pow(k, 2);
 	return 0;
 }

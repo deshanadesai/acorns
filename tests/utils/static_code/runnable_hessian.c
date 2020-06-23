@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < num_params * num_ders; i++)
     {
         fprintf(fp, "%f ", ders[i]);
-        printf("%f", ders[i]);
+        printf("\nUs: %f", ders[i]);
     }
     fclose(fp);
     return 0;

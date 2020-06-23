@@ -121,7 +121,7 @@ def generate_full_graph(avg_us, avg_pytorch, avg_wenzel_static, avg_wenzel_dynam
     plt.legend(('ACORNS', 'Pytorch', 'Mitsuba (Static)', 'Mitsuba (Dynamic)', 'Enoki', 'Tapenade'),
                shadow=False, fontsize=fontsize, frameon=False)
     plt.margins(0, 0)
-    plt.savefig('./tests/results/grad/graphs/g++9/non-random/{}_function_full_grad_g++9.pdf'.format(num_vars), bbox_inches='tight',
+    plt.savefig('./tests/results/grad/graphs/g++9/non-random/{}_function_grad_g++9.pdf'.format(num_vars), bbox_inches='tight',
                 pad_inches=0)
     plt.clf()
 
@@ -147,7 +147,7 @@ def generate_full_graph_without_dynamic(avg_us, avg_pytorch, avg_wenzel_static, 
     plt.legend(('ACORNS', 'Pytorch', 'Mitsuba (Static)', 'Enoki', 'Tapenade'),
                shadow=False, fontsize=fontsize, frameon=False)
     plt.margins(0, 0)
-    plt.savefig('./tests/results/grad/graphs/g++9/non-random/graph_{}_full_no_dynamic.pdf'.format(num_vars), bbox_inches='tight',
+    plt.savefig('./tests/results/grad/graphs/g++9/non-random/graph_{}_no_dynamic.pdf'.format(num_vars), bbox_inches='tight',
                 pad_inches=0)
     plt.clf()
 

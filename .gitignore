@@ -1,5 +1,6 @@
 src/__pycache__/*
 tests/python_test_utils/__pycache__/*
+tests/utils/*
 *.png
 *.pdf
 *.npy

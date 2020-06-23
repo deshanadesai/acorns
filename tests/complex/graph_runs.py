@@ -14,7 +14,6 @@ def convert_split_size_to_number_of_files(split_sizes, num_params):
     for split in split_sizes:
         num_file = math.ceil(float(num_params) / float(split))
         num_files.append(num_file)
-    num_files.reverse()
     return num_files
 
 

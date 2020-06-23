@@ -1,3 +1,4 @@
+
 import sys
 import math
 import matplotlib.pyplot as plt
@@ -10,16 +11,19 @@ import numpy as np
 import shutil
 from datetime import datetime
 
-sys.path.append('tests/python_test_utils')
-import tapenade_utils
-import us_utils
-import wenzel_utils
-import pytorch_utils
-import enoki_utils
-
-sys.path.append('acorns')
 print(sys.path)
-import forward_diff
+
+sys.path.append('tests/python_test_utils')
+import enoki_utils
+import pytorch_utils
+import wenzel_utils
+import us_utils
+import tapenade_utils
+# sys.path.append('acorns')
+# print(sys.path)
+
+import acorns.forward_diff as forward_diff
+
 
 def generate_params(num_params, function_num):
     # , " which is: ", functions[function_num][0])
@@ -106,7 +110,6 @@ def generate_graph(avg_us, avg_pytorch, avg_wenzel, denom, func_num, function):
 
 if __name__ == "__main__":
     functions = [
-        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],
         ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
         ["sin(k) + cos(k) + pow(k, 2)", ["k"]]
     ]
@@ -201,7 +204,8 @@ if __name__ == "__main__":
                 wenzel_static = wenzel_utils.run_wenzel("single", True)
                 wenzel_dynamic = wenzel_utils.run_wenzel("single", False)
 
-                print("Pytorch: {}\n Us: {}\n Enoki: {}\n Tapenade: {}\n Wenzel Static: {}\n Wenzel Dynamic: {}".format(pytorch, ours, enoki, tapenade, wenzel_static, wenzel_dynamic))
+                print("Pytorch: {}\n Us: {}\n Enoki: {}\n Tapenade: {}\n Wenzel Static: {}\n Wenzel Dynamic: {}".format(
+                    pytorch, ours, enoki, tapenade, wenzel_static, wenzel_dynamic))
 
                 # for j in range(len(ours[0])):
                 #     # print("Pytorch: {}\n Us: {}\n Enoki: {}\n Tapenade: {}\n Wenzel Static: {}\n Wenzel Dynamic {}".format( float(pytorch([0][j]), float(ours[0][j]), float(enoki[0][j]), float(tapenade[0][j]), float(wenzel_static[0][j]), float(wenzel_dynamic[0][j]))))

@@ -102,7 +102,7 @@ if __name__ == "__main__":
     alphabets = list(string.ascii_lowercase)
     alphabets.remove('i')
 
-    for k in range(1, 11):
+    for k in range(2, 3):
         function = generate_function.gen_other(k)
         functions.append(function)
         print(function)

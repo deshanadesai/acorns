@@ -26,7 +26,6 @@ def generate_function_c_file(func_num, functions, input_filename):
 
 def generate_derivatives_c_file(func_num, functions, input_filename, run_c, derivatives_filename, reverse, second_der):
     vars = ",".join(str(x) for x in functions[func_num][1])
-    
     reverse_string = ""
     if reverse:
         reverse_string += " --reverse "

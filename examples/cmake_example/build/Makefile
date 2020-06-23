@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /mnt/d/Documents/programming/coursework/autodiff/examples/cma
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -77,6 +66,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -111,44 +111,57 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named example
+# Target rules for targets named derivative
 
 # Build rule for target.
-example: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 example
-.PHONY : example
+derivative: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 derivative
+.PHONY : derivative
 
 # fast build rule for target.
-example/fast:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/build
-.PHONY : example/fast
+derivative/fast:
+	$(MAKE) -f CMakeFiles/derivative.dir/build.make CMakeFiles/derivative.dir/build
+.PHONY : derivative/fast
 
-ders/der_1.o: ders/der_1.c.o
+#=============================================================================
+# Target rules for targets named main_target
 
-.PHONY : ders/der_1.o
+# Build rule for target.
+main_target: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main_target
+.PHONY : main_target
+
+# fast build rule for target.
+main_target/fast:
+	$(MAKE) -f CMakeFiles/main_target.dir/build.make CMakeFiles/main_target.dir/build
+.PHONY : main_target/fast
+
+ders/der_0.o: ders/der_0.c.o
+
+.PHONY : ders/der_0.o
 
 # target to build an object file
-ders/der_1.c.o:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/ders/der_1.c.o
-.PHONY : ders/der_1.c.o
+ders/der_0.c.o:
+	$(MAKE) -f CMakeFiles/derivative.dir/build.make CMakeFiles/derivative.dir/ders/der_0.c.o
+.PHONY : ders/der_0.c.o
 
-ders/der_1.i: ders/der_1.c.i
+ders/der_0.i: ders/der_0.c.i
 
-.PHONY : ders/der_1.i
+.PHONY : ders/der_0.i
 
 # target to preprocess a source file
-ders/der_1.c.i:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/ders/der_1.c.i
-.PHONY : ders/der_1.c.i
+ders/der_0.c.i:
+	$(MAKE) -f CMakeFiles/derivative.dir/build.make CMakeFiles/derivative.dir/ders/der_0.c.i
+.PHONY : ders/der_0.c.i
 
-ders/der_1.s: ders/der_1.c.s
+ders/der_0.s: ders/der_0.c.s
 
-.PHONY : ders/der_1.s
+.PHONY : ders/der_0.s
 
 # target to generate assembly for a file
-ders/der_1.c.s:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/ders/der_1.c.s
-.PHONY : ders/der_1.c.s
+ders/der_0.c.s:
+	$(MAKE) -f CMakeFiles/derivative.dir/build.make CMakeFiles/derivative.dir/ders/der_0.c.s
+.PHONY : ders/der_0.c.s
 
 src/example.o: src/example.c.o
 
@@ -156,7 +169,7 @@ src/example.o: src/example.c.o
 
 # target to build an object file
 src/example.c.o:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/src/example.c.o
+	$(MAKE) -f CMakeFiles/main_target.dir/build.make CMakeFiles/main_target.dir/src/example.c.o
 .PHONY : src/example.c.o
 
 src/example.i: src/example.c.i
@@ -165,7 +178,7 @@ src/example.i: src/example.c.i
 
 # target to preprocess a source file
 src/example.c.i:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/src/example.c.i
+	$(MAKE) -f CMakeFiles/main_target.dir/build.make CMakeFiles/main_target.dir/src/example.c.i
 .PHONY : src/example.c.i
 
 src/example.s: src/example.c.s
@@ -174,7 +187,7 @@ src/example.s: src/example.c.s
 
 # target to generate assembly for a file
 src/example.c.s:
-	$(MAKE) -f CMakeFiles/example.dir/build.make CMakeFiles/example.dir/src/example.c.s
+	$(MAKE) -f CMakeFiles/main_target.dir/build.make CMakeFiles/main_target.dir/src/example.c.s
 .PHONY : src/example.c.s
 
 # Help Target
@@ -183,12 +196,13 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... edit_cache"
-	@echo "... example"
 	@echo "... rebuild_cache"
-	@echo "... ders/der_1.o"
-	@echo "... ders/der_1.i"
-	@echo "... ders/der_1.s"
+	@echo "... edit_cache"
+	@echo "... derivative"
+	@echo "... main_target"
+	@echo "... ders/der_0.o"
+	@echo "... ders/der_0.i"
+	@echo "... ders/der_0.s"
 	@echo "... src/example.o"
 	@echo "... src/example.i"
 	@echo "... src/example.s"

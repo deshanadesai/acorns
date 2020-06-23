@@ -1,0 +1,2 @@
+/usr/bin/ar qc libderivative.a  CMakeFiles/derivative.dir/ders/der_0.c.o
+/usr/bin/ranlib libderivative.a

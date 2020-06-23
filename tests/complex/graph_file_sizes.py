@@ -27,12 +27,10 @@ def convert_split_size_to_number_of_files(split_sizes, num_params):
     for split in split_sizes:
         num_file = math.ceil(float(num_params) / float(split))
         num_files.append(num_file)
-    num_files.reverse()
     return num_files
 
 
 def convert_files_to_lists(file_location):
-    c_sizes = {}
     o_sizes = {}
     functions = []
 
@@ -40,24 +38,22 @@ def convert_files_to_lists(file_location):
     with open(file_location) as json_data:
         data = json.load(json_data)
         for key in sorted(data):
-            c_sizes[key] = []
             o_sizes[key] = []
             functions.append(key)
 
             for split in sorted(data[key], key=natural_keys):
-                c_size = float(data[key][split]['.c'] / 1e+9)
-                o_size = float(data[key][split]['.o'] / 1e+9)
-                split_set.add(int(split))
-                print("Key: {}, Split: {}, Data: {} ".format(
-                    key, split, data[key][split]))
-                print("C Size is {} GB".format(c_size))
-                print("O Size is {} GB".format(o_size))
-                c_sizes[key].append(c_size)
-                o_sizes[key].append(o_size)
+                if '.o' in data[key][split]:
+                    o_size = float(data[key][split]['.o'] / 1e+9)
+                    split_set.add(int(split))
+                    print("Key: {}, Split: {}, Data: {} ".format(
+                        key, split, data[key][split]))
+                    # print("C Size is {} GB".format(c_size))
+                    # print("O Size is {} GB".format(o_size))
+                    o_sizes[key].append(o_size)
 
     print(split_set)
     split_list = list(sorted(split_set))
-    return c_sizes, o_sizes, functions, split_list
+    return o_sizes, functions, split_list
 
 
 def generate_two_graph(avg_us, denom, function, suffix="", ymin=1.e+00, ymax=1.e+02):
@@ -75,16 +71,14 @@ def generate_two_graph(avg_us, denom, function, suffix="", ymin=1.e+00, ymax=1.e
     plt.clf()
 
 
-c_sizes, o_sizes, functions, split_list, = convert_files_to_lists(
+o_sizes, functions, split_list, = convert_files_to_lists(
     "./tests/complex/data/sizes/file_sizes.json")
 
 for i, function in enumerate(functions):
     num_files = convert_split_size_to_number_of_files(
         split_list, num_params[i])
-    print('C Sizes: {}\n O Sizes: {}\n Num Files {}'.format(
-        c_sizes[function], o_sizes[function], num_files))
-    generate_two_graph(c_sizes[function], num_files,
-                       function, suffix="C", ymin=1.e-06, ymax=1.e+02)
+    print('{}: \n O Sizes: {}\n Num Files {}'.format(
+        function, o_sizes[function], num_files))
     generate_two_graph(o_sizes[function], num_files,
                        function, suffix="O", ymin=1.e-04, ymax=1.e-02)
     # generate_full_graph_without_dynamic(us_times[label], pytorch_times[label], wenzel_static_times[label], enoki_times[label], tapenade_times[label], num_params, label, 'Wenzel', i)
