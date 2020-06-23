@@ -85,13 +85,13 @@ int main(int argc, char *argv[])
     FILE *fp;
 
     fp = fopen(output_filename, "w+");
-    printf("%f ", delta);
+    printf("Time: %f ", delta);
     fprintf(fp, "%f ", delta);
 
     for (int i = 0; i < num_params * num_ders; i++)
     {
         fprintf(fp, "%f ", ders[i]);
-        printf("%f", ders[i]);
+        // printf("\nUs: %f", ders[i]);
     }
     fclose(fp);
     return 0;

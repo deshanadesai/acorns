@@ -114,7 +114,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=directory_test
+CMAKE_PROJECT_NAME:STATIC=SimpleProject
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -166,16 +166,13 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-Project_BINARY_DIR:STATIC=/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/build
+SimpleProject_BINARY_DIR:STATIC=/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/build
 
 //Value Computed by CMake
-Project_SOURCE_DIR:STATIC=/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example
+SimpleProject_SOURCE_DIR:STATIC=/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example
 
-//Value Computed by CMake
-directory_test_BINARY_DIR:STATIC=/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/build
-
-//Value Computed by CMake
-directory_test_SOURCE_DIR:STATIC=/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example
+//Dependencies for target
+derivative_LIB_DEPENDS:STATIC=
 
 
 ########################

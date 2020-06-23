@@ -76,7 +76,6 @@ def cleanup():
 
 if __name__ == "__main__":
     functions = [
-        ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j", ["k", "j"]],
         ["((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k", ["k"]],
         ["sin(k) + cos(k) + pow(k, 2)", ["k"] ]
     ]
@@ -91,6 +90,8 @@ if __name__ == "__main__":
     NUM_ITERATIONS = 10
     RUN_C = True
 
+    RUNNABLE_TAPENADE = './tests/utils/runnable_tapenade_hess'
+    TAPENADE_OUTPUT = './tests/utils/tapenade_output_hess.txt'
     output = {}
 
     for func_num, func in enumerate(functions):
@@ -107,6 +108,13 @@ if __name__ == "__main__":
         us_utils.generate_derivatives_c_file(func_num, functions, INPUT_FILENAME, RUN_C, derivatives_filename="./tests/utils/hessian/ders_hessian", reverse=False, second_der=True)
         us_utils.compile_ours(RUN_C, runnable_filename="./tests/utils/static_code/runnable_hessian", derivatives_filename="./tests/utils/hessian/ders_hessian")
 
+        # generate and compile tapenade code
+        tapenade_utils.generate_function_c_file(
+            func_num, functions, './tests/utils/tapenade_func.c')
+        tapenade_utils.generate_hessian_c_file(func_num)
+        tapenade_utils.generate_runnable_tapenade_hess(
+            func[1], len(func[1]), func_num)
+        tapenade_utils.compile('./tests/utils/runnable_tapenade_hess')
 
         while num_params <= MAX_PARAMS:
 
@@ -122,16 +130,11 @@ if __name__ == "__main__":
             wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "hessian", True)
             wenzel_utils.compile_wenzel("hessian", True, compiler_version=WENZEL_COMPILER_VERSION)
 
-            # wenzel dynamic
-            wenzel_utils.generate_wenzel_file(func_num, num_params, functions, PARAMS_FILENAME, "hessian", False)
-            wenzel_utils.compile_wenzel("hessian", False, compiler_version=WENZEL_COMPILER_VERSION)
-
-
             # initialize arrays for run
             our_times = []
             py_times = []
             wenzel_times_static = []
-            wenzel_times_dynamic = []
+            tapenade_times = []
 
             for i in range(NUM_ITERATIONS):
 
@@ -139,23 +142,25 @@ if __name__ == "__main__":
                 ours = us_utils.run_ours(
                     functions[func_num], num_params, functions, PARAMS_FILENAME, OUTPUT_FILENAME,   runnable_filename="./tests/utils/static_code/runnable_hessian")
                 wenzel_static = wenzel_utils.run_wenzel("hessian", True)
-                wenzel_dynamic = wenzel_utils.run_wenzel("hessian", False)
+                tapenade = tapenade_utils.run_tapenade(functions[func_num], num_params, functions, PARAMS_FILENAME, TAPENADE_OUTPUT, RUNNABLE_TAPENADE)
 
+
+                # print("Pytorch: {}\n Us: {}\n Wenzel Static: {}\n Wenzel Dynamic: {}\n Tapenade: {}".format(pytorch, ours, wenzel_static, wenzel_dynamic, tapenade))
+                tapenade_times.append(float(tapenade[1]))
                 our_times.append(float(ours[1]))
                 py_times.append(float(pytorch[1]))
                 wenzel_times_static.append(float(wenzel_static[1]))
-                wenzel_times_dynamic.append(float(wenzel_dynamic[1]))
 
             # print for debug purposes
             print("Parameters: ", params[:10])
             print("ours: ", ours[0][:10])
-            print("pytorch: ", pytorch[0][:10])
+            # print("pytorch: ", pytorch[0][:10])
 
             output[func[0]][num_params] = {
                 "us": sum(our_times) / len(our_times),
                 "pytorch": sum(py_times) / len(py_times),
                 "wenzel_static": (sum(wenzel_times_static) / len(wenzel_times_static)),
-                "wenzel_dynamic": (sum(wenzel_times_dynamic) / len(wenzel_times_dynamic)),
+                "tapenade": sum(tapenade_times) / len(tapenade_times),
                 "flags": "-ffast-math -O3",
                 "compiler_version": WENZEL_COMPILER_VERSION
             }

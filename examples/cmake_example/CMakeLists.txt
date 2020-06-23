@@ -1,16 +1,26 @@
-cmake_minimum_required(VERSION 2.8.9)
-project(directory_test)
+cmake_minimum_required(VERSION 3.1)
+project(SimpleProject)
 
-#Bring the headers, such as Student.h into the project
-include_directories(include)
 
-# Tell CMake to run python from the directory where this CMakeLists file exists.
-execute_process(COMMAND python3 ext/forward_diff.py functions/func_1.c energy -ccode True -second_der False --vars a -func function_0 --output_filename ders/der_1
-    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+execute_process(COMMAND
+python -c "import acorns; import sys; sys.stdout.write(acorns.__path__[0])"
+OUTPUT_VARIABLE ACORNS_PATH)
+SET(GENERATOR_COMMAND "python3 ${ACORNS_PATH}/forward_diff.py ${PROJECT_SOURCE_DIR}/functions/function_0.c energy --vars x --func function_0 --output_filename ${PROJECT_SOURCE_DIR}/ders/der_0")
 
-#However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES "src/*.c" "ders/*.c")
- 
-add_executable(example ${SOURCES})
+add_custom_command(
+OUTPUT
+    ${PROJECT_SOURCE_DIR}/ders/der_0.c
+    ${PROJECT_SOURCE_DIR}/ders/der_0.h
+COMMAND
+    ${GENERATOR_COMMAND}
+DEPENDS
+    ${PROJECT_SOURCE_DIR}/functions/function_0.c
+)
 
-target_link_libraries(example m)
+add_library(derivative "ders/der_0.c")
+target_include_directories(derivative PUBLIC ders)
+
+# Link target derivative to main_executable
+
+add_executable(main_target src/example.c)
+target_link_libraries(main_target PUBLIC derivative m)

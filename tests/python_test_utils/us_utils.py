@@ -26,7 +26,6 @@ def generate_function_c_file(func_num, functions, input_filename):
 
 def generate_derivatives_c_file(func_num, functions, input_filename, run_c, derivatives_filename, reverse, second_der):
     vars = ",".join(str(x) for x in functions[func_num][1])
-    
     reverse_string = ""
     if reverse:
         reverse_string += " --reverse "
@@ -39,6 +38,7 @@ def generate_derivatives_c_file(func_num, functions, input_filename, run_c, deri
 def generate_omp_derivatives_c_file(filename, num_threads):
     with open(filename) as file:
         c_code = file.read()
+        c_code = "#include <omp.h>\n" + c_code.replace("{", "{\n\tomp_set_dynamic(0);\n\tomp_set_num_threads(NUM_THREADS);\n\t#pragma omp parallel for\n", 1)
         c_code = c_code.replace("NUM_THREADS", num_threads)
         output_file = open(filename, "w+")
         output_file.write(c_code)
@@ -65,6 +65,6 @@ def compile_ours(run_c, runnable_filename, derivatives_filename):
             cmd = "cl " + runnable_filename + ".c " + derivatives_filename + ".c  /link /out:utils/program.exe"
         else:
             cmd = "gcc -O3 -ffast-math -o " + runnable_filename + " " + runnable_filename + \
-                ".c " + derivatives_filename + ".c -lm"
+                ".c " + derivatives_filename + ".c -lm -fopenmp"
         print(cmd)
         os.system(cmd)

@@ -33,6 +33,65 @@ def generate_derivatives_c_file(func_num):
         output_file = open('./tests/utils/tapenade_ders.c', "w+")
         output_file.write(c_code)
         output_file.close()
+
+def generate_hessian_c_file(func_num):
+    cmd = "./tests/utils/ext/tapenade/bin/tapenade ./tests/utils/tapenade_func.c -head function_{} -tangent -output \"./tests/utils/tapenade_grad\"".format(func_num)
+    os.system(cmd)
+    with open("./tapenade_grad_d.c") as file:
+        c_code = file.read()
+        c_code = c_code.replace("#include <adBuffer.h>", "")
+        output_file = open('./tests/utils/tapenade_grad.c', "w+")
+        output_file.write(c_code)
+        output_file.close()
+    cmd = "./tests/utils/ext/tapenade/bin/tapenade ./tests/utils/tapenade_grad.c -head function_{}_b -tangent -output \"./tests/utils/tapenade_hess\"".format(func_num)
+    os.system(cmd)
+    with open("./tapenade_hess_d.c") as file:
+        c_code = file.read()
+        c_code = c_code.replace("#include <adBuffer.h>", "")
+        output_file = open('./tests/utils/tapenade_hess.c', "w+")
+        output_file.write(c_code)
+        output_file.close()
+
+def generate_runnable_tapenade_hess(vars, num_vars, func_num):
+    dd_vars = generate_dd_vars(vars, num_vars)
+    vals_string = generate_vals_hess(vars, num_vars)
+    ders_string = generate_vars_from_params_string(vars, num_vars, func_num)
+    tapenade_der = None
+    with open("./tests/utils/tapenade_hess.c") as file:
+        tapenade_der = file.read()
+    with open("./tests/utils/static_code/runnable_tapenade_hess.txt") as file:
+        tapenade = file.read() 
+        print(tapenade_der)
+        print(tapenade)
+        c_code = tapenade.format(tapenade_der, num_vars, num_vars, dd_vars, vals_string, ders_string)
+        output_file = open('./tests/utils/runnable_tapenade_hess.c', "w+")
+        output_file.write(c_code)
+        output_file.close()
+
+def generate_dd_vars(vars, num_vars):
+    dd_vars_string = ""
+    for var in vars:
+        dd_vars_string += "double {}dd = 0;\n\t".format(var)
+    return dd_vars_string
+
+def generate_hess_function_call(vars, num_vars, func_num):
+    function_call_str = "function_{}_d_d(".format(func_num)
+    for i, var in enumerate(vars):
+        function_call_str += "{}, ders_flags[second_der][{}], ders_flags[first_der][{}], {}dd,".format(var, i, i, var)
+    function_call_str += "&function_0_d, &function_0d, &function_0_d)"
+    return function_call_str
+
+def generate_vals_hess(vars, num_vars):
+    vals_string = ""
+    for i, var in enumerate(vars):
+        vals_string += "\t\tdouble {} = values[i * {} + {}];\n".format(var, num_vars, i)
+    return vals_string
+
+def generate_vars_from_params_string(vars, num_vars, func_num):
+    ders_string = ""
+    function_call = generate_hess_function_call(vars, num_vars, func_num)
+    ders_string += "\t\tdouble output = {};\n".format(function_call)
+    return ders_string
     
 def generate_derivative_string(vars, num_vars, func_num):
     der_string = ""
@@ -62,7 +121,6 @@ def generate_runnable_tapenade(vars, num_vars, func_num):
         output_file.write(c_code)
         output_file.close()
 
-
 def run_tapenade(func, num_params, functions, params_filename, output_filename, runnable_filename):
     if sys.platform.startswith('win'):
         print("running....")
@@ -85,4 +143,8 @@ def compile(runnable_filename):
         cmd = "gcc -O3 -ffast-math -o " + runnable_filename + " " + runnable_filename + ".c -lm"
     print(cmd)
     os.system(cmd)
-    
+
+
+# vars = ["x", "y"]
+# num_vars = 2
+# generate_runnable_tapenade_hess(vars, num_vars)
