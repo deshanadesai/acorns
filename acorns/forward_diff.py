@@ -448,14 +448,8 @@ def get_traversal(fun, x):
 #     `fun` is expected to be scalar valued. The gradient has the same type as argument."""
 #     assert type(x) in (int, tuple, list), x
 
-<<<<<<< HEAD
-    fun = ast.ext[-1].body.block_items[1].init
-    return get_traversal(fun, x)
-
-=======
 #     fun = ast.ext[-1].body.block_items[1].init
 #     return get_traversal(fun,x)
->>>>>>> master
 
 def simplify_equation(equation):
     import re
@@ -625,19 +619,6 @@ def grad(ast, expression, variables, func='function',
 
 
 
-<<<<<<< HEAD
-            if ast.ext[ext_index].body.block_items[blocks].type.type.__class__.__name__ == 'ArrayDecl':
-                expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}][{}]'.format(
-                    ast.ext[ext_index].body.block_items[blocks].type.dim.value, ast.ext[ext_index].body.block_items[blocks].type.type.dim.value)
-            else:
-                expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}]'.format(
-                    ast.ext[ext_index].body.block_items[blocks].type.dim.value)
-        else:
-            expr_name = ast.ext[ext_index].body.block_items[blocks].name
-        if expr_name != expression:
-            dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
-            continue
-=======
 
 
         if ast.ext[ext_index].body.block_items[blocks].__class__.__name__ == 'Assignment':
@@ -665,7 +646,6 @@ def grad(ast, expression, variables, func='function',
 
             if expr_name != expression:
                 continue
->>>>>>> master
 
             fun = dict_[expr_name]
 
@@ -809,13 +789,8 @@ def prepare_graph(function):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-<<<<<<< HEAD
-    parser.add_argument('filename', type=str, help='file name')
-    parser.add_argument('expr', type=str, help='file name')
-=======
     parser.add_argument('filename', type = str, help='file name')
     parser.add_argument('expr', type = str, help='expression')
->>>>>>> master
     parser.add_argument('-v', '--vars',
                         type=str, action='store',
                         dest='variables',
