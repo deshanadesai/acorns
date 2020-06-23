@@ -106,7 +106,7 @@ if __name__ == "__main__":
         us_utils.generate_function_c_file(func_num, functions, INPUT_FILENAME)
         for num_cores in num_cores_as_list:
 
-            num_cores_str = str(4) #str(num_cores)
+            num_cores_str = str(num_cores)
             print("Using {} threads".format(num_cores_str))
 
             # generate and compile our code
