@@ -23,11 +23,13 @@ setuptools.setup(
     install_requires = [
             'pycparser',
             'numpy',
-            'argparse']
+            'argparse'],
     entry_points={
-        'console_scripts': ['autodiff=acorns.forward_diff:autodiff']
-    }            
+        'console_scripts': [
+            'acorns_autodiff = acorns.forward_diff:main'
+            ]
+    }
 
     # setup_requires=['pytest-runner'],
-    # tests_require=['pytest'],    
+    # tests_require=['pytest'],
 )
