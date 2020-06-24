@@ -10,13 +10,13 @@ from .unroll import prepare_graph_from_file, prepare_graph
 
 
 
-def autodiff(function, expression, variables, func = 'function', 
+def autodiff(function, expression, variables, func = 'function',
                 reverse_diff = False, second_der = False, output_filename = 'c_code',
                 output_func = 'compute'):
 
     ast = prep_graph_ad(function)
-    grad(ast, expression, variables, func = func, 
-        reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename, 
+    grad(ast, expression, variables, func = func,
+        reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename,
         output_func = output_func)
 
 

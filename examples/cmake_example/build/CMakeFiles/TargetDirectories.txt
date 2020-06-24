@@ -1,4 +1,0 @@
-/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/build/CMakeFiles/rebuild_cache.dir
-/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/build/CMakeFiles/edit_cache.dir
-/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/build/CMakeFiles/derivative.dir
-/mnt/d/Documents/programming/coursework/autodiff/examples/cmake_example/build/CMakeFiles/main_target.dir
