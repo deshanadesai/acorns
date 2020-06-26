@@ -1,0 +1,9 @@
+{
+    "(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "us": 0.0096699
+        }
+    }
+}

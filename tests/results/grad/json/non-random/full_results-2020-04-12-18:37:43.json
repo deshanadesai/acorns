@@ -1,0 +1,428 @@
+{
+    "((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k": {
+        "10": {
+            "compiler_version": "",
+            "enoki": 9.1e-05,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0013372421264648438,
+            "tapenade": 0.0,
+            "us": 0.0,
+            "wenzel_dynamic": 2.1899999999999997e-05,
+            "wenzel_static": 0.0
+        },
+        "2010": {
+            "compiler_version": "",
+            "enoki": 0.0008887999999999998,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0014684438705444337,
+            "tapenade": 1.5500000000000004e-05,
+            "us": 1.0300000000000001e-05,
+            "wenzel_dynamic": 0.00301,
+            "wenzel_static": 2.7099999999999998e-05
+        },
+        "4010": {
+            "compiler_version": "",
+            "enoki": 0.0016377000000000002,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0015805482864379883,
+            "tapenade": 2.4400000000000004e-05,
+            "us": 1.6800000000000002e-05,
+            "wenzel_dynamic": 0.006457200000000001,
+            "wenzel_static": 5.4099999999999994e-05
+        },
+        "6010": {
+            "compiler_version": "",
+            "enoki": 0.0023960999999999995,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0017195701599121093,
+            "tapenade": 3.9999999999999996e-05,
+            "us": 3.23e-05,
+            "wenzel_dynamic": 0.0092397,
+            "wenzel_static": 8.509999999999998e-05
+        },
+        "8010": {
+            "compiler_version": "",
+            "enoki": 0.0032131,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0018161535263061523,
+            "tapenade": 5.2300000000000004e-05,
+            "us": 3.62e-05,
+            "wenzel_dynamic": 0.0108758,
+            "wenzel_static": 0.00011639999999999998
+        },
+        "10010": {
+            "compiler_version": "",
+            "enoki": 0.0038892999999999996,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0019383192062377929,
+            "tapenade": 7.429999999999999e-05,
+            "us": 5.44e-05,
+            "wenzel_dynamic": 0.0116432,
+            "wenzel_static": 0.00013729999999999998
+        },
+        "20010": {
+            "compiler_version": "",
+            "enoki": 0.0076792,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.002575993537902832,
+            "tapenade": 0.0001323,
+            "us": 9.580000000000001e-05,
+            "wenzel_dynamic": 0.016289500000000002,
+            "wenzel_static": 0.00028280000000000004
+        },
+        "30010": {
+            "compiler_version": "",
+            "enoki": 0.009772099999999999,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0031143903732299806,
+            "tapenade": 0.00011180000000000001,
+            "us": 8.15e-05,
+            "wenzel_dynamic": 0.020958200000000003,
+            "wenzel_static": 0.00026159999999999996
+        },
+        "40010": {
+            "compiler_version": "",
+            "enoki": 0.010576499999999999,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.003736710548400879,
+            "tapenade": 0.000138,
+            "us": 0.0001261,
+            "wenzel_dynamic": 0.027380599999999998,
+            "wenzel_static": 0.0002724
+        },
+        "50010": {
+            "compiler_version": "",
+            "enoki": 0.0111665,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.00433201789855957,
+            "tapenade": 0.0001685,
+            "us": 0.0001238,
+            "wenzel_dynamic": 0.0345213,
+            "wenzel_static": 0.0003376
+        },
+        "60010": {
+            "compiler_version": "",
+            "enoki": 0.0117316,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.004919743537902832,
+            "tapenade": 0.00021000000000000004,
+            "us": 0.0001696,
+            "wenzel_dynamic": 0.041351200000000005,
+            "wenzel_static": 0.00042560000000000005
+        },
+        "70010": {
+            "compiler_version": "",
+            "enoki": 0.012873200000000001,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.005525064468383789,
+            "tapenade": 0.00024680000000000004,
+            "us": 0.0001915,
+            "wenzel_dynamic": 0.047947500000000004,
+            "wenzel_static": 0.0004763
+        },
+        "80010": {
+            "compiler_version": "",
+            "enoki": 0.014318,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.006057524681091308,
+            "tapenade": 0.00030810000000000006,
+            "us": 0.0002731,
+            "wenzel_dynamic": 0.05528559999999999,
+            "wenzel_static": 0.0005505999999999999
+        },
+        "90010": {
+            "compiler_version": "",
+            "enoki": 0.015995699999999995,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.006771540641784668,
+            "tapenade": 0.0003489,
+            "us": 0.0002619,
+            "wenzel_dynamic": 0.0624395,
+            "wenzel_static": 0.0006131
+        }
+    },
+    "((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j": {
+        "10": {
+            "compiler_version": "",
+            "enoki": 9.84e-05,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0012719154357910157,
+            "tapenade": 0.0,
+            "us": 0.0,
+            "wenzel_dynamic": 2.4299999999999994e-05,
+            "wenzel_static": 1e-07
+        },
+        "2010": {
+            "compiler_version": "",
+            "enoki": 0.0009021,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0013502836227416992,
+            "tapenade": 1.76e-05,
+            "us": 1.59e-05,
+            "wenzel_dynamic": 0.0036894000000000002,
+            "wenzel_static": 0.00012759999999999998
+        },
+        "4010": {
+            "compiler_version": "",
+            "enoki": 0.0017257000000000002,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0014777660369873046,
+            "tapenade": 4.32e-05,
+            "us": 3.81e-05,
+            "wenzel_dynamic": 0.0078959,
+            "wenzel_static": 0.00026159999999999996
+        },
+        "6010": {
+            "compiler_version": "",
+            "enoki": 0.0025050000000000003,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.001539301872253418,
+            "tapenade": 6.010000000000001e-05,
+            "us": 5.74e-05,
+            "wenzel_dynamic": 0.0091654,
+            "wenzel_static": 0.000394
+        },
+        "8010": {
+            "compiler_version": "",
+            "enoki": 0.0032802000000000005,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.00169827938079834,
+            "tapenade": 8.95e-05,
+            "us": 8.08e-05,
+            "wenzel_dynamic": 0.0104824,
+            "wenzel_static": 0.0005193
+        },
+        "10010": {
+            "compiler_version": "",
+            "enoki": 0.0038512999999999998,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0018389463424682618,
+            "tapenade": 0.00010469999999999997,
+            "us": 9.779999999999999e-05,
+            "wenzel_dynamic": 0.0113487,
+            "wenzel_static": 0.0006593
+        },
+        "20010": {
+            "compiler_version": "",
+            "enoki": 0.007559600000000001,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.002390551567077637,
+            "tapenade": 0.00010549999999999999,
+            "us": 0.0001044,
+            "wenzel_dynamic": 0.017199600000000002,
+            "wenzel_static": 0.0006019
+        },
+        "30010": {
+            "compiler_version": "",
+            "enoki": 0.010529199999999999,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.003072166442871094,
+            "tapenade": 0.0001653,
+            "us": 0.00016580000000000002,
+            "wenzel_dynamic": 0.025663399999999996,
+            "wenzel_static": 0.0009029999999999999
+        },
+        "40010": {
+            "compiler_version": "",
+            "enoki": 0.011076,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0035643577575683594,
+            "tapenade": 0.0002075,
+            "us": 0.0002097,
+            "wenzel_dynamic": 0.0344261,
+            "wenzel_static": 0.0012127
+        },
+        "50010": {
+            "compiler_version": "",
+            "enoki": 0.0111023,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0041369438171386715,
+            "tapenade": 0.00026690000000000004,
+            "us": 0.00028419999999999997,
+            "wenzel_dynamic": 0.0427104,
+            "wenzel_static": 0.0014983
+        },
+        "60010": {
+            "compiler_version": "",
+            "enoki": 0.012054899999999999,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.004841494560241699,
+            "tapenade": 0.0003079,
+            "us": 0.00034540000000000005,
+            "wenzel_dynamic": 0.051208500000000004,
+            "wenzel_static": 0.0017984
+        },
+        "70010": {
+            "compiler_version": "",
+            "enoki": 0.0134385,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.005392241477966309,
+            "tapenade": 0.00039239999999999994,
+            "us": 0.0005062,
+            "wenzel_dynamic": 0.059863900000000005,
+            "wenzel_static": 0.0021260000000000003
+        },
+        "80010": {
+            "compiler_version": "",
+            "enoki": 0.014819200000000001,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.006195521354675293,
+            "tapenade": 0.0005154,
+            "us": 0.0006020999999999999,
+            "wenzel_dynamic": 0.0684063,
+            "wenzel_static": 0.0024258
+        },
+        "90010": {
+            "compiler_version": "",
+            "enoki": 0.0167852,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.006834340095520019,
+            "tapenade": 0.0005838,
+            "us": 0.0006980999999999999,
+            "wenzel_dynamic": 0.07712379999999999,
+            "wenzel_static": 0.0027285000000000005
+        }
+    },
+    "sin(k) + cos(k) + pow(k, 2)": {
+        "10": {
+            "compiler_version": "",
+            "enoki": 5.9000000000000004e-05,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.001084303855895996,
+            "tapenade": 2.54e-05,
+            "us": 2.5800000000000004e-05,
+            "wenzel_dynamic": 2.8499999999999998e-05,
+            "wenzel_static": 2.7700000000000002e-05
+        },
+        "2010": {
+            "compiler_version": "",
+            "enoki": 0.00024059999999999997,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.001104879379272461,
+            "tapenade": 0.00016039999999999997,
+            "us": 0.0001691,
+            "wenzel_dynamic": 0.0006117000000000001,
+            "wenzel_static": 0.00016650000000000004
+        },
+        "4010": {
+            "compiler_version": "",
+            "enoki": 0.0004147999999999999,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0011539697647094727,
+            "tapenade": 0.0003003,
+            "us": 0.0003042,
+            "wenzel_dynamic": 0.0013421000000000002,
+            "wenzel_static": 0.0003022
+        },
+        "6010": {
+            "compiler_version": "",
+            "enoki": 0.0005775999999999999,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0012157201766967774,
+            "tapenade": 0.0004347,
+            "us": 0.0004227,
+            "wenzel_dynamic": 0.0017953000000000003,
+            "wenzel_static": 0.0004557
+        },
+        "8010": {
+            "compiler_version": "",
+            "enoki": 0.0007609,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0012781381607055663,
+            "tapenade": 0.0005849,
+            "us": 0.0005824999999999999,
+            "wenzel_dynamic": 0.0024333000000000002,
+            "wenzel_static": 0.0006095
+        },
+        "10010": {
+            "compiler_version": "",
+            "enoki": 0.0009552,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0013438224792480468,
+            "tapenade": 0.0007259,
+            "us": 0.0007323,
+            "wenzel_dynamic": 0.0031092,
+            "wenzel_static": 0.0007513
+        },
+        "20010": {
+            "compiler_version": "",
+            "enoki": 0.0016659000000000003,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0016600608825683594,
+            "tapenade": 0.0014325,
+            "us": 0.0014172,
+            "wenzel_dynamic": 0.004972,
+            "wenzel_static": 0.0014359000000000002
+        },
+        "30010": {
+            "compiler_version": "",
+            "enoki": 0.0025897000000000003,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.001954507827758789,
+            "tapenade": 0.0009812000000000002,
+            "us": 0.0010995999999999998,
+            "wenzel_dynamic": 0.0049476,
+            "wenzel_static": 0.0013436
+        },
+        "40010": {
+            "compiler_version": "",
+            "enoki": 0.003725,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.00231475830078125,
+            "tapenade": 0.0012782000000000002,
+            "us": 0.0012878,
+            "wenzel_dynamic": 0.005512700000000001,
+            "wenzel_static": 0.0013293
+        },
+        "50010": {
+            "compiler_version": "",
+            "enoki": 0.0034678,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.002608990669250488,
+            "tapenade": 0.0015838999999999998,
+            "us": 0.0015917000000000001,
+            "wenzel_dynamic": 0.006969899999999999,
+            "wenzel_static": 0.0016301
+        },
+        "60010": {
+            "compiler_version": "",
+            "enoki": 0.0030049000000000005,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0028932809829711912,
+            "tapenade": 0.001885,
+            "us": 0.0018951999999999997,
+            "wenzel_dynamic": 0.0083244,
+            "wenzel_static": 0.0019438
+        },
+        "70010": {
+            "compiler_version": "",
+            "enoki": 0.0029931,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.003213310241699219,
+            "tapenade": 0.0021836,
+            "us": 0.0022387,
+            "wenzel_dynamic": 0.009845900000000001,
+            "wenzel_static": 0.0022662000000000003
+        },
+        "80010": {
+            "compiler_version": "",
+            "enoki": 0.0031940000000000002,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0035590648651123045,
+            "tapenade": 0.0025344000000000005,
+            "us": 0.0025648000000000003,
+            "wenzel_dynamic": 0.0111341,
+            "wenzel_static": 0.0025777
+        },
+        "90010": {
+            "compiler_version": "",
+            "enoki": 0.0036341999999999998,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0038994789123535157,
+            "tapenade": 0.0028091000000000006,
+            "us": 0.0028953,
+            "wenzel_dynamic": 0.012631100000000001,
+            "wenzel_static": 0.0029138
+        }
+    }
+}

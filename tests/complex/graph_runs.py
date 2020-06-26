@@ -58,10 +58,10 @@ def generate_two_graph(avg_us, denom, function, suffix=""):
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(1, 1, 1)
     plt.plot(denom, avg_us, color='#1abc9c', linestyle='dashed',  markersize=7)
-    plt.ylim(1.e-05, 1.e-02)
+    plt.ylim(1.e-04, 1.e-02)
     plt.setp(ax.get_xticklabels(), fontsize=20)
     plt.setp(ax.get_yticklabels(), fontsize=20)
-    plt.yscale('log')
+    plt.yscale('linear')
     plt.margins(0, 0)
     plt.savefig('./tests/complex/graphs/runs/{}-{}.pdf'.format(function, suffix), bbox_inches='tight',
                 pad_inches=0)

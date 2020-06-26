@@ -1,0 +1,902 @@
+{
+    "4*((V * (1 - V)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.6e-06,
+            "us": 1.6e-06,
+            "wenzel": 4.199999999999998e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 3.4500000000000005e-05,
+            "us": 3.3799999999999995e-05,
+            "wenzel": 3.51e-05
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 7.62e-05,
+            "us": 7.479999999999999e-05,
+            "wenzel": 7.77e-05
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00014629999999999998,
+            "us": 0.00012080000000000004,
+            "wenzel": 0.0001107
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0001772,
+            "us": 0.0001519,
+            "wenzel": 0.0001829
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0002293,
+            "us": 0.00020179999999999997,
+            "wenzel": 0.00019580000000000002
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00044669999999999996,
+            "us": 0.00044550000000000004,
+            "wenzel": 0.0004885
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0006271,
+            "us": 0.0006457,
+            "wenzel": 0.000704
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0010243,
+            "us": 0.0009773,
+            "wenzel": 0.0011596999999999998
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0010022,
+            "us": 0.0009552000000000001,
+            "wenzel": 0.0012502999999999998
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0016937,
+            "us": 0.0014328000000000001,
+            "wenzel": 0.0014215
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0016231,
+            "us": 0.0013367000000000001,
+            "wenzel": 0.001602
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0016728,
+            "us": 0.0018538000000000003,
+            "wenzel": 0.0019301999999999995
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0018404,
+            "us": 0.0019173000000000003,
+            "wenzel": 0.0019952
+        }
+    },
+    "4*4*((a * (1 - a))*(u * (1 - u)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.5e-06,
+            "us": 1.4999999999999998e-06,
+            "wenzel": 4.399999999999998e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 8.809999999999999e-05,
+            "us": 9.39e-05,
+            "wenzel": 0.00017740000000000003
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00017439999999999998,
+            "us": 0.0001567,
+            "wenzel": 0.0002545
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00028179999999999997,
+            "us": 0.0002669,
+            "wenzel": 0.00045109999999999996
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00029719999999999996,
+            "us": 0.0005323999999999999,
+            "wenzel": 0.0005569
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00045700000000000005,
+            "us": 0.00040689999999999997,
+            "wenzel": 0.0007205000000000001
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0010753000000000002,
+            "us": 0.0009123999999999998,
+            "wenzel": 0.0018722000000000003
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0013135,
+            "us": 0.001261,
+            "wenzel": 0.0025294000000000002
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0016168999999999999,
+            "us": 0.0014386999999999998,
+            "wenzel": 0.0030348
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0019683,
+            "us": 0.0021045,
+            "wenzel": 0.0037952
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0025226000000000003,
+            "us": 0.0024711,
+            "wenzel": 0.0045189
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0032619999999999997,
+            "us": 0.0028481,
+            "wenzel": 0.004305600000000001
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0025591000000000004,
+            "us": 0.0031153,
+            "wenzel": 0.0049445
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0033643000000000006,
+            "us": 0.0030439,
+            "wenzel": 0.0062361
+        }
+    },
+    "4*4*4*((d * (1 - d))*(g * (1 - g))*(D * (1 - D)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.7e-06,
+            "us": 3.2e-06,
+            "wenzel": 4.1e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00012639999999999998,
+            "us": 0.00010350000000000001,
+            "wenzel": 0.0001602
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00024060000000000002,
+            "us": 0.00023919999999999996,
+            "wenzel": 0.0004027999999999999
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00038889999999999997,
+            "us": 0.0004188000000000001,
+            "wenzel": 0.0006361
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0005446,
+            "us": 0.0006253,
+            "wenzel": 0.0009488
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0007501,
+            "us": 0.0007142,
+            "wenzel": 0.0010585
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0014388,
+            "us": 0.0013356,
+            "wenzel": 0.0022020000000000004
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0020654,
+            "us": 0.0020069999999999997,
+            "wenzel": 0.0030876999999999996
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0025972,
+            "us": 0.0025239999999999993,
+            "wenzel": 0.0035539
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0031953999999999997,
+            "us": 0.0030726,
+            "wenzel": 0.004972900000000001
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0034801,
+            "us": 0.0036524,
+            "wenzel": 0.005494000000000001
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0042797,
+            "us": 0.004385,
+            "wenzel": 0.006809499999999999
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0054092,
+            "us": 0.0045519,
+            "wenzel": 0.007771
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.005196600000000001,
+            "us": 0.0054144,
+            "wenzel": 0.0082789
+        }
+    },
+    "4*4*4*4*((U * (1 - U))*(C * (1 - C))*(E * (1 - E))*(t * (1 - t)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2e-06,
+            "us": 1.7999999999999997e-06,
+            "wenzel": 2e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00019370000000000005,
+            "us": 0.00018370000000000002,
+            "wenzel": 0.00030369999999999996
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0003861,
+            "us": 0.0004018,
+            "wenzel": 0.0004962
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0006171000000000001,
+            "us": 0.0004753,
+            "wenzel": 0.000606
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0007364000000000001,
+            "us": 0.0009096,
+            "wenzel": 0.0008962
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0009249,
+            "us": 0.0009285999999999999,
+            "wenzel": 0.0012506000000000001
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0014397,
+            "us": 0.0015001999999999997,
+            "wenzel": 0.0021472
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0026511,
+            "us": 0.0022861,
+            "wenzel": 0.0034862000000000005
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0034815,
+            "us": 0.003067,
+            "wenzel": 0.004569200000000001
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0039577,
+            "us": 0.0042412,
+            "wenzel": 0.005525
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0048598,
+            "us": 0.0050807,
+            "wenzel": 0.0072841
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.005650900000000001,
+            "us": 0.0055169,
+            "wenzel": 0.0090821
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0052149,
+            "us": 0.0052617,
+            "wenzel": 0.0074977
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.007360200000000002,
+            "us": 0.0067052,
+            "wenzel": 0.0097069
+        }
+    },
+    "4*4*4*4*4*((K * (1 - K))*(W * (1 - W))*(L * (1 - L))*(X * (1 - X))*(H * (1 - H)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.1000000000000002e-06,
+            "us": 1.7e-06,
+            "wenzel": 2.5e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.000248,
+            "us": 0.00023760000000000006,
+            "wenzel": 0.00034270000000000004
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00047000000000000004,
+            "us": 0.00048319999999999993,
+            "wenzel": 0.0008281
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0006082999999999999,
+            "us": 0.0005675999999999999,
+            "wenzel": 0.0007370999999999999
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0009559,
+            "us": 0.0009764,
+            "wenzel": 0.0014792999999999998
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0012698000000000002,
+            "us": 0.0010352,
+            "wenzel": 0.0018451999999999995
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0021436,
+            "us": 0.0022375,
+            "wenzel": 0.0038485000000000004
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0028575999999999996,
+            "us": 0.0030870999999999997,
+            "wenzel": 0.005038900000000001
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0042147999999999994,
+            "us": 0.003993099999999999,
+            "wenzel": 0.0072186
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.005235200000000001,
+            "us": 0.0050991000000000005,
+            "wenzel": 0.011472000000000001
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0062155000000000005,
+            "us": 0.006526599999999999,
+            "wenzel": 0.0104201
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0073341000000000005,
+            "us": 0.0073746,
+            "wenzel": 0.013071999999999997
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008965200000000001,
+            "us": 0.0092027,
+            "wenzel": 0.015143799999999999
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.009674,
+            "us": 0.008616599999999999,
+            "wenzel": 0.015829699999999995
+        }
+    },
+    "4*4*4*4*4*4*((l * (1 - l))*(B * (1 - B))*(K * (1 - K))*(C * (1 - C))*(D * (1 - D))*(G * (1 - G)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.6000000000000004e-06,
+            "us": 1.5000000000000005e-06,
+            "wenzel": 2e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00024650000000000003,
+            "us": 0.00025949999999999997,
+            "wenzel": 0.0003888
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00045719999999999995,
+            "us": 0.0005275,
+            "wenzel": 0.0008449999999999999
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0008534999999999999,
+            "us": 0.0007868,
+            "wenzel": 0.0011443000000000002
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0011533000000000001,
+            "us": 0.0009236999999999998,
+            "wenzel": 0.0015379999999999999
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0014195000000000002,
+            "us": 0.0013817,
+            "wenzel": 0.0020537999999999997
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0023938999999999996,
+            "us": 0.0023541000000000005,
+            "wenzel": 0.0040631
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0034842000000000007,
+            "us": 0.0035755999999999995,
+            "wenzel": 0.0059082
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.005227299999999999,
+            "us": 0.0049131999999999995,
+            "wenzel": 0.0095619
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.005902900000000001,
+            "us": 0.0058166,
+            "wenzel": 0.009758
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.007857300000000001,
+            "us": 0.007078000000000001,
+            "wenzel": 0.011555699999999999
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.009600599999999999,
+            "us": 0.009088599999999999,
+            "wenzel": 0.013417799999999999
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.009421099999999998,
+            "us": 0.009609099999999999,
+            "wenzel": 0.0156877
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0108445,
+            "us": 0.010838700000000001,
+            "wenzel": 0.017304900000000005
+        }
+    },
+    "4*4*4*4*4*4*4*((X * (1 - X))*(T * (1 - T))*(u * (1 - u))*(A * (1 - A))*(N * (1 - N))*(r * (1 - r))*(l * (1 - l)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.4999999999999998e-06,
+            "us": 2.7999999999999994e-06,
+            "wenzel": 2.4999999999999998e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0002827,
+            "us": 0.0002979,
+            "wenzel": 0.0006183000000000001
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0007485,
+            "us": 0.0006707,
+            "wenzel": 0.0011083
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0009594,
+            "us": 0.0010776,
+            "wenzel": 0.0018709000000000004
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0013510999999999998,
+            "us": 0.0010937,
+            "wenzel": 0.0019809999999999997
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0016457,
+            "us": 0.0017121,
+            "wenzel": 0.0027474
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.002715,
+            "us": 0.0026194,
+            "wenzel": 0.0050314
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0044809,
+            "us": 0.0044043,
+            "wenzel": 0.0095083
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.006575200000000001,
+            "us": 0.0064884999999999995,
+            "wenzel": 0.0105355
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0073369,
+            "us": 0.0078638,
+            "wenzel": 0.0135828
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0085935,
+            "us": 0.008529100000000001,
+            "wenzel": 0.0159774
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0103761,
+            "us": 0.0099856,
+            "wenzel": 0.0188999
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.010981300000000001,
+            "us": 0.0106088,
+            "wenzel": 0.0196517
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0131053,
+            "us": 0.013775200000000001,
+            "wenzel": 0.0225163
+        }
+    },
+    "4*4*4*4*4*4*4*4*((G * (1 - G))*(k * (1 - k))*(w * (1 - w))*(j * (1 - j))*(t * (1 - t))*(m * (1 - m))*(b * (1 - b))*(B * (1 - B)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.0000000000000003e-06,
+            "us": 2.1e-06,
+            "wenzel": 2.7999999999999994e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0004317,
+            "us": 0.00041450000000000005,
+            "wenzel": 0.0007071
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0006925999999999999,
+            "us": 0.0006571999999999999,
+            "wenzel": 0.0009193999999999999
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0012993000000000002,
+            "us": 0.0011411999999999998,
+            "wenzel": 0.0017585999999999997
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0015413,
+            "us": 0.0013193,
+            "wenzel": 0.0020885
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0017747000000000001,
+            "us": 0.0017156,
+            "wenzel": 0.0029539
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.003656299999999999,
+            "us": 0.0030771999999999996,
+            "wenzel": 0.0054123999999999995
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0048771000000000005,
+            "us": 0.005255899999999999,
+            "wenzel": 0.007566100000000001
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0066871,
+            "us": 0.006864799999999999,
+            "wenzel": 0.011643699999999998
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0086744,
+            "us": 0.0082987,
+            "wenzel": 0.012829400000000001
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0099662,
+            "us": 0.0101968,
+            "wenzel": 0.0163664
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.011753099999999999,
+            "us": 0.012213400000000003,
+            "wenzel": 0.0197524
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0138961,
+            "us": 0.013640100000000002,
+            "wenzel": 0.0211782
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.014842,
+            "us": 0.014608699999999999,
+            "wenzel": 0.023299899999999995
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*((W * (1 - W))*(f * (1 - f))*(h * (1 - h))*(w * (1 - w))*(V * (1 - V))*(t * (1 - t))*(a * (1 - a))*(Q * (1 - Q))*(O * (1 - O)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.4e-06,
+            "us": 2e-06,
+            "wenzel": 5.8e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0004156,
+            "us": 0.0004559999999999999,
+            "wenzel": 0.0009561999999999999
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0008583999999999999,
+            "us": 0.0008602,
+            "wenzel": 0.0020372
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0014995999999999998,
+            "us": 0.0012607,
+            "wenzel": 0.0024727000000000004
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0015653999999999998,
+            "us": 0.0015990999999999998,
+            "wenzel": 0.0030794999999999998
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0020672,
+            "us": 0.0019134999999999998,
+            "wenzel": 0.0038909
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0043763000000000005,
+            "us": 0.0037145999999999998,
+            "wenzel": 0.009031099999999999
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0057396,
+            "us": 0.0059822,
+            "wenzel": 0.011060200000000001
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0072118,
+            "us": 0.007405299999999999,
+            "wenzel": 0.014850499999999997
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.009579599999999999,
+            "us": 0.010372900000000001,
+            "wenzel": 0.019192400000000002
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.011042,
+            "us": 0.011138700000000001,
+            "wenzel": 0.0271636
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.013538699999999997,
+            "us": 0.0135707,
+            "wenzel": 0.027193600000000002
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0149447,
+            "us": 0.014219699999999998,
+            "wenzel": 0.027439
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0177219,
+            "us": 0.016289,
+            "wenzel": 0.0358792
+        }
+    }
+}

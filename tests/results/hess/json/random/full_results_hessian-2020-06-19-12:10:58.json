@@ -1,0 +1,11 @@
+{
+    "4*4*((d * (1 - d))*(G * (1 - G)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "us": 1.6e-06,
+            "wenzel_dynamic": 3.45e-05,
+            "wenzel_static": 1.0000000000000002e-06
+        }
+    }
+}

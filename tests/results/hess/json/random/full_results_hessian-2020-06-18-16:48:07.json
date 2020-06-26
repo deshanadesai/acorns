@@ -1,0 +1,49 @@
+{
+    "4*4*((X * (1 - X))*(E * (1 - E)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.012277960777282715,
+            "tapenade": 1.1e-05,
+            "us": 1.0000000000000002e-06,
+            "wenzel_dynamic": 2.6499999999999994e-05,
+            "wenzel_static": 1.0000000000000002e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "pytorch": 1.248734450340271,
+            "tapenade": 0.00030389999999999996,
+            "us": 7.7e-05,
+            "wenzel_dynamic": 0.0022967000000000005,
+            "wenzel_static": 0.0001422
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "pytorch": 2.8596442699432374,
+            "tapenade": 0.0006086,
+            "us": 0.00016800000000000002,
+            "wenzel_dynamic": 0.0042349,
+            "wenzel_static": 0.00025330000000000003
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "pytorch": 4.783908057212829,
+            "tapenade": 0.0009549000000000001,
+            "us": 0.00022920000000000001,
+            "wenzel_dynamic": 0.006528400000000001,
+            "wenzel_static": 0.0003674
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "pytorch": 7.168927264213562,
+            "tapenade": 0.0012728,
+            "us": 0.00030040000000000004,
+            "wenzel_dynamic": 0.008965399999999998,
+            "wenzel_static": 0.0005046
+        }
+    }
+}

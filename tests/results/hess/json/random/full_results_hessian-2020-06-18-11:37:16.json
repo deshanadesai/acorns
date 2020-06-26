@@ -1,0 +1,102 @@
+{
+    "4*((Q * (1 - Q)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.6e-06,
+            "us": 1.2000000000000002e-06,
+            "wenzel_dynamic": 3.5600000000000005e-05,
+            "wenzel_static": 1.2999999999999998e-06
+        }
+    },
+    "4*4*((O * (1 - O))*(b * (1 - b)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.47e-05,
+            "us": 1.7e-06,
+            "wenzel_dynamic": 2.5499999999999996e-05,
+            "wenzel_static": 1.2999999999999998e-06
+        }
+    },
+    "4*4*4*((K * (1 - K))*(G * (1 - G))*(I * (1 - I)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.63e-05,
+            "us": 1.4e-06,
+            "wenzel_dynamic": 4.2399999999999994e-05,
+            "wenzel_static": 2.6e-06
+        }
+    },
+    "4*4*4*4*((l * (1 - l))*(D * (1 - D))*(x * (1 - x))*(r * (1 - r)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 9.199999999999999e-05,
+            "us": 1.6e-06,
+            "wenzel_dynamic": 0.0001001,
+            "wenzel_static": 3.7999999999999996e-06
+        }
+    },
+    "4*4*4*4*4*((E * (1 - E))*(F * (1 - F))*(f * (1 - f))*(B * (1 - B))*(j * (1 - j)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.5800000000000004e-05,
+            "us": 1.6e-06,
+            "wenzel_dynamic": 9.779999999999999e-05,
+            "wenzel_static": 1.64e-05
+        }
+    },
+    "4*4*4*4*4*4*((x * (1 - x))*(f * (1 - f))*(U * (1 - U))*(j * (1 - j))*(d * (1 - d))*(c * (1 - c)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.74e-05,
+            "us": 1.8000000000000001e-06,
+            "wenzel_dynamic": 0.0001457,
+            "wenzel_static": 2.1200000000000004e-05
+        }
+    },
+    "4*4*4*4*4*4*4*((n * (1 - n))*(c * (1 - c))*(M * (1 - M))*(t * (1 - t))*(f * (1 - f))*(V * (1 - V))*(U * (1 - U)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 4.85e-05,
+            "us": 2.0000000000000003e-06,
+            "wenzel_dynamic": 0.0001718,
+            "wenzel_static": 6.44e-05
+        }
+    },
+    "4*4*4*4*4*4*4*4*((f * (1 - f))*(v * (1 - v))*(X * (1 - X))*(V * (1 - V))*(t * (1 - t))*(W * (1 - W))*(h * (1 - h))*(w * (1 - w)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 6.220000000000001e-05,
+            "us": 4.4e-06,
+            "wenzel_dynamic": 0.00021999999999999998,
+            "wenzel_static": 7.58e-05
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*((B * (1 - B))*(q * (1 - q))*(l * (1 - l))*(Y * (1 - Y))*(P * (1 - P))*(H * (1 - H))*(Z * (1 - Z))*(R * (1 - R))*(E * (1 - E)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 9.17e-05,
+            "us": 2.0000000000000003e-06,
+            "wenzel_dynamic": 0.0002095,
+            "wenzel_static": 0.0001147
+        }
+    },
+    "4*4*4*4*4*4*4*4*4*4*((J * (1 - J))*(K * (1 - K))*(Q * (1 - Q))*(O * (1 - O))*(r * (1 - r))*(f * (1 - f))*(F * (1 - F))*(V * (1 - V))*(C * (1 - C))*(A * (1 - A)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.000119,
+            "us": 1.1600000000000002e-05,
+            "wenzel_dynamic": 0.0003645,
+            "wenzel_static": 0.00010690000000000001
+        }
+    }
+}

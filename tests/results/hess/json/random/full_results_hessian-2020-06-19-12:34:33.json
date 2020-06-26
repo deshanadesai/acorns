@@ -1,0 +1,16 @@
+{
+    "4*4*((l * (1 - l))*(w * (1 - w)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.2e-06,
+            "tapenade_compile_time": 0.5753116607666016,
+            "tapenade_file_gen": 3.6301016807556152,
+            "us": 2.1000000000000002e-06,
+            "us_compile_time": 0.6997561454772949,
+            "us_file_gen": 0.8804590702056885,
+            "wenzel_dynamic": 3.99e-05,
+            "wenzel_static": 1.0000000000000002e-06
+        }
+    }
+}

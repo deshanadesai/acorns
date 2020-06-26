@@ -1,0 +1,17 @@
+{
+    "4*((d * (1 - d)))": {
+        "10": {
+            "WENZEL_COMPILER_VERSION": "-5",
+            "enoki": 0.0007611,
+            "enoki_speedup": 691.9090909090909,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0021315574645996093,
+            "pytorch_speedup": 1937.779513272372,
+            "us": 1.1e-06,
+            "wenzel_dynamic": 1.74e-05,
+            "wenzel_dynamic_speedup": 15.818181818181817,
+            "wenzel_static": 1.1e-06,
+            "wenzel_static_speedup": 1.0
+        }
+    }
+}

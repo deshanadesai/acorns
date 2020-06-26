@@ -1,0 +1,88 @@
+{
+    "(a*a+b*b+c*c+d*d)*(1+1/((a*d-b*c)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.0000000000000002e-06,
+            "us": 2.5e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 8.289999999999998e-05,
+            "us": 7.9e-05
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00015690000000000002,
+            "us": 0.00015929999999999997
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0002554,
+            "us": 0.0002792
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0003381,
+            "us": 0.00033049999999999996
+        },
+        "10010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.00047249999999999994,
+            "us": 0.00042639999999999996
+        },
+        "20010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0011075999999999998,
+            "us": 0.0008454000000000002
+        },
+        "30010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0012930999999999997,
+            "us": 0.001245
+        },
+        "40010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0016584000000000002,
+            "us": 0.0021219999999999998
+        },
+        "50010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0020837,
+            "us": 0.0020645999999999993
+        },
+        "60010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0029820000000000003,
+            "us": 0.002549
+        },
+        "70010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0031734,
+            "us": 0.0031831999999999997
+        },
+        "80010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.003503300000000001,
+            "us": 0.0038802000000000003
+        },
+        "90010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0041481,
+            "us": 0.0037601999999999996
+        }
+    }
+}

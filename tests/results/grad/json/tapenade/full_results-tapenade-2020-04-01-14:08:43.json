@@ -1,0 +1,29 @@
+{
+    "((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2e-06,
+            "us": 1.8000000000000001e-06,
+            "wenzel": 1.4000000000000001e-06
+        }
+    },
+    "((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2.0000000000000003e-06,
+            "us": 2.3000000000000004e-06,
+            "wenzel": 1.1e-06
+        }
+    },
+    "sin(k) + cos(k) + pow(k, 2)": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 8.51e-05,
+            "us": 8.13e-05,
+            "wenzel": 5.120000000000001e-05
+        }
+    }
+}

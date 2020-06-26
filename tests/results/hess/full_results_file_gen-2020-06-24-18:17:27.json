@@ -1,0 +1,242 @@
+{
+    "o": {
+        "true": {
+            "num_vars": 1,
+            "file_gen_time": 0.1136317253112793
+        },
+        "false": {
+            "num_vars": 1,
+            "file_gen_time": 0.05131697654724121
+        }
+    },
+    "l*2*H": {
+        "true": {
+            "num_vars": 2,
+            "file_gen_time": 0.05956602096557617
+        },
+        "false": {
+            "num_vars": 2,
+            "file_gen_time": 0.06116342544555664
+        }
+    },
+    "l*2*b*2*a": {
+        "true": {
+            "num_vars": 3,
+            "file_gen_time": 0.07024550437927246
+        },
+        "false": {
+            "num_vars": 3,
+            "file_gen_time": 0.08176898956298828
+        }
+    },
+    "d*2*Y*2*J*2*o": {
+        "true": {
+            "num_vars": 4,
+            "file_gen_time": 0.0839536190032959
+        },
+        "false": {
+            "num_vars": 4,
+            "file_gen_time": 0.11587810516357422
+        }
+    },
+    "o*2*C*2*Z*2*A*2*G": {
+        "true": {
+            "num_vars": 5,
+            "file_gen_time": 0.10526490211486816
+        },
+        "false": {
+            "num_vars": 5,
+            "file_gen_time": 0.15469050407409668
+        }
+    },
+    "v*2*A*2*p*2*c*2*z*2*g": {
+        "true": {
+            "num_vars": 6,
+            "file_gen_time": 0.17157864570617676
+        },
+        "false": {
+            "num_vars": 6,
+            "file_gen_time": 0.20977139472961426
+        }
+    },
+    "S*2*a*2*G*2*V*2*T*2*f*2*X": {
+        "true": {
+            "num_vars": 7,
+            "file_gen_time": 0.1916971206665039
+        },
+        "false": {
+            "num_vars": 7,
+            "file_gen_time": 0.3472301959991455
+        }
+    },
+    "C*2*L*2*h*2*a*2*m*2*x*2*J*2*I": {
+        "true": {
+            "num_vars": 8,
+            "file_gen_time": 0.17870020866394043
+        },
+        "false": {
+            "num_vars": 8,
+            "file_gen_time": 0.46835875511169434
+        }
+    },
+    "z*2*X*2*x*2*m*2*M*2*a*2*H*2*B*2*g": {
+        "true": {
+            "num_vars": 9,
+            "file_gen_time": 0.21307611465454102
+        },
+        "false": {
+            "num_vars": 9,
+            "file_gen_time": 0.6971900463104248
+        }
+    },
+    "S*2*q*2*o*2*l*2*k*2*h*2*v*2*L*2*R*2*Q": {
+        "true": {
+            "num_vars": 10,
+            "file_gen_time": 0.301668643951416
+        },
+        "false": {
+            "num_vars": 10,
+            "file_gen_time": 0.8537671566009521
+        }
+    },
+    "R*2*P*2*v*2*G*2*s*2*d*2*J*2*c*2*B*2*L*2*l": {
+        "true": {
+            "num_vars": 11,
+            "file_gen_time": 0.49933385848999023
+        },
+        "false": {
+            "num_vars": 11,
+            "file_gen_time": 1.3813529014587402
+        }
+    },
+    "f*2*S*2*M*2*Q*2*K*2*g*2*c*2*w*2*G*2*V*2*v*2*D": {
+        "true": {
+            "num_vars": 12,
+            "file_gen_time": 0.319061279296875
+        },
+        "false": {
+            "num_vars": 12,
+            "file_gen_time": 1.8268048763275146
+        }
+    },
+    "F*2*Q*2*z*2*o*2*X*2*O*2*A*2*r*2*Y*2*P*2*D*2*N*2*b": {
+        "true": {
+            "num_vars": 13,
+            "file_gen_time": 0.34284210205078125
+        },
+        "false": {
+            "num_vars": 13,
+            "file_gen_time": 2.3127334117889404
+        }
+    },
+    "d*2*B*2*t*2*Y*2*Q*2*p*2*U*2*j*2*Z*2*P*2*b*2*r*2*g*2*I": {
+        "true": {
+            "num_vars": 14,
+            "file_gen_time": 0.4599802494049072
+        },
+        "false": {
+            "num_vars": 14,
+            "file_gen_time": 3.283808708190918
+        }
+    },
+    "a*2*s*2*l*2*g*2*u*2*D*2*S*2*Q*2*t*2*E*2*T*2*X*2*Y*2*O*2*W": {
+        "true": {
+            "num_vars": 15,
+            "file_gen_time": 0.4161198139190674
+        },
+        "false": {
+            "num_vars": 15,
+            "file_gen_time": 4.3385536670684814
+        }
+    },
+    "f*2*I*2*E*2*P*2*l*2*M*2*c*2*H*2*v*2*L*2*o*2*Y*2*w*2*k*2*D*2*W": {
+        "true": {
+            "num_vars": 16,
+            "file_gen_time": 0.4958076477050781
+        },
+        "false": {
+            "num_vars": 16,
+            "file_gen_time": 5.804471492767334
+        }
+    },
+    "g*2*O*2*W*2*x*2*u*2*B*2*v*2*q*2*c*2*p*2*V*2*m*2*a*2*R*2*d*2*z*2*P": {
+        "true": {
+            "num_vars": 17,
+            "file_gen_time": 0.5187172889709473
+        },
+        "false": {
+            "num_vars": 17,
+            "file_gen_time": 7.3319993019104
+        }
+    },
+    "X*2*j*2*C*2*U*2*A*2*L*2*s*2*u*2*a*2*z*2*E*2*r*2*W*2*q*2*Q*2*h*2*d*2*b": {
+        "true": {
+            "num_vars": 18,
+            "file_gen_time": 0.6284689903259277
+        },
+        "false": {
+            "num_vars": 18,
+            "file_gen_time": 9.64954924583435
+        }
+    },
+    "Q*2*G*2*n*2*A*2*q*2*s*2*N*2*V*2*v*2*C*2*I*2*B*2*o*2*U*2*u*2*z*2*M*2*l*2*J": {
+        "true": {
+            "num_vars": 19,
+            "file_gen_time": 0.7798922061920166
+        },
+        "false": {
+            "num_vars": 19,
+            "file_gen_time": 12.379406929016113
+        }
+    },
+    "t*2*j*2*S*2*u*2*Z*2*M*2*T*2*G*2*b*2*H*2*e*2*r*2*h*2*g*2*a*2*I*2*B*2*v*2*O*2*N": {
+        "true": {
+            "num_vars": 20,
+            "file_gen_time": 0.7795605659484863
+        },
+        "false": {
+            "num_vars": 20,
+            "file_gen_time": 15.943971395492554
+        }
+    },
+    "O*2*d*2*V*2*X*2*a*2*Y*2*B*2*o*2*T*2*c*2*Q*2*L*2*H*2*R*2*n*2*v*2*x*2*l*2*b*2*s*2*I": {
+        "true": {
+            "num_vars": 21,
+            "file_gen_time": 0.827495813369751
+        },
+        "false": {
+            "num_vars": 21,
+            "file_gen_time": 22.216043949127197
+        }
+    },
+    "r*2*l*2*c*2*g*2*x*2*w*2*z*2*d*2*F*2*J*2*V*2*B*2*O*2*R*2*S*2*Z*2*Y*2*X*2*C*2*U*2*H*2*K": {
+        "true": {
+            "num_vars": 22,
+            "file_gen_time": 0.8176143169403076
+        },
+        "false": {
+            "num_vars": 22,
+            "file_gen_time": 35.45878267288208
+        }
+    },
+    "K*2*n*2*X*2*d*2*t*2*O*2*j*2*T*2*b*2*l*2*f*2*E*2*v*2*F*2*r*2*s*2*z*2*o*2*G*2*J*2*c*2*e*2*k": {
+        "true": {
+            "num_vars": 23,
+            "file_gen_time": 0.959850549697876
+        },
+        "false": {
+            "num_vars": 23,
+            "file_gen_time": 39.80397295951843
+        }
+    },
+    "h*2*a*2*v*2*K*2*r*2*Z*2*g*2*J*2*f*2*Q*2*j*2*c*2*o*2*m*2*R*2*L*2*n*2*N*2*H*2*G*2*p*2*V*2*I*2*X": {
+        "true": {
+            "num_vars": 24,
+            "file_gen_time": 0.9766156673431396
+        },
+        "false": {
+            "num_vars": 24,
+            "file_gen_time": 51.29210329055786
+        }
+    }
+}

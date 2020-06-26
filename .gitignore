@@ -4,7 +4,6 @@ tests/utils/*
 *.png
 *.pdf
 *.npy
-*.json
 __pycache__/*
 objs/.DS_Store
 .DS_Store

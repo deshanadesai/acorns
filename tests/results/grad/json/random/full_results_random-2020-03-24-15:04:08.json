@@ -1,0 +1,13 @@
+{
+    "4*((e * (1 - e)))": {
+        "10": {
+            "WENZEL_COMPILER_VERSION": "",
+            "enoki": 0.000731,
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.0019078254699707031,
+            "us": 1.0000000000000002e-06,
+            "wenzel_dynamic": 1.98e-05,
+            "wenzel_static": 1.4000000000000001e-06
+        }
+    }
+}

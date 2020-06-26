@@ -1,0 +1,12 @@
+{
+    "4*((z * (1 - z)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "pytorch": 0.005407500267028809,
+            "us": 1.0000000000000002e-06,
+            "wenzel_dynamic": 3.01e-05,
+            "wenzel_static": 1.0000000000000002e-06
+        }
+    }
+}

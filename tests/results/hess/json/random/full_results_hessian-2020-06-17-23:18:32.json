@@ -1,0 +1,128 @@
+{
+    "((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k": {
+        "10000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0002024,
+            "wenzel_dynamic": 0.0494719,
+            "wenzel_static": 0.0002079
+        },
+        "20000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.00022899999999999998,
+            "wenzel_dynamic": 0.0889684,
+            "wenzel_static": 0.0004261
+        },
+        "30000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.00033039999999999995,
+            "wenzel_dynamic": 0.1353495,
+            "wenzel_static": 0.0007032999999999998
+        },
+        "40000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0006119000000000001,
+            "wenzel_dynamic": 0.17810769999999998,
+            "wenzel_static": 0.0008742000000000001
+        },
+        "50000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0005311000000000001,
+            "wenzel_dynamic": 0.22262590000000002,
+            "wenzel_static": 0.0010777
+        }
+    },
+    "((k*k+3*k)-k/4)/k+k*k*k*k+k*k*(22/7*k)+k*k*k*k*k*k*k*k*k*j": {
+        "10000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0020798000000000006,
+            "us": 0.0003894,
+            "wenzel_dynamic": 0.0491995,
+            "wenzel_static": 0.0013501000000000001
+        },
+        "20000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.006191900000000001,
+            "us": 0.0008921000000000001,
+            "wenzel_dynamic": 0.1051585,
+            "wenzel_static": 0.0024305999999999998
+        },
+        "30000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0066633,
+            "us": 0.0013031999999999998,
+            "wenzel_dynamic": 0.14758320000000003,
+            "wenzel_static": 0.0036553
+        },
+        "40000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0082911,
+            "us": 0.001756,
+            "wenzel_dynamic": 0.19779010000000002,
+            "wenzel_static": 0.0048411999999999995
+        },
+        "50000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0099998,
+            "us": 0.0023150999999999996,
+            "wenzel_dynamic": 0.23676280000000002,
+            "wenzel_static": 0.0052821000000000005
+        }
+    },
+    "sin(k) + cos(k) + pow(k, 2)": {
+        "10000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0017833000000000002,
+            "wenzel_dynamic": 0.0104895,
+            "wenzel_static": 0.0009124000000000001
+        },
+        "20000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0016061000000000003,
+            "wenzel_dynamic": 0.0195633,
+            "wenzel_static": 0.0018076000000000001
+        },
+        "30000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0023407,
+            "wenzel_dynamic": 0.028684300000000003,
+            "wenzel_static": 0.0024279
+        },
+        "40000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0031974000000000004,
+            "wenzel_dynamic": 0.0389276,
+            "wenzel_static": 0.003193800000000001
+        },
+        "50000": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.008889999999999999,
+            "us": 0.0040168,
+            "wenzel_dynamic": 0.05072449999999999,
+            "wenzel_static": 0.0042525
+        }
+    }
+}

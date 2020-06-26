@@ -799,6 +799,8 @@ def autodiff(function, expression, variables, func = 'function',
                 reverse_diff = False, second_der = False, output_filename = 'c_code',
                 output_func = 'compute'):
 
+    print(reverse_diff)
+
     ast = prepare_graph(function)
     grad(ast, expression, variables, func = func,
         reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename,

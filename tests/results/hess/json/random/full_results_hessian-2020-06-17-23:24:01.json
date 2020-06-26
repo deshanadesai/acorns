@@ -1,0 +1,12 @@
+{
+    "4*((U * (1 - U)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 4.699999999999997e-06,
+            "us": 1.1e-06,
+            "wenzel_dynamic": 3.22e-05,
+            "wenzel_static": 1.1e-06
+        }
+    }
+}

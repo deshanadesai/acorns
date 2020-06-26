@@ -1,0 +1,16 @@
+{
+    "4*4*((p * (1 - p))*(j * (1 - j)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 2e-06,
+            "tapenade_compile_time": 0.29639530181884766,
+            "tapenade_file_gen": 3.4634029865264893,
+            "us": 1.9e-06,
+            "us_compile_time": 0.7387571334838867,
+            "us_file_gen": 0.8412275314331055,
+            "wenzel_dynamic": 3.0199999999999995e-05,
+            "wenzel_static": 1.2e-06
+        }
+    }
+}

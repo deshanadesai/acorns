@@ -38,6 +38,23 @@ def create_vars(s):
             i += 1
     return vars
 
+def generate_simple(s):
+    if s > len(character_selection):
+        raise Exception("s must be less than {}".format(len(character_selection))) 
+    vars = create_vars(s)
+
+    ders_string = ""
+
+    for i, var in enumerate(vars):
+        ders_string += var 
+
+        if (i != len(vars) - 1):
+            ders_string += "*2*"
+
+    function = [ders_string, vars]
+    return function
+
+
 def generate_poly(degree, variables, terms, input_string):
     def gen_polynomial(select_deg, append_term, select_var):
         for deg in range(0, select_deg-1):

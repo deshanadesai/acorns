@@ -1,0 +1,59 @@
+{
+    "4*4*((X * (1 - X))*(k * (1 - k)))": {
+        "10": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 1.9e-06,
+            "tapenade_compile_time": 0.5698156356811523,
+            "tapenade_file_gen": 3.3799712657928467,
+            "us": 2.1000000000000002e-06,
+            "us_compile_time": 0.6125831604003906,
+            "us_file_gen": 0.7935612201690674,
+            "wenzel_static": 1.3000000000000003e-06
+        },
+        "2010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0001716,
+            "tapenade_compile_time": 0.5698156356811523,
+            "tapenade_file_gen": 3.3799712657928467,
+            "us": 0.00015199999999999995,
+            "us_compile_time": 0.6125831604003906,
+            "us_file_gen": 0.7935612201690674,
+            "wenzel_static": 0.00016399999999999997
+        },
+        "4010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0003037,
+            "tapenade_compile_time": 0.5698156356811523,
+            "tapenade_file_gen": 3.3799712657928467,
+            "us": 0.000274,
+            "us_compile_time": 0.6125831604003906,
+            "us_file_gen": 0.7935612201690674,
+            "wenzel_static": 0.0004251
+        },
+        "6010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0004298,
+            "tapenade_compile_time": 0.5698156356811523,
+            "tapenade_file_gen": 3.3799712657928467,
+            "us": 0.00045630000000000003,
+            "us_compile_time": 0.6125831604003906,
+            "us_file_gen": 0.7935612201690674,
+            "wenzel_static": 0.0006808000000000001
+        },
+        "8010": {
+            "compiler_version": "",
+            "flags": "-ffast-math -O3",
+            "tapenade": 0.0006495000000000001,
+            "tapenade_compile_time": 0.5698156356811523,
+            "tapenade_file_gen": 3.3799712657928467,
+            "us": 0.0005759999999999999,
+            "us_compile_time": 0.6125831604003906,
+            "us_file_gen": 0.7935612201690674,
+            "wenzel_static": 0.0008531999999999999
+        }
+    }
+}
