@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(SimpleProject)
 
+file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/ders)
 add_custom_command(
 OUTPUT
     ${PROJECT_SOURCE_DIR}/ders/der_0.c
