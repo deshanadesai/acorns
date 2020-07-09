@@ -11,15 +11,20 @@ class CGenerator(object):
 		uses string accumulation for returning expressions.
 	"""
 
-	def __init__(self, filename = 'c_code', variable_count = 1, derivative_count = 1, split = False):
+	def __init__(self, filename = 'c_code', variable_count = 1, derivative_count = 1, split = False, parallel = False, num_threads=1):
 		self.indent_level = 0
 		self.filename=filename
 		self.variable_count = variable_count # number of variables
 		self.derivative_count = derivative_count # number of derivatives
 		self.count = 0
 		self.split = split
-
+		self.parallel = parallel
+		self.num_threads = num_threads
 		f = open(self.filename+'.c','w')
+
+		if self.parallel:
+			f.write("#include <omp.h>\n")
+
 		f.close()
 
 
@@ -38,8 +43,14 @@ class CGenerator(object):
 		f.write("void "+output_func+"(double values[], int num_points, double ders[]);")
 		f.close()
             
+		
+
 
 		file_pointer.write("void "+output_func+"(double values[], int num_points, double ders[]){\n\n")
+
+		if self.parallel:
+			file_pointer.write("\tomp_set_dynamic(0);\n\tomp_set_num_threads("+str(self.num_threads)+");\n\t#pragma omp parallel for\n")
+
 		file_pointer.write("\tfor(int i = 0; i < num_points; ++i)\n\t{\n") # iterate over
 		return file_pointer		
 

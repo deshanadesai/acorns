@@ -541,7 +541,7 @@ def expand_equation(equation, dict_):
 
 def grad(ast, expression, variables, func = 'function',
                           reverse_diff = False, second_der = False, output_filename = 'c_code',
-                          output_func = 'compute'):
+                          output_func = 'compute', parallel = False, num_threads = 1):
     """
     Returns a function which computes gradient of `fun` with respect to
     positional argument number `x`. The returned function takes the
@@ -565,10 +565,10 @@ def grad(ast, expression, variables, func = 'function',
 
     if(reverse_diff and second_der):
         print('Computing Hessian with Reverse Differentiation')
-        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = len(variables)*len(variables))
+        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = len(variables)*len(variables), parallel = parallel, num_threads = num_threads)
     elif (not reverse_diff and second_der):
         print('Computing Hessian with Forward Differentiation')
-        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = (len(variables)*(len(variables))))
+        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = (len(variables)*(len(variables))), parallel = parallel, num_threads = num_threads)
 
     else:
         if reverse_diff:
@@ -576,7 +576,7 @@ def grad(ast, expression, variables, func = 'function',
         else:
             print('Computing Gradient with Forward Differentiation')  
 
-        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = len(variables))
+        c_code = c_generator.CGenerator(filename = output_filename, variable_count = len(variables), derivative_count = len(variables), parallel = parallel, num_threads = num_threads)
 
     file_pointer = open(output_filename+'.c','a')
     file_pointer = c_code._make_header(output_func, file_pointer)
@@ -792,7 +792,7 @@ def grad(ast, expression, variables, func = 'function',
 
 def grad_with_split(ast, expression, variables, func = 'function', 
                           reverse_diff = False, second_der = False, output_filename = 'c_code',
-                          output_func = 'compute', split_by = 20):
+                          output_func = 'compute', split_by = 20, parallel = False, num_threads = 1):
 
     """
     Returns a function which computes gradient of `fun` with respect to
@@ -817,10 +817,10 @@ def grad_with_split(ast, expression, variables, func = 'function',
 
     if(reverse_diff and second_der):
         print('Computing Hessian with Reverse Differentiation')
-        c_code = c_generator.CGenerator(filename = output_filename+'0', variable_count = len(variables), derivative_count = len(variables)*len(variables), split=True)
+        c_code = c_generator.CGenerator(filename = output_filename+'0', variable_count = len(variables), derivative_count = len(variables)*len(variables), split=True, parallel = parallel, num_threads = num_threads)
     elif (not reverse_diff and second_der):
         print('Computing Hessian with Forward Differentiation')        
-        c_code = c_generator.CGenerator(filename = output_filename+'0', variable_count = len(variables), derivative_count = (len(variables)*(len(variables))), split=True)
+        c_code = c_generator.CGenerator(filename = output_filename+'0', variable_count = len(variables), derivative_count = (len(variables)*(len(variables))), split=True, parallel = parallel, num_threads = num_threads)
 
     else:
         if reverse_diff:
@@ -828,7 +828,7 @@ def grad_with_split(ast, expression, variables, func = 'function',
         else:
             print('Computing Gradient with Forward Differentiation')  
 
-        c_code = c_generator.CGenerator(filename = output_filename+'0', variable_count = len(variables), derivative_count = len(variables), split=True)
+        c_code = c_generator.CGenerator(filename = output_filename+'0', variable_count = len(variables), derivative_count = len(variables), split=True, parallel = parallel, num_threads = num_threads)
     file_pointer = open(output_filename+'0.c','a')
     file_pointer = c_code._make_header(output_func, file_pointer)
 
@@ -954,7 +954,7 @@ def grad_with_split(ast, expression, variables, func = 'function',
                         
                         if not (i==(len(variables)-1) and j==(len(variables)-1)):
                             c_code = c_generator.CGenerator(filename = output_filename+str(tmp), variable_count = len(variables), 
-                                derivative_count = (len(variables)*(len(variables))), split=True)
+                                derivative_count = (len(variables)*(len(variables))), split=True, parallel = parallel, num_threads = num_threads)
                             file_pointer = open(output_filename+str(tmp)+'.c','a')
                             file_pointer = c_code._make_header(output_func, file_pointer)
                             job_finished = True
@@ -1033,7 +1033,7 @@ def grad_with_split(ast, expression, variables, func = 'function',
                         if not (i==(len(variables)-1) and j==(len(variables)-1)):
 
                             c_code = c_generator.CGenerator(filename = output_filename+str(tmp), variable_count = len(variables), 
-                                derivative_count = (len(variables)*(len(variables))), split=True)                            
+                                derivative_count = (len(variables)*(len(variables))), split=True, parallel = parallel, num_threads = num_threads)                            
                             file_pointer = open(output_filename+str(tmp)+'.c','a')
                             file_pointer = c_code._make_header(output_func, file_pointer)
                             job_finished = True
@@ -1115,6 +1115,10 @@ def main():
     parser.add_argument('--second_der', default = False, action='store_true', dest = 'second_der', help='second derivative')
     parser.add_argument('--output_filename', type = str, default ='c_code', help='output file name')
     parser.add_argument('--output_function', type = str, default ='compute', help='output function name')
+    parser.add_argument('--parallel', default = False, action='store_true', dest = 'parallel', help='parallel for')
+    parser.add_argument('--num_threads', type = int, default = 1, dest = 'num_threads', help='only to be specified if parallel is True')
+    parser.add_argument('--split', default = False, action='store_true', dest = 'split',  help='split lines in different files')
+    parser.add_argument('--split_by', type = int, default = 20, dest = 'split_by', help='only to be specified if split is True')
 
 
     parser = parser.parse_args()
@@ -1126,6 +1130,10 @@ def main():
     reverse_diff = parser.reverse
     second_der = parser.second_der
     output_func = parser.output_function
+    parallel = parser.parallel
+    num_threads = parser.num_threads
+    split = parser.split
+    split_by = parser.split_by
 
     if reverse_diff:
         print("Differentiation Method: Reverse")
@@ -1137,13 +1145,20 @@ def main():
     else:
         print("Derivative order: First")
 
-    print("Parallel : False")
-    print("Splitted : False")
+    print("Parallel : {}".format(parallel))
+    print("Splitted : {}".format(split))
 
     ast = prepare_graph_from_file(filename)
-    grad(ast, expression, variables, func = parser.func,
-                          reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename,
-                          output_func = output_func)
+
+    if split:
+        grad_with_split(ast, expression, variables, func = parser.func,
+            reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename, 
+            output_func = output_func, split_by=split_by, parallel = parallel, num_threads = num_threads)
+    else:
+        grad(ast, expression, variables, func = parser.func,
+            reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename, 
+            output_func = output_func, parallel = parallel, num_threads = num_threads)       
+
 
 
 if __name__ == "__main__":

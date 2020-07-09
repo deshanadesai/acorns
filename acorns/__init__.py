@@ -11,7 +11,7 @@ from .unroll import prepare_graph_from_file, prepare_graph
 
 def autodiff(function, expression, variables, func = 'function', 
                 reverse_diff = False, second_der = False, output_filename = 'c_code',
-                output_func = 'compute', split=False, split_by=20):
+                output_func = 'compute', split=False, split_by=20, parallel = False, num_threads = 1):
 
 
     ast = prep_graph_ad(function)
@@ -19,11 +19,11 @@ def autodiff(function, expression, variables, func = 'function',
     if split:
         grad_with_split(ast, expression, variables, func = func, 
             reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename, 
-            output_func = output_func, split_by=split_by)
+            output_func = output_func, split_by=split_by, parallel = parallel, num_threads = num_threads)
     else:
         grad(ast, expression, variables, func = func, 
             reverse_diff = reverse_diff, second_der = second_der, output_filename = output_filename, 
-            output_func = output_func)       
+            output_func = output_func, parallel = parallel, num_threads = num_threads)       
 
 
 def unroll_file(filename, output_filename,  constants = []):
