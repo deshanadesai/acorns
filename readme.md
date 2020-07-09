@@ -41,6 +41,17 @@ acorns.autodiff(c_function, 'energy', ['a','p'], func = 'function_test', output_
        output_func = 'compute_grad_forward')
 ```
 
+### Examples directory:
+
+1. `c_code_basic.py` - basic examples of forward and reverse, single and double autodifferentiation
+
+2. `c_code_basic_parallel.py` - example of including parallel for loops
+
+3. `c_code_basic_split.py` - example script for splitting derivatives into multiple files
+
+4. `run_sample_c_functions.py` - runs sample functions from the `examples/sample_functions/` directory, includes single and double dimensional array examples
+
+5. For unrolling - example input  `examples/unrolled_example.c` and output code `examples/unrolled_example_output.c` along with differentiation of the output code `examples/unrolled_example_fd_output.c` are provided.
 
 ### Known problems
 
