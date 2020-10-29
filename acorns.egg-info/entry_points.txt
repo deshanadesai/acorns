@@ -1,0 +1,3 @@
+[console_scripts]
+acorns_autodiff = acorns.forward_diff:main
+

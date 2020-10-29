@@ -55,11 +55,6 @@ class Generator(pycparser.c_ast.Node):
 				return self.variables[n.name]
 		return n.name
 
-	# def generic_visit(self, node):
-	# 	if node is None:
-	# 		return ''
-	# 		# return ''.join(self.visit(c) for c_name, c in node.children())		
-
 	def visit_FuncCall(self, n):
 		if (n.name.name) == 'log':
 			if n.args.__class__.__name__ == 'Expr':
@@ -252,7 +247,6 @@ class Generator(pycparser.c_ast.Node):
 		return flattened
 
 	def visit_Assignment(self, n, subscript=False):
-		# print("@ Assignment")
 		name = self.visit(n.lvalue, subscript=subscript)
 		value = self.visit(n.rvalue, subscript=subscript)
 		value = self.eval_arrayref(value)
@@ -323,35 +317,12 @@ class Generator(pycparser.c_ast.Node):
 			# this will break if something other than a decl is passed
 			names.append(self.visit(decl, controller_vars = controller_vars))
 		return names
-		# s = self.visit(n.decls[0])
-		# print("in decl list")
-		# print(s)
-		# if len(n.decls) > 1:
-		# 	s += ', ' + ', '.join(self.visit_Decl(decl, no_type=True)
-		# 		for decl in n.decls[1:])
-		# return s
-		
-
-
-        # s = 'for ('
-        # if n.init: s += self.visit(n.init)
-        # s += ';'
-        # if n.cond: s += ' ' + self.visit(n.cond)
-        # s += ';'
-        # if n.next: s += ' ' + self.visit(n.next)
-        # s += ')\n'
-        # s += self._generate_stmt(n.stmt, add_indent=True)
-        # return s
-
 
 
 def match_item(ast):
 	gen = Generator()
 	if ast.block_items:
 		for block in ast.block_items:
-			# print('In match item')
-			# print(type(block))
-			# print(block)
 			res = gen.visit(block)
 			if type(res).__name__=='tuple':
 				# came from assignment or array ref. assumed assignment
@@ -435,6 +406,4 @@ if __name__ == "__main__":
     ast = parse_file(filename, use_cpp=False,
             cpp_path='gcc',
             cpp_args=['-E', r'-Iutils/fake_libc_include'])
-    # ast.show()
     make_graph(ast, output_filename)
-    # ast.show()

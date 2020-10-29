@@ -201,7 +201,6 @@ class Variable(Expr):
             self.name = name
 
     def _eval(self, subscript=None):
-        # TODO
         return self.name
 
     def _forward_diff(self):
@@ -584,29 +583,6 @@ def grad(ast, expression, variables, func = 'function',
     dict_ = {}
 
 
-    # old code: looks for a new variable declaration and processes it only then.
-    # for blocks in range(len(ast.ext[ext_index].body.block_items)):
-    #     print(dir(ast.ext[ext_index].body.block_items[blocks]))
-    #     if 'name' not in dir(ast.ext[ext_index].body.block_items[blocks]):
-    #         continue
-
-    #     if ast.ext[ext_index].body.block_items[blocks].type.__class__.__name__ == 'ArrayDecl':
-
-    #         if ast.ext[ext_index].body.block_items[blocks].type.type.__class__.__name__ == 'ArrayDecl':
-    #             expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}][{}]'.format(ast.ext[ext_index].body.block_items[blocks].type.dim.value,ast.ext[ext_index].body.block_items[blocks].type.type.dim.value)
-    #         else:
-    #             expr_name = ast.ext[ext_index].body.block_items[blocks].name+'[{}]'.format(ast.ext[ext_index].body.block_items[blocks].type.dim.value)
-    #     else:
-    #         expr_name = ast.ext[ext_index].body.block_items[blocks].name
-    #     if expr_name != expression:
-    #         dict_[expr_name] = ast.ext[ext_index].body.block_items[blocks].init
-    #         continue
-
-    #     fun = ast.ext[ext_index].body.block_items[blocks].init
-
-
-
-
     # looks for an assignment
     for blocks in range(len(ast.ext[ext_index].body.block_items)):
         if ast.ext[ext_index].body.block_items[blocks].__class__.__name__ == 'Decl':
@@ -669,29 +645,11 @@ def grad(ast, expression, variables, func = 'function',
 
     assert fun != None
 
-    # fun.show()
-
-    # print("dictionary: ")
-    # print(dict_)
-
-    # print("Function: ")
-    # fun.show()
-
-    # fun = expand_equation(fun, dict_)
-
-    # print("Expanded equation:")
-    # fun.show()
-
-
     grad = {}
     for i, vars_ in enumerate(variables):
         file_pointer = c_code._declare_vars(vars_,i,file_pointer=file_pointer)
         grad[vars_] = '0'
 
-
-
-
-    # print(grad)
 
     if reverse_diff:
         if second_der:
@@ -731,7 +689,7 @@ def grad(ast, expression, variables, func = 'function',
 
         else:
             Expr(fun)._reverse_diff("1.",grad)
-            # print(grad)
+            
             i = 0
             for k,v in grad.items():
                 file_pointer=c_code._generate_expr(k, v,index=i, file_pointer=file_pointer)
