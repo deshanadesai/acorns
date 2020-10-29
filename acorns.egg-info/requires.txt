@@ -1,3 +1,0 @@
-pycparser
-numpy
-argparse
