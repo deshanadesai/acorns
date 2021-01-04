@@ -119,6 +119,32 @@ fd.grad(ast, target, variables, func = 'function_test', second_der = True, outpu
 
 
 
+c_file = 'basic_pow.c'
+print("running for .." ,c_file)
+
+target = "energy"
+variables = ['L','r']
+
+
+with open(input_loc + c_file,'r') as f:
+       c_function = f.read()
+ast = fd.prepare_graph(c_function)
+basename = os.path.basename(c_file)
+
+       
+fd.grad(ast, target, variables, func = 'function_test', output_filename = output_loc+'/'+basename+'_grad_forward',
+       output_func = 'compute_grad_forward')
+fd.grad(ast, target, variables, func = 'function_test', reverse_diff = True, output_filename = output_loc+'/'+basename+'_grad_reverse',
+       output_func = 'compute_grad_reverse')
+fd.grad(ast, target, variables, func = 'function_test', second_der = True, output_filename = output_loc+'/'+basename+'_hessian_forward',
+       output_func = 'compute_hessian_forward')
+# fd.grad(ast, target, variables, func = 'function_test', second_der = True, reverse_diff = True, 
+#         output_filename = output_loc+'/'+basename+'_hessian_reverse',  output_func = 'compute_hessian_reverse')
+
+
+
+
+
 c_file = 'decl_array1d.c'
 print("running for .." ,c_file)
 

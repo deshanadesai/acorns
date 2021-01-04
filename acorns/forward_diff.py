@@ -332,6 +332,8 @@ class Log(Expr):
         except:
             exp = Expr(cur_node.ast.args.exprs[0]).eval()
         return "(log("+Expr(exp).eval()+"))"
+
+
     def _forward_diff(self,cur_node):   
         # skipped the try except - may break
         exp_eval = Expr(cur_node.ast.args.exprs[0]).eval()
@@ -365,34 +367,47 @@ class Pow(Expr):
 
     def _forward_diff(self,cur_node):
         try:
-            base = cur_node.ast.args.exprs[0].name
+            base = Expr(cur_node.ast.args.exprs[0].name)
+            base_str = base.eval()
         except:
-            base = Expr(cur_node.ast.args.exprs[0]).eval()
+            base = Expr(cur_node.ast.args.exprs[0])
+            base_str = base.eval()
 
         try:
-            exp = cur_node.ast.args.exprs[1].value
+            exp = Expr(cur_node.ast.args.exprs[1].value)
+            exp_str = exp.eval()
+
         except AttributeError:
-            exp = Expr(cur_node.ast.args.exprs[1]).eval()
+            exp = Expr(cur_node.ast.args.exprs[1])
+            exp_str = exp.eval()
 
-        der_base = Expr(base)._forward_diff()
-        der_exp = Expr(exp)._forward_diff()
 
-        return "(pow("+base+",("+exp+"-1)) * "+\
-                "("+exp+ " * "+ der_base +" + "+base+ " * "+ der_exp+ " * log("+base+")))"
+
+        der_base = base._forward_diff()
+
+        der_exp = exp._forward_diff()
+
+        return "(pow("+base_str+",("+exp_str+"-1)) * "+\
+                "("+exp_str+ " * "+ der_base +" + "+base_str+ " * "+ der_exp+ " * log("+base_str+")))"
 
 
     def _reverse_diff(self, cur_node, adjoint, grad):
         try:
             base = cur_node.ast.args.exprs[0].name
+            base_str = base
         except:
-            base = Expr(cur_node.ast.args.exprs[0]).eval()
+            base = Expr(cur_node.ast.args.exprs[0])
+            base_str = base.eval()
 
         try:
             exp = cur_node.ast.args.exprs[1].value
+            exp_str = exp
         except AttributeError:
-            exp = Expr(cur_node.ast.args.exprs[1]).eval()
-        Expr(base)._reverse_diff( "(" + adjoint + ")"+ "*"+ "("+ exp+")"+" * " + "(pow(" + base +","+ "("+exp +"- 1)"+"))", grad)
-        Expr(exp)._reverse_diff("(" +  adjoint + ")"+ "*"+ "log("+base+")" +" * " + "pow(" + base +"," + exp +")", grad)
+            exp = Expr(cur_node.ast.args.exprs[1])
+            exp_str =  exp.eval()
+
+        Expr(base)._reverse_diff( "(" + adjoint + ")"+ "*"+ "("+ exp_str+")"+" * " + "(pow(" + base_str +","+ "("+exp_str +"- 1)"+"))", grad)
+        Expr(exp)._reverse_diff("(" +  adjoint + ")"+ "*"+ "log("+base_str+")" +" * " + "pow(" + base_str +"," + exp_str +")", grad)
 
 
 class Sine(Expr):
