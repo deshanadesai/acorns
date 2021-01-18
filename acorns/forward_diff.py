@@ -393,21 +393,23 @@ class Pow(Expr):
 
     def _reverse_diff(self, cur_node, adjoint, grad):
         try:
-            base = cur_node.ast.args.exprs[0].name
-            base_str = base
+            base = Expr(cur_node.ast.args.exprs[0].name)
+            base_str = base.eval()
         except:
             base = Expr(cur_node.ast.args.exprs[0])
             base_str = base.eval()
 
         try:
-            exp = cur_node.ast.args.exprs[1].value
-            exp_str = exp
+            exp = Expr(cur_node.ast.args.exprs[1].value)
+            exp_str = exp.eval()
+
         except AttributeError:
             exp = Expr(cur_node.ast.args.exprs[1])
             exp_str =  exp.eval()
 
-        Expr(base)._reverse_diff( "(" + adjoint + ")"+ "*"+ "("+ exp_str+")"+" * " + "(pow(" + base_str +","+ "("+exp_str +"- 1)"+"))", grad)
-        Expr(exp)._reverse_diff("(" +  adjoint + ")"+ "*"+ "log("+base_str+")" +" * " + "pow(" + base_str +"," + exp_str +")", grad)
+
+        base._reverse_diff( "(" + adjoint + ")"+ "*"+ "("+ exp_str+")"+" * " + "(pow(" + base_str +","+ "("+exp_str +"- 1)"+"))", grad)
+        exp._reverse_diff("(" +  adjoint + ")"+ "*"+ "log("+base_str+")" +" * " + "pow(" + base_str +"," + exp_str +")", grad)
 
 
 class Sine(Expr):
