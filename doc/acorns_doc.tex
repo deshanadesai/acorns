@@ -9,6 +9,7 @@
 \usepackage{natbib}
 \usepackage{times}
 \usepackage{listings}
+\usepackage{upquote}
 \usepackage{xcolor}
 \usepackage{color}
 \usepackage{marginnote}
@@ -138,6 +139,7 @@ To install the package from the source, you can perform the following steps: \ne
 \begin{lstlisting}
 git clone git@github.com:deshanadesai/acorns.git 
 cd acorns
+pip install -r requirements.txt
 python setup.py install
 \end{lstlisting}
 
@@ -265,11 +267,11 @@ int function_test(double a, double p){
 }    
 \end{lstlisting}
 
-A more complex example with for loops that can be given as input:
+A more complex example with for loops, variable and constant initializations and matrix element assignments that can be given as input:
 
 \begin{lstlisting}
 
-double func(const double *local_disp, const double *grads, const int n_grads)
+double func(const double *local_disp)
 {
     const int size = 3;
     int n_grads = 4;
@@ -287,8 +289,7 @@ double func(const double *local_disp, const double *grads, const int n_grads)
         {
             for (int c = 0; c < size; ++c)
             {
-                def_grad[d][c] = def_grad[d][c] 
-                + grads[(i + p * n_grads) * size + c] * local_disp[i * size + d];
+                def_grad[d][c] = def_grad[d][c]  * local_disp[i * size + d];
             }
         }
     }    
@@ -305,14 +306,17 @@ double func(const double *local_disp, const double *grads, const int n_grads)
 \end{lstlisting}
 
 
+This code must be unrolled before differentiating it. To unroll this code saved in a file 'func.c', run:
+\begin{lstlisting}
+acorns.unroll_file('func.c','output_func',constants=['size','n_grads','p'])
+\end{lstlisting}
+
 
 
 \subsection{Examples}
 \label{sec:examples}
 
-The directory \code{examples/sample\_c\_functions/} contains examples of basic usage of \Acorns\.  
-
-For example, the code here shows the \code{pow()} functionality
+The directory \code{examples/sample\_c\_functions/} contains examples of basic usage of \Acorns\ . For example, the code here shows the \code{pow()} functionality
 
 \begin{lstlisting}
 int function_test(double r, double L){ 
@@ -333,21 +337,21 @@ ast = fd.prepare_graph(c_function)
 This produces the abstract syntax tree from the code. If the function contained for loops, it would need to be unrolled first by calling the \code{unroll()} function. After this, we are ready to differentiate it using the \code{grad()} function call:
 
 \begin{lstlisting}
-fd.grad(ast, target = "energy", variables = ['L','r'], func = 'function_test',
+fd.grad(ast, "energy", ['L','r'], func = 'function_test',
 output_filename = output_location+'/'+filename+'_grad_forward',
        output_func = 'compute_grad_forward')
 \end{lstlisting}
 
 To use reverse differentiation instead, the parameter needs to be passed the function call:
 \begin{lstlisting}
-fd.grad(ast, target = "energy", variables = ['L','r'], func = 'function_test',
+fd.grad(ast, "energy", ['L','r'], func = 'function_test',
 reverse_diff = True, output_filename =  output_location+'/'+filename+'_grad_reverse',
        output_func = 'compute_grad_reverse')
 \end{lstlisting}
 
 Finally, to compute the hessian, the \code{second\_der} parameter would be passed.
 \begin{lstlisting}
-fd.grad(ast,  target = "energy", variables = ['L','r'], func = 'function_test',
+fd.grad(ast, "energy", ['L','r'], func = 'function_test',
 second_der = True, output_filename = output_location+'/'+filename+'_hessian_forward',
        output_func = 'compute_hessian_forward')
 \end{lstlisting}
