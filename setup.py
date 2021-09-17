@@ -22,8 +22,7 @@ setuptools.setup(
     package_dir={"": "."},
     install_requires = [
             'pycparser',
-            'numpy',
-            'argparse'],
+            'numpy'],
     entry_points={
         'console_scripts': [
             'acorns_autodiff = acorns.forward_diff:main'
