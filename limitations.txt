@@ -1,1 +1,0 @@
-1. forward_diff.py currently only deals with expanding equations for upto 2 dimensional arrays (can be fixed)
