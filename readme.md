@@ -9,6 +9,8 @@ Package license: MIT
 
 Feedstock license: BSD 3-Clause
 
+Current Version: 3.0 - Fixes bugs and supports features described in the [user guide](https://github.com/deshanadesai/acorns/blob/master/doc/ACORNS_user_guide.pdf)
+
 Summary: An easy-to-use Code Generator for Gradients and Hessians
 
 ACORNS is an algorithm for automatic differention of algorithms written in a subset of C99 code and its efficient implementation as a Python script.
