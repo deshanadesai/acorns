@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-__version__ = '0.0.4'
+__version__ = '3.0'
 __all__ = [
     'autodiff', 'unroll_file', 'unroll', 
 ]
