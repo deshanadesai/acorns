@@ -78,7 +78,6 @@ Please refer to the user guide for further reading: [user guide](https://github.
 ***acorns/:***
   The acorns module source code.
   
-***tests/:***
-  Unit tests and comparison benchmarks with other standard packages.
+
 
 
