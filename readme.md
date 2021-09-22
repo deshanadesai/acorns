@@ -60,6 +60,7 @@ acorns.autodiff(c_function, 'energy', ['a','p'], func = 'function_test', output_
 - Support for nested loops is limited to two.
 - Does not currently support complicated data structures.
 
+Please refer to the user guide for further reading: [user guide](https://github.com/deshanadesai/acorns/blob/master/doc/ACORNS_user_guide.pdf)
 ### Package Contents:
 
 ***README.rst:***
